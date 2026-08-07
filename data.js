@@ -21,17 +21,11 @@ window.PORTFOLIO_DATA = {
       "Geopolitics",
       "International Affairs",
       "Supply Chain",
-      "Energy Security"
+      "Energy Security",
+      "Dogs",
+      "Hiking"
     ]
   },
-
-  facts: [
-    { label: "Focus",     value: "Energy Security" },
-    { label: "Discipline", value: "International Policy" },
-    { label: "Toolkit",    value: "Python · R · GIS" },
-    { label: "Based in",   value: "Athens, GA" },
-    { label: "Graduation", value: "May 2027" }
-  ],
 
   experience: [
     {
