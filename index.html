@@ -250,6 +250,20 @@
   .chip{font-family:var(--mono);font-size:.8rem;padding:.4rem .8rem;border:1px solid var(--ink);border-radius:2px}
   .chip.solid{background:var(--ink);color:var(--paper)}
 
+  /* writing */
+  .writing-list{display:flex;flex-direction:column}
+  .wr-item{display:block;padding:1.5rem 0;border-top:1px solid var(--rule);color:inherit;transition:padding-left .3s,background .3s}
+  .wr-item:first-child{border-top:none}
+  .wr-link{cursor:pointer}
+  .wr-link:hover{padding-left:.6rem}
+  .wr-meta{display:flex;flex-wrap:wrap;gap:.4rem .9rem;align-items:baseline;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:var(--ink-faint);margin-bottom:.5rem;text-transform:uppercase}
+  .wr-outlet{color:var(--accent-2)}
+  .wr-title{font-family:var(--serif);font-size:clamp(1.35rem,2.6vw,1.7rem);font-weight:500;line-height:1.15}
+  .wr-title .arw{font-size:.9em;color:var(--accent);display:inline-block;transition:transform .3s}
+  .wr-link:hover .wr-title{color:var(--accent)}
+  .wr-link:hover .wr-title .arw{transform:translate(3px,-3px)}
+  .wr-thesis{color:var(--ink-soft);margin-top:.55rem;max-width:62ch;font-size:.98rem}
+
   /* contact */
   .contact{border-top:1px solid var(--rule);padding-bottom:clamp(3rem,8vh,6rem)}
   .contact .big{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,6vw,4.6rem);line-height:1.05;letter-spacing:-.02em;margin:.5rem 0 2.2rem;max-width:18ch}
@@ -332,6 +346,7 @@
     <a href="#experience">Experience</a>
     <a href="#education">Education</a>
     <a href="#projects">Projects</a>
+    <a href="#writing">Writing</a>
     <a href="#record">Record</a>
     <a href="#contact">Contact</a>
     <a class="nav-cv" id="navCv" href="#" download>Résumé ↓</a>
@@ -483,6 +498,23 @@
       }).join('')
     + '</div></section>';
 
+  /* WRITING */
+  if((DATA.writing||[]).length){
+    html += flow();
+    html += '<section id="writing" class="wrap">'
+      + '<div class="sec-head reveal"><span class="sec-num">05</span><h2 class="sec-title">Selected Writing</h2></div>'
+      + '<div class="writing-list">'
+      + DATA.writing.map(function(w){
+          var inner = '<div class="wr-meta"><span class="wr-outlet">'+esc(w.outlet)+'</span>'+(w.date?'<span class="wr-date">'+esc(w.date)+'</span>':'')+'</div>'
+            + '<h3 class="wr-title">'+esc(w.title)+(w.url?' <span class="arw">↗</span>':'')+'</h3>'
+            + (w.thesis?'<p class="wr-thesis">'+esc(w.thesis)+'</p>':'');
+          return w.url
+            ? '<a class="wr-item wr-link reveal" href="'+esc(safeUrl(w.url))+'" target="_blank" rel="noopener noreferrer">'+inner+'</a>'
+            : '<div class="wr-item reveal">'+inner+'</div>';
+        }).join('')
+      + '</div></section>';
+  }
+
   /* RECORD */
   var activities=(DATA.activities||[]).map(function(a){
     return '<div class="row"><div class="l1">'+esc(a.name)+'</div><div class="l2"><span>'+esc(a.role)+'</span><span>'+esc(a.period)+'</span></div></div>';
@@ -498,7 +530,7 @@
   }).join('');
   html += flow();
   html += '<section id="record" class="wrap">'
-    + '<div class="sec-head reveal"><span class="sec-num">05</span><h2 class="sec-title">Record</h2></div>'
+    + '<div class="sec-head reveal"><span class="sec-num">06</span><h2 class="sec-title">Record</h2></div>'
     + '<div class="ledger">'
     + '<div class="reveal"><h3 class="rec-h">Activities &amp; Leadership</h3>'+activities
     + '<h3 class="rec-h">Awards &amp; Honours</h3>'+awards+'</div>'
@@ -514,7 +546,7 @@
   if(ct.github)   cl+='<a href="https://'+esc(ct.github)+'" target="_blank" rel="noopener noreferrer">'+ICONS.github+' '+esc(ct.github)+'</a>';
   html += flow();
   html += '<section id="contact" class="wrap contact">'
-    + '<div class="sec-head reveal"><span class="sec-num">06</span><h2 class="sec-title">Contact</h2></div>'
+    + '<div class="sec-head reveal"><span class="sec-num">07</span><h2 class="sec-title">Contact</h2></div>'
     + '<div class="big reveal">'+esc(ct.headlinePre)+'<a href="mailto:'+esc(ct.email)+'">'+esc(ct.headlineLink)+'</a>'+esc(ct.headlinePost)+'</div>'
     + '<div class="contact-links reveal">'+cl+'</div>'
     + '</section>';
@@ -593,7 +625,7 @@
         navLinks.forEach(function(a){ var on=a.getAttribute('href')==='#'+id; a.classList.toggle('active', on);
           if(on) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); }); } });
     },{rootMargin:'-45% 0px -50% 0px'});
-    ['about','experience','education','projects','record','contact'].forEach(function(id){
+    ['about','experience','education','projects','writing','record','contact'].forEach(function(id){
       var s=document.getElementById(id); if(s) spyIO.observe(s);
     });
   }

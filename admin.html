@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
 <title>Portfolio Admin — Tobyn Smith</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -103,7 +104,7 @@
   }catch(e){ state = JSON.parse(JSON.stringify(FILE)); }
 
   // ensure arrays exist
-  ['experience','education','projects','activities','awards','memberships','skills'].forEach(function(k){ if(!Array.isArray(state[k])) state[k]=[]; });
+  ['experience','education','projects','writing','activities','awards','memberships','skills'].forEach(function(k){ if(!Array.isArray(state[k])) state[k]=[]; });
   state.hero=state.hero||{}; state.profile=state.profile||{}; state.contact=state.contact||{};
   if(!Array.isArray(state.profile.interests)) state.profile.interests=[];
   if(typeof state.footer!=='string') state.footer = (typeof FILE.footer==='string' ? FILE.footer : '');
@@ -269,21 +270,27 @@
     return it;
   }
 
+  // ===== WRITING =====
+  (function(){
+    var b=card('Selected Writing','06');
+    b.appendChild(objList(state.writing,['title','outlet','date','thesis','url'],['Title','Outlet / type','Date','One-line thesis','URL (blank hides the link)'],'Piece'));
+  })();
+
   // ===== RECORD =====
   (function(){
-    var b=card('Activities & Leadership','06');
+    var b=card('Activities & Leadership','07');
     b.appendChild(objList(state.activities,['name','role','period'],['Name','Role','Period'],'Activity'));
   })();
   (function(){
-    var b=card('Awards & Honours','07');
+    var b=card('Awards & Honours','08');
     b.appendChild(objList(state.awards,['name','detail'],['Award','Detail / issuer'],'Award'));
   })();
   (function(){
-    var b=card('Memberships','08');
+    var b=card('Memberships','09');
     b.appendChild(stringList(state.memberships,'Organisation name'));
   })();
   (function(){
-    var b=card('Technical Skills','09');
+    var b=card('Technical Skills','10');
     var host=document.createElement('div'); b.appendChild(host);
     function draw(){
       host.innerHTML='';
@@ -308,7 +315,7 @@
 
   // ===== CONTACT =====
   (function(){
-    var b=card('Contact','10'), C=state.contact;
+    var b=card('Contact','11'), C=state.contact;
     b.appendChild(field('Headline: before link',C.headlinePre,function(v){C.headlinePre=v;}));
     var g=document.createElement('div'); g.className='grid2';
     g.appendChild(field('Linked word',C.headlineLink,function(v){C.headlineLink=v;}));
@@ -326,7 +333,7 @@
 
   // ===== RÉSUMÉ / CV =====
   (function(){
-    var b=card('Résumé / CV','11'), C=state.contact;
+    var b=card('Résumé / CV','12'), C=state.contact;
     b.appendChild(field('CV file name in your website folder',C.cvUrl,function(v){C.cvUrl=v;},{placeholder:'Tobyn-Smith-Resume.pdf',hint:'The "Download résumé" button and the Résumé nav link point to this file. Keep it matching the PDF below.'}));
     var lab=document.createElement('label'); lab.textContent='Replace the résumé PDF'; b.appendChild(lab);
     var hint=document.createElement('div'); hint.className='hint'; hint.style.marginBottom='.55rem';
@@ -345,7 +352,7 @@
 
   // ===== FOOTER =====
   (function(){
-    var b=card('Footer','12');
+    var b=card('Footer','13');
     b.appendChild(field('Footer note (right side)',state.footer,function(v){state.footer=v;},{placeholder:'Athens, Georgia · Energy Security & Policy Research',hint:'The © line on the left is generated from your name automatically.'}));
   })();
 
