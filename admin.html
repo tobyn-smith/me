@@ -90,16 +90,36 @@
 <script>
 (function(){
   var FILE = JSON.parse(JSON.stringify(window.PORTFOLIO_DATA||{}));
-  var state;
+  var state, loadedFromDraft=false;
   try{
-    var draft = localStorage.getItem('portfolio_draft');
-    state = draft ? JSON.parse(draft) : JSON.parse(JSON.stringify(FILE));
+    var raw = localStorage.getItem('portfolio_draft');
+    var parsed = (raw && raw!=='null' && raw!=='undefined') ? JSON.parse(raw) : null;
+    if(parsed && typeof parsed==='object' && !Array.isArray(parsed)){
+      state = parsed;
+      loadedFromDraft = JSON.stringify(parsed) !== JSON.stringify(FILE); // only flag a draft that differs from the file
+    } else {
+      state = JSON.parse(JSON.stringify(FILE));
+    }
   }catch(e){ state = JSON.parse(JSON.stringify(FILE)); }
 
   // ensure arrays exist
-  ['facts','experience','education','projects','activities','awards','memberships','skills'].forEach(function(k){ if(!Array.isArray(state[k])) state[k]=[]; });
+  ['experience','education','projects','activities','awards','memberships','skills'].forEach(function(k){ if(!Array.isArray(state[k])) state[k]=[]; });
   state.hero=state.hero||{}; state.profile=state.profile||{}; state.contact=state.contact||{};
-  if(!Array.isArray(state.hero.meta)) state.hero.meta=[];
+  if(!Array.isArray(state.profile.interests)) state.profile.interests=[];
+  if(typeof state.footer!=='string') state.footer = (typeof FILE.footer==='string' ? FILE.footer : '');
+  // drop fields no longer used by the site so downloads stay clean
+  delete state.facts; delete state.stats; if(state.hero) delete state.hero.meta; if(state.hero) delete state.hero.eyebrow; if(state.profile) delete state.profile.body;
+
+  // warn if we're editing a stored draft that may be stale vs data.js on disk
+  if(loadedFromDraft){
+    var db=document.createElement('div');
+    db.style.cssText='background:#fdecec;border:1px solid #e6a6a0;color:#7a2a20;border-radius:6px;padding:.75rem 1rem;font-size:.85rem;margin-bottom:1.2rem;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap';
+    var msg=document.createElement('span'); msg.innerHTML='<b>Editing a saved draft.</b> It may differ from the current <code>data.js</code>. Discard it to start from the file.';
+    var dbtn=document.createElement('button'); dbtn.textContent='Discard draft & load data.js'; dbtn.className='ghost mini'; dbtn.style.whiteSpace='nowrap';
+    dbtn.addEventListener('click',function(){ if(confirm('Discard your saved draft and reload from data.js?')){ localStorage.removeItem('portfolio_draft'); location.reload(); } });
+    db.appendChild(msg); db.appendChild(dbtn);
+    var edEl=document.getElementById('editor'); edEl.parentNode.insertBefore(db, edEl);
+  }
 
   var editor=document.getElementById('editor');
   var toastEl=document.getElementById('toast');
@@ -159,7 +179,7 @@
   (function(){
     var b=card('Hero','01',true), H=state.hero;
     b.appendChild(field('Name / headline',H.name,function(v){H.name=v;}));
-    b.appendChild(field('Tagline',H.tagline,function(v){H.tagline=v;},{area:true}));
+    b.appendChild(field('Tagline',H.tagline,function(v){H.tagline=v;},{area:true,hint:'Put a | in the middle: text before it shows large (your role); text after it shows as the smaller accent-barred specialties line.'}));
   })();
 
   // ===== PROFILE =====
@@ -169,7 +189,7 @@
     b.appendChild(field('Lead sentence (large)',P.lead,function(v){P.lead=v;},{area:true}));
     b.appendChild(field('Photo file name',P.photo,function(v){P.photo=v;},{placeholder:'headshot.jpg',hint:'Portrait shown in the Profile. Save the image with this name in your website folder (or drag it onto update-photo.bat).'}));
     b.appendChild(field('Photo caption',P.photoCaption,function(v){P.photoCaption=v;},{placeholder:'University of Georgia, Athens'}));
-    var li=document.createElement('label');li.textContent='Interested in (tags under the lead)';b.appendChild(li);
+    var li=document.createElement('label');li.textContent='Interested in (shown as an inline list under the lead)';b.appendChild(li);
     b.appendChild(stringList(P.interests,'e.g. Geopolitics'));
   })();
 
@@ -245,7 +265,7 @@
     it.appendChild(stringList(p.stack,'e.g. Python'));
     var l2=document.createElement('label');l2.textContent='Links (leave URL blank to hide a link)';it.appendChild(l2);
     it.appendChild(objList(p.links,['label','url'],['Label','URL'],'Link'));
-    it.appendChild(checkbox('Feature this project (full-width, larger)',p.featured,function(v){p.featured=v;}));
+    it.appendChild(checkbox('Feature this project (subtle accent border highlight)',p.featured,function(v){p.featured=v;}));
     return it;
   }
 
@@ -307,7 +327,7 @@
   // ===== RÉSUMÉ / CV =====
   (function(){
     var b=card('Résumé / CV','11'), C=state.contact;
-    b.appendChild(field('CV file name in your website folder',C.cvUrl,function(v){C.cvUrl=v;},{placeholder:'Tobyn-Smith-Resume.pdf',hint:'The "Download CV" button and the Résumé nav link point to this file. Keep it matching the PDF below.'}));
+    b.appendChild(field('CV file name in your website folder',C.cvUrl,function(v){C.cvUrl=v;},{placeholder:'Tobyn-Smith-Resume.pdf',hint:'The "Download résumé" button and the Résumé nav link point to this file. Keep it matching the PDF below.'}));
     var lab=document.createElement('label'); lab.textContent='Replace the résumé PDF'; b.appendChild(lab);
     var hint=document.createElement('div'); hint.className='hint'; hint.style.marginBottom='.55rem';
     hint.textContent='Pick your new résumé PDF, then click Save — it downloads with the exact filename above so you can drop it straight into your website folder and push.';
@@ -321,6 +341,12 @@
       var a=document.createElement('a'); a.href=URL.createObjectURL(picked); a.download=name;
       document.body.appendChild(a); a.click(); a.remove(); toast('Saved as '+name); });
     row.appendChild(file); row.appendChild(dl); b.appendChild(row);
+  })();
+
+  // ===== FOOTER =====
+  (function(){
+    var b=card('Footer','12');
+    b.appendChild(field('Footer note (right side)',state.footer,function(v){state.footer=v;},{placeholder:'Athens, Georgia · Energy Security & Policy Research',hint:'The © line on the left is generated from your name automatically.'}));
   })();
 
   // generic list of objects with fixed keys
