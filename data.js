@@ -11,7 +11,7 @@ window.PORTFOLIO_DATA = {
   hero: {
     eyebrow: "Energy Security / Policy Research",
     name: "Tobyn Smith",
-    tagline: "I research the geopolitics of energy security and build the maps that measure it.",
+    tagline: "International Policy Graduate Student | Energy Security, AI, Supply Chain Risk & Geospatial Analysis",
     meta: [
       "Athens, Georgia",
       "M.A. International Policy · 2027",
