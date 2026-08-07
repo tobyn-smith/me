@@ -170,6 +170,8 @@
     var b=card('Profile','02'), P=state.profile;
     if(!Array.isArray(P.interests)) P.interests=[];
     b.appendChild(field('Lead sentence (large)',P.lead,function(v){P.lead=v;},{area:true}));
+    b.appendChild(field('Photo file name',P.photo,function(v){P.photo=v;},{placeholder:'headshot.jpg',hint:'Portrait shown in the Profile. Save the image with this name in your website folder (or drag it onto update-photo.bat).'}));
+    b.appendChild(field('Photo caption',P.photoCaption,function(v){P.photoCaption=v;},{placeholder:'University of Georgia, Athens'}));
     var li=document.createElement('label');li.textContent='Interested in (tags under the lead)';b.appendChild(li);
     b.appendChild(stringList(P.interests,'e.g. Geopolitics'));
     var l=document.createElement('label');l.textContent='Facts (right-hand list)';b.appendChild(l);

@@ -20,6 +20,8 @@ window.PORTFOLIO_DATA = {
   },
 
   profile: {
+    photo: "headshot.jpg",
+    photoCaption: "University of Georgia, Athens",
     lead: "I'm a graduate student in International Policy at the University of Georgia, concentrating in Energy Security.",
     interests: [
       "Geopolitics",
