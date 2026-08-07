@@ -99,6 +99,21 @@
   nav.top a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .3s}
   nav.top a:hover{color:var(--ink)}nav.top a:hover::after{width:100%}
   @media(max-width:720px){nav.top a:not(.nav-cv):not(.nav-menu-item){display:none}nav.top{gap:.55rem}.theme-toggle{width:42px;height:42px}.nav-cv{padding:.5rem 1rem!important}}
+  /* mobile hamburger menu */
+  .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;border:1px solid var(--rule);border-radius:100px;background:transparent;cursor:pointer;padding:0 11px;flex:none}
+  .nav-toggle span{height:2px;background:var(--ink);border-radius:2px;transition:transform .3s,opacity .3s}
+  .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  @media(max-width:720px){.nav-toggle{display:flex}}
+  .mobile-menu{display:none;position:fixed;top:59px;left:0;right:0;z-index:19;background:var(--paper);border-bottom:1px solid var(--rule);flex-direction:column;padding:.3rem clamp(1.25rem,5vw,4rem) .9rem;box-shadow:0 22px 44px -26px rgba(0,0,0,.4)}
+  .mobile-menu.open{display:flex;animation:menuIn .22s ease}
+  .mobile-menu a{padding:.85rem 0;font-family:var(--sans);font-size:1.02rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);transition:color .2s,padding-left .2s}
+  .mobile-menu a:last-child{border-bottom:none}
+  .mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);padding-left:.4rem}
+  @keyframes menuIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  @media(min-width:721px){.mobile-menu{display:none!important}}
+  @media(prefers-reduced-motion:reduce){.mobile-menu.open{animation:none}.nav-toggle span{transition:none}}
 
   /* globe */
   #globe{position:absolute;top:50%;right:-8%;transform:translateY(-50%);width:min(46vw,620px);height:min(46vw,620px);z-index:1;opacity:.9;cursor:grab;touch-action:none}
@@ -351,8 +366,18 @@
     <a href="#contact">Contact</a>
     <a class="nav-cv" id="navCv" href="#" download>Résumé ↓</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"></button>
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu"><span></span><span></span><span></span></button>
   </nav>
 </header>
+<nav class="mobile-menu" id="mobileMenu" aria-label="Sections">
+  <a href="#about">About</a>
+  <a href="#experience">Experience</a>
+  <a href="#education">Education</a>
+  <a href="#projects">Projects</a>
+  <a href="#writing">Writing</a>
+  <a href="#record">Record</a>
+  <a href="#contact">Contact</a>
+</nav>
 
 <main id="app" tabindex="-1"></main>
 
@@ -602,6 +627,18 @@
   var navCv=document.getElementById('navCv');
   if(navCv){ if(ct.cvUrl){ navCv.setAttribute('href',safeUrl(ct.cvUrl)); } else { navCv.style.display='none'; } }
 
+  // mobile hamburger menu
+  var navToggle=document.getElementById('navToggle'), mobileMenu=document.getElementById('mobileMenu');
+  if(navToggle&&mobileMenu){
+    var closeMenu=function(){ mobileMenu.classList.remove('open'); navToggle.setAttribute('aria-expanded','false'); };
+    navToggle.addEventListener('click',function(){
+      var open=mobileMenu.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open?'true':'false');
+    });
+    mobileMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeMenu); });
+    addEventListener('keydown',function(e){ if(e.key==='Escape') closeMenu(); });
+  }
+
   // dark mode toggle
   var themeBtn=document.getElementById('themeToggle');
   function syncThemeIcon(){ var dark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -618,7 +655,7 @@
   }
 
   // scrollspy active nav
-  var navLinks=[].slice.call(document.querySelectorAll('nav.top a[href^="#"]'));
+  var navLinks=[].slice.call(document.querySelectorAll('nav.top a[href^="#"], .mobile-menu a[href^="#"]'));
   if('IntersectionObserver' in window){
     var spyIO=new IntersectionObserver(function(es){
       es.forEach(function(e){ if(e.isIntersecting){ var id=e.target.getAttribute('id');
