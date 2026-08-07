@@ -314,6 +314,8 @@
   a:focus-visible,button:focus-visible,.btn:focus-visible,.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
   .sec-head::after{width:0;transition:width .7s cubic-bezier(.2,.7,.2,1) .12s}
   .sec-head.in::after{width:54px}
+  .globe-target .sec-head::after{animation:targetPulse 1.3s cubic-bezier(.2,.7,.2,1)}
+  @keyframes targetPulse{0%{width:54px}45%{width:100%}100%{width:54px}}
   @media(prefers-reduced-motion:reduce){#progress{transition:none}.sec-head::after{width:54px;transition:none}#toTop{transition:opacity .25s}#toTop.show,#toTop:hover{transform:none}}
 
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
@@ -672,7 +674,7 @@
     var canvas=document.getElementById('globe'); if(!canvas||!canvas.getContext) return;
     var ctx=canvas.getContext('2d');
     var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var interactive=innerWidth>820 && matchMedia('(hover:hover)').matches && !reduce;
+    var interactive=innerWidth>820 && !reduce; // desktop + wide touch devices (tap-to-navigate)
     var DPR=Math.min(window.devicePixelRatio||1,2);
     var R,cx,cy;
     function size(){
@@ -691,19 +693,16 @@
       var z=Math.sin(tilt)*sl + Math.cos(tilt)*cl*Math.cos(lo);
       return {x:cx+R*x, y:cy-R*y, z:z};
     }
-    // energy / geopolitics centres
+    // nodes anchored to Tobyn's actual work — click a node to jump to that section
     var hubs=[
-      {lon:-74,lat:40.7,name:"New York",note:"policy & finance"},
-      {lon:-0.1,lat:51.5,name:"London",note:"energy markets"},
-      {lon:37.6,lat:55.7,name:"Moscow",note:"gas exporter"},
-      {lon:121.5,lat:31.2,name:"Shanghai",note:"manufacturing hub"},
-      {lon:55.3,lat:25.3,name:"Dubai",note:"oil gateway"},
-      {lon:24.7,lat:59.4,name:"Tallinn",note:"Baltic energy"},
-      {lon:-95.4,lat:29.8,name:"Houston",note:"U.S. energy capital"},
-      {lon:139.7,lat:35.7,name:"Tokyo",note:"LNG importer"},
-      {lon:3.4,lat:6.5,name:"Lagos",note:"oil producer"}
+      {lon:-74,   lat:40.7, name:"New York",          note:"Crowdwave · AI audience research", section:"experience"},
+      {lon:-84.4, lat:33.75,name:"Atlanta / Athens",  note:"BSI & University of Georgia",       section:"education"},
+      {lon:-99.5, lat:27.5, name:"US-Mexico corridor",note:"supply-chain risk intel",           section:"experience"},
+      {lon:-98,   lat:39.5, name:"United States",     note:"50-state grid-resilience index",    section:"projects"},
+      {lon:21.1,  lat:55.7, name:"Baltic Sea",        note:"LNG transit-risk mapping",          section:"projects"},
+      {lon:109.8, lat:40.6, name:"Baotou",            note:"rare-earth policy memo",            section:"writing"}
     ];
-    var arcs=[[0,1],[1,2],[2,3],[3,4],[1,4],[0,6],[5,2],[3,7],[4,8],[1,5]];
+    var arcs=[[0,3],[1,3],[2,3],[3,4],[4,5],[5,3]];
     function greatCircle(a,b,n){
       var lon1=a.lon*Math.PI/180,lat1=a.lat*Math.PI/180,lon2=b.lon*Math.PI/180,lat2=b.lat*Math.PI/180;
       var d=2*Math.asin(Math.sqrt(Math.pow(Math.sin((lat1-lat2)/2),2)+Math.cos(lat1)*Math.cos(lat2)*Math.pow(Math.sin((lon1-lon2)/2),2)));
@@ -770,7 +769,7 @@
     if(interactive){
       tip=document.createElement('div'); tip.className='globe-tip'; document.body.appendChild(tip);
       // discoverability hint (fades after a few seconds or on first interaction)
-      var hint=document.createElement('div'); hint.className='globe-hint'; hint.textContent='drag to spin · click a city';
+      var hint=document.createElement('div'); hint.className='globe-hint'; hint.textContent='drag to spin · click a node';
       if(canvas.parentNode) canvas.parentNode.appendChild(hint);
       var hideHint=function(){ hint.classList.remove('show'); };
       setTimeout(function(){ hint.classList.add('show'); },1300);
@@ -795,12 +794,16 @@
           tip.style.left=c2.x+'px'; tip.style.top=c2.y+'px'; tip.classList.add('show'); canvas.style.cursor='pointer'; }
         else { tip.classList.remove('show'); canvas.style.cursor='grab'; }
       });
+      function pulseSection(sec){ sec.classList.add('globe-target'); setTimeout(function(){sec.classList.remove('globe-target');},1400); }
       function end(e){ if(!dragging) return; dragging=false; canvas.classList.remove('dragging');
-        if(dragDist<5){ // a click (not a drag): fly the nearest hub to the front
-          var bx=(e&&e.clientX!=null)?e.clientX:downX, by=(e&&e.clientY!=null)?e.clientY:downY, best=-1, bd=18;
+        if(dragDist<5){ // a click/tap (not a drag): fly the nearest node front + jump to its section
+          var bx=(e&&e.clientX!=null)?e.clientX:downX, by=(e&&e.clientY!=null)?e.clientY:downY, best=-1, bd=20;
           for(var i=0;i<hubs.length;i++){ var c=hubClient(hubs[i]); if(c.z<=0) continue;
             var d=Math.hypot(bx-c.x, by-c.y); if(d<bd){ bd=d; best=i; } }
-          if(best>=0) focusHub(hubs[best]);
+          if(best>=0){ focusHub(hubs[best]);
+            var sec=hubs[best].section && document.getElementById(hubs[best].section);
+            if(sec){ sec.scrollIntoView({behavior:'smooth',block:'start'}); pulseSection(sec); }
+          }
         } }
       addEventListener('pointerup',end); addEventListener('pointercancel',end);
       canvas.addEventListener('pointerleave',function(){ if(!dragging){ hovered=-1; if(tip) tip.classList.remove('show'); } });
