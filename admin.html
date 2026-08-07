@@ -158,11 +158,8 @@
   // ===== HERO =====
   (function(){
     var b=card('Hero','01',true), H=state.hero;
-    b.appendChild(field('Eyebrow (small label above name)',H.eyebrow,function(v){H.eyebrow=v;}));
     b.appendChild(field('Name / headline',H.name,function(v){H.name=v;}));
     b.appendChild(field('Tagline',H.tagline,function(v){H.tagline=v;},{area:true}));
-    var l=document.createElement('label');l.textContent='Meta chips (location, degree, tools)';b.appendChild(l);
-    b.appendChild(stringList(H.meta,'e.g. Athens, Georgia'));
   })();
 
   // ===== PROFILE =====
