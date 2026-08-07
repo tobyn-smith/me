@@ -72,6 +72,7 @@
     <b>How this works:</b> edit anything below, then click <b>Download data.js</b> at the bottom and replace the
     <code>data.js</code> file in your website folder (and re-upload / push to publish). Use <b>Save draft</b> +
     <b>Preview site</b> to see changes before you commit them. Drafts are stored in this browser only.
+    To swap your résumé, use the <b>Résumé / CV</b> card near the bottom and drop the downloaded PDF into the same folder.
   </div>
   <div id="editor"></div>
 </div>
@@ -303,6 +304,25 @@
     g3.appendChild(field('LinkedIn (no https://)',C.linkedin,function(v){C.linkedin=v;},{placeholder:'linkedin.com/in/tobynsmith'}));
     g3.appendChild(field('GitHub (no https://)',C.github,function(v){C.github=v;},{placeholder:'github.com/tobyn-smith'}));
     b.appendChild(g3);
+  })();
+
+  // ===== RÉSUMÉ / CV =====
+  (function(){
+    var b=card('Résumé / CV','11'), C=state.contact;
+    b.appendChild(field('CV file name in your website folder',C.cvUrl,function(v){C.cvUrl=v;},{placeholder:'Tobyn-Smith-Resume.pdf',hint:'The "Download CV" button and the Résumé nav link point to this file. Keep it matching the PDF below.'}));
+    var lab=document.createElement('label'); lab.textContent='Replace the résumé PDF'; b.appendChild(lab);
+    var hint=document.createElement('div'); hint.className='hint'; hint.style.marginBottom='.55rem';
+    hint.textContent='Pick your new résumé PDF, then click Save — it downloads with the exact filename above so you can drop it straight into your website folder and push.';
+    b.appendChild(hint);
+    var row=document.createElement('div'); row.className='row-mini';
+    var file=document.createElement('input'); file.type='file'; file.accept='application/pdf';
+    var dl=document.createElement('button'); dl.className='ghost mini'; dl.textContent='⬇ Save as PDF'; dl.disabled=true; dl.style.whiteSpace='nowrap';
+    var picked=null;
+    file.addEventListener('change',function(){ picked=(file.files&&file.files[0])||null; dl.disabled=!picked; });
+    dl.addEventListener('click',function(){ if(!picked) return; var name=(C.cvUrl||'Tobyn-Smith-Resume.pdf');
+      var a=document.createElement('a'); a.href=URL.createObjectURL(picked); a.download=name;
+      document.body.appendChild(a); a.click(); a.remove(); toast('Saved as '+name); });
+    row.appendChild(file); row.appendChild(dl); b.appendChild(row);
   })();
 
   // generic list of objects with fixed keys

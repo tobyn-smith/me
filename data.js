@@ -143,13 +143,6 @@ window.PORTFOLIO_DATA = {
     { name: "Risk Intelligence",   solid: false }
   ],
 
-  stats: [
-    { value: 50, suffix: "+", label: "AI cohorts evaluated" },
-    { value: 50, suffix: "+", label: "Risk reports & heatmaps" },
-    { value: 50, suffix: "",  label: "U.S. states scored" },
-    { value: 2,  suffix: "",  label: "Published research platforms" }
-  ],
-
   contact: {
     headlinePre:  "Open to research roles, policy work, and ",
     headlineLink: "collaboration",
