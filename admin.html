@@ -166,8 +166,10 @@
   // ===== PROFILE =====
   (function(){
     var b=card('Profile','02'), P=state.profile;
+    if(!Array.isArray(P.interests)) P.interests=[];
     b.appendChild(field('Lead sentence (large)',P.lead,function(v){P.lead=v;},{area:true}));
-    b.appendChild(field('Body paragraph',P.body,function(v){P.body=v;},{area:true}));
+    var li=document.createElement('label');li.textContent='Interested in (tags under the lead)';b.appendChild(li);
+    b.appendChild(stringList(P.interests,'e.g. Geopolitics'));
     var l=document.createElement('label');l.textContent='Facts (right-hand list)';b.appendChild(l);
     b.appendChild(objList(state.facts,['label','value'],['Label','Value'],'Fact'));
   })();
