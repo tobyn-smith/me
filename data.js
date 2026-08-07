@@ -142,5 +142,7 @@ window.PORTFOLIO_DATA = {
     linkedin: "linkedin.com/in/tobynsmith",
     github:   "github.com/tobyn-smith",
     cvUrl:    "Tobyn-Smith-Resume.pdf"
-  }
+  },
+
+  footer: "Athens, Georgia · Energy Security & Policy Research"
 };
