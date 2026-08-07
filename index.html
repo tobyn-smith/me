@@ -260,6 +260,18 @@
   @media(prefers-reduced-motion:reduce){.reveal,.tl-item.is-current .tl-dot::after{opacity:1!important;transform:none!important;animation:none!important;transition:none}html{scroll-behavior:auto}}
 
   .preview-flag{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);z-index:40;background:var(--accent);color:var(--paper);font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;padding:.5rem 1rem;border-radius:100px;box-shadow:0 10px 30px -12px rgba(0,0,0,.5)}
+
+  /* print: clean, light, all content visible */
+  @media print{
+    #globe,#progress,.theme-toggle,.flow,.hero-cta,nav.top,body::before{display:none!important}
+    :root,:root[data-theme="dark"]{--paper:#fff;--paper-2:#fff;--paper-3:#fff;--ink:#111;--ink-soft:#333;--ink-faint:#555;--rule:#ccc;--accent:#8c2f24;--accent-2:#8c2f24}
+    body{background:#fff;color:#111}
+    header.bar{position:static;background:#fff;border-bottom:1px solid #ccc}
+    main section[id]{padding:1.1rem 0!important;break-inside:avoid}
+    .proj,.edu,.tl-card,.portrait{box-shadow:none!important;break-inside:avoid}
+    .reveal{opacity:1!important;transform:none!important}
+    a{text-decoration:none}
+  }
 </style>
 </head>
 <body>
