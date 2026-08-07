@@ -171,8 +171,6 @@
     b.appendChild(field('Photo caption',P.photoCaption,function(v){P.photoCaption=v;},{placeholder:'University of Georgia, Athens'}));
     var li=document.createElement('label');li.textContent='Interested in (tags under the lead)';b.appendChild(li);
     b.appendChild(stringList(P.interests,'e.g. Geopolitics'));
-    var l=document.createElement('label');l.textContent='Facts (right-hand list)';b.appendChild(l);
-    b.appendChild(objList(state.facts,['label','value'],['Label','Value'],'Fact'));
   })();
 
   // ===== EXPERIENCE =====
