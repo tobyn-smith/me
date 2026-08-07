@@ -30,6 +30,8 @@
   ::selection{background:var(--accent);color:var(--paper)}
   a{color:inherit;text-decoration:none}
   .wrap{max-width:var(--max);margin:0 auto;padding:0 clamp(1.25rem,5vw,4rem)}
+  /* sections carry .wrap for horizontal padding; restore vertical rhythm (specificity beats .wrap) */
+  section.wrap:not(.hero){padding-top:clamp(3rem,7vh,5.5rem);padding-bottom:clamp(3rem,7vh,5.5rem)}
 
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
