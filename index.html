@@ -88,6 +88,9 @@
   .globe-tip.show{opacity:1}
   .globe-tip b{color:#e9a08f}
   .globe-tip::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%) rotate(45deg);width:8px;height:8px;background:var(--ink)}
+  .globe-hint{position:absolute;right:6%;bottom:2.4rem;z-index:3;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:.55rem;opacity:0;transition:opacity .7s;pointer-events:none;white-space:nowrap}
+  .globe-hint.show{opacity:.75}
+  .globe-hint::before{content:"";width:18px;height:1px;background:var(--accent)}
 
   /* energy-flow dividers */
   .flow{position:relative;height:1px;background:var(--rule);overflow:visible}
@@ -638,6 +641,13 @@
     var tip=null, dragging=false, lastX=0, lastY=0, dragDist=0, downX=0, downY=0;
     if(interactive){
       tip=document.createElement('div'); tip.className='globe-tip'; document.body.appendChild(tip);
+      // discoverability hint (fades after a few seconds or on first interaction)
+      var hint=document.createElement('div'); hint.className='globe-hint'; hint.textContent='drag to spin · click a city';
+      if(canvas.parentNode) canvas.parentNode.appendChild(hint);
+      var hideHint=function(){ hint.classList.remove('show'); };
+      setTimeout(function(){ hint.classList.add('show'); },1300);
+      setTimeout(hideHint,8000);
+      canvas.addEventListener('pointerdown',hideHint,{once:true});
       function hubClient(hb){ var p=project(hb.lon,hb.lat,rot); var r=canvas.getBoundingClientRect();
         return {x:r.left+p.x/DPR, y:r.top+p.y/DPR, z:p.z}; }
       canvas.addEventListener('pointerdown',function(e){ dragging=true; focusing=false; lastX=e.clientX; lastY=e.clientY;
