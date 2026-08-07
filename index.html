@@ -607,7 +607,9 @@
         }
       });
     }
-    function loop(){ t++; if(!dragging){ rot+=spin; spin+=(base-spin)*0.03; } draw(); requestAnimationFrame(loop); }
+    var visible=true, running=false;
+    function loop(){ if(!visible){ running=false; return; } t++; if(!dragging){ rot+=spin; spin+=(base-spin)*0.03; } draw(); requestAnimationFrame(loop); }
+    function start(){ if(!running){ running=true; requestAnimationFrame(loop); } }
 
     // ---- interaction ----
     var tip=null, dragging=false, lastX=0, lastY=0;
@@ -640,7 +642,12 @@
 
     if(reduce){ draw();
       new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
-    } else { loop(); }
+    } else {
+      start();
+      if('IntersectionObserver' in window){
+        new IntersectionObserver(function(es){ visible=es[0].isIntersecting; if(visible) start(); },{rootMargin:'140px'}).observe(canvas);
+      }
+    }
   })();
 })();
 </script>
