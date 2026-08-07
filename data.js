@@ -143,13 +143,21 @@ window.PORTFOLIO_DATA = {
     { name: "Risk Intelligence",   solid: false }
   ],
 
+  stats: [
+    { value: 50, suffix: "+", label: "AI cohorts evaluated" },
+    { value: 50, suffix: "+", label: "Risk reports & heatmaps" },
+    { value: 50, suffix: "",  label: "U.S. states scored" },
+    { value: 2,  suffix: "",  label: "Published research platforms" }
+  ],
+
   contact: {
-    headlinePre:  "Open to research roles, collaborations, and a good ",
-    headlineLink: "conversation",
+    headlinePre:  "Open to research roles, policy work, and ",
+    headlineLink: "collaboration",
     headlinePost: ".",
     email:    "tobynsmith@uga.edu",
     phone:    "(706) 240-4258",
     linkedin: "linkedin.com/in/tobynsmith",
-    github:   "github.com/tobyn-smith"
+    github:   "github.com/tobyn-smith",
+    cvUrl:    "Tobyn-Smith-Resume.pdf"
   }
 };
