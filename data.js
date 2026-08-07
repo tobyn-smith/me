@@ -21,7 +21,7 @@ window.PORTFOLIO_DATA = {
 
   profile: {
     lead: "I'm a graduate student in International Policy at the University of Georgia, concentrating in Energy Security. My interest sits where three things meet: geopolitics, supply chain dependency, and the infrastructure that energy actually runs on.",
-    body: "Most of my work is research written for people who intend to act on it. That has meant supply-chain risk intelligence for Fortune 500 clients at BSI, guidance on the ethics and design of a university-wide AI assistant, and current research at Crowdwave into the methodology behind AI-driven audience simulation. Where an argument needs evidence, I build the geospatial pipelines that turn open data into maps you can read at a glance."
+    body: "Most of my work is research written for people who intend to act on it. That has meant supply-chain risk intelligence for Fortune 500 clients at BSI, guidance on the ethics and design of a university-wide AI assistant, and research at Crowdwave into the methodology behind AI-driven audience simulation. Where an argument needs evidence, I build the geospatial pipelines that turn open data into maps you can read at a glance."
   },
 
   facts: [
@@ -37,11 +37,11 @@ window.PORTFOLIO_DATA = {
       role: "Research Intern",
       org: "Crowdwave",
       location: "New York, NY",
-      period: "May 2026 – Present",
-      current: true,
+      period: "May 2026 – Aug 2026",
+      current: false,
       points: [
-        "Investigate the political, ethical, and methodological implications of AI-driven audience simulation for opinion and survey design.",
-        "Evaluate 50+ simulated cohorts using CPI scoring, assessing persuasion strength and alignment with human benchmarks."
+        "Investigated the political, ethical, and methodological implications of AI-driven audience simulation for opinion and survey design.",
+        "Evaluated 50+ simulated cohorts using CPI scoring, assessing persuasion strength and alignment with human benchmarks."
       ]
     },
     {
