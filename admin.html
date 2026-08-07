@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portfolio Admin — Tobyn Smith</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#f4f1ea;--panel:#fbfaf6;--ink:#1b1a17;--ink-soft:#4a463d;--ink-faint:#8a8577;
+    --accent:#8c2f24;--accent-2:#b5541a;--rule:#d8d1c1;--ok:#2f6a3f;
+    --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;padding-bottom:6rem}
+  a{color:var(--accent)}
+  .topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:.9rem clamp(1rem,4vw,2.5rem);display:flex;flex-wrap:wrap;align-items:center;gap:1rem;justify-content:space-between}
+  .topbar h1{font-family:var(--serif);font-size:1.25rem;font-weight:600}
+  .topbar h1 small{font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-top:.1rem}
+  .actions{display:flex;flex-wrap:wrap;gap:.6rem}
+  button{font-family:var(--sans);font-size:.82rem;font-weight:500;cursor:pointer;border:1px solid var(--ink);background:var(--panel);color:var(--ink);border-radius:4px;padding:.55rem .95rem;transition:background .2s,color .2s,transform .1s}
+  button:hover{background:var(--ink);color:var(--paper)}button:active{transform:translateY(1px)}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  button.primary:hover{background:#71241b}
+  button.ghost{border-color:var(--rule);color:var(--ink-soft);background:transparent}
+  button.ghost:hover{background:var(--rule);color:var(--ink)}
+  button.mini{font-size:.72rem;padding:.35rem .6rem}
+  .wrap{max-width:920px;margin:0 auto;padding:1.5rem clamp(1rem,4vw,2.5rem)}
+  .note{background:#fff7e6;border:1px solid #e7d59b;border-radius:6px;padding:.9rem 1.1rem;font-size:.85rem;color:#6b5a1f;margin-bottom:1.6rem}
+  .note b{color:#5a4a12}
+  details.card{background:var(--panel);border:1px solid var(--rule);border-radius:8px;margin-bottom:1rem;overflow:hidden}
+  details.card>summary{cursor:pointer;list-style:none;padding:1rem 1.2rem;font-family:var(--serif);font-size:1.15rem;font-weight:600;display:flex;align-items:center;gap:.7rem;user-select:none}
+  details.card>summary::-webkit-details-marker{display:none}
+  details.card>summary::before{content:"▸";color:var(--accent);font-size:.8rem;transition:transform .2s}
+  details.card[open]>summary::before{transform:rotate(90deg)}
+  details.card>summary .num{font-family:var(--mono);font-size:.7rem;color:var(--ink-faint);letter-spacing:.1em}
+  .card-body{padding:0 1.2rem 1.3rem}
+  label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:.9rem 0 .3rem}
+  input,textarea{width:100%;font-family:var(--sans);font-size:.9rem;color:var(--ink);background:#fff;border:1px solid var(--rule);border-radius:5px;padding:.55rem .7rem;resize:vertical}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+  textarea{min-height:70px;line-height:1.5}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 1rem}
+  @media(max-width:600px){.grid2{grid-template-columns:1fr}}
+  .item{border:1px dashed var(--rule);border-radius:7px;padding:.9rem 1rem 1.1rem;margin-top:.9rem;position:relative;background:#fff}
+  .item .item-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.2rem}
+  .item .item-head strong{font-family:var(--serif);font-size:.98rem}
+  .row-mini{display:flex;gap:.5rem;align-items:center;margin-top:.5rem}
+  .row-mini input{flex:1}
+  .addbtn{margin-top:.9rem}
+  .chk{display:flex;align-items:center;gap:.5rem;margin-top:.9rem;font-family:var(--sans);font-size:.85rem;text-transform:none;letter-spacing:0;color:var(--ink)}
+  .chk input{width:auto}
+  .toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ok);color:#fff;font-size:.85rem;font-weight:500;padding:.7rem 1.2rem;border-radius:100px;box-shadow:0 12px 30px -12px rgba(0,0,0,.5);transition:opacity .3s,transform .3s;z-index:50;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .hint{font-size:.75rem;color:var(--ink-faint);margin-top:.25rem}
+  .foot-actions{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-top:1px solid var(--rule);padding:.8rem clamp(1rem,4vw,2.5rem);display:flex;flex-wrap:wrap;gap:.6rem;justify-content:flex-end;z-index:30}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Portfolio Admin <small>Tobyn Smith · content editor</small></h1>
+  <div class="actions">
+    <button class="ghost" id="btnPreview">Preview site ↗</button>
+    <button class="ghost" id="btnReset">Reset to saved file</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="note">
+    <b>How this works:</b> edit anything below, then click <b>Download data.js</b> at the bottom and replace the
+    <code>data.js</code> file in your website folder (and re-upload / push to publish). Use <b>Save draft</b> +
+    <b>Preview site</b> to see changes before you commit them. Drafts are stored in this browser only.
+  </div>
+  <div id="editor"></div>
+</div>
+
+<div class="foot-actions">
+  <button class="ghost" id="btnSave">Save draft</button>
+  <button class="ghost" id="btnPreview2">Preview site ↗</button>
+  <button class="primary" id="btnDownload">⬇ Download data.js</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  var FILE = JSON.parse(JSON.stringify(window.PORTFOLIO_DATA||{}));
+  var state;
+  try{
+    var draft = localStorage.getItem('portfolio_draft');
+    state = draft ? JSON.parse(draft) : JSON.parse(JSON.stringify(FILE));
+  }catch(e){ state = JSON.parse(JSON.stringify(FILE)); }
+
+  // ensure arrays exist
+  ['facts','experience','education','projects','activities','awards','memberships','skills'].forEach(function(k){ if(!Array.isArray(state[k])) state[k]=[]; });
+  state.hero=state.hero||{}; state.profile=state.profile||{}; state.contact=state.contact||{};
+  if(!Array.isArray(state.hero.meta)) state.hero.meta=[];
+
+  var editor=document.getElementById('editor');
+  var toastEl=document.getElementById('toast');
+  function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); setTimeout(function(){toastEl.classList.remove('show');},1900); }
+  function autosave(){ try{ localStorage.setItem('portfolio_draft', JSON.stringify(state)); }catch(e){} }
+
+  // ---- small builders ----
+  function field(labelText, value, oninput, opts){
+    opts=opts||{};
+    var wrap=document.createElement('div');
+    var lab=document.createElement('label'); lab.textContent=labelText; wrap.appendChild(lab);
+    var el=document.createElement(opts.area?'textarea':'input');
+    el.value=value==null?'':value;
+    if(opts.placeholder) el.placeholder=opts.placeholder;
+    el.addEventListener('input',function(){ oninput(el.value); autosave(); });
+    wrap.appendChild(el);
+    if(opts.hint){ var hnt=document.createElement('div'); hnt.className='hint'; hnt.textContent=opts.hint; wrap.appendChild(hnt); }
+    return wrap;
+  }
+  function checkbox(labelText,value,onchange){
+    var wrap=document.createElement('label'); wrap.className='chk';
+    var el=document.createElement('input'); el.type='checkbox'; el.checked=!!value;
+    el.addEventListener('change',function(){ onchange(el.checked); autosave(); });
+    wrap.appendChild(el); wrap.appendChild(document.createTextNode(labelText));
+    return wrap;
+  }
+  // editable list of plain strings
+  function stringList(arr, placeholder){
+    var box=document.createElement('div');
+    function draw(){
+      box.innerHTML='';
+      arr.forEach(function(v,idx){
+        var r=document.createElement('div'); r.className='row-mini';
+        var inp=document.createElement('input'); inp.value=v==null?'':v; inp.placeholder=placeholder||'';
+        inp.addEventListener('input',function(){ arr[idx]=inp.value; autosave(); });
+        var del=document.createElement('button'); del.className='ghost mini'; del.textContent='✕';
+        del.addEventListener('click',function(){ arr.splice(idx,1); autosave(); draw(); });
+        r.appendChild(inp); r.appendChild(del); box.appendChild(r);
+      });
+      var add=document.createElement('button'); add.className='ghost mini addbtn'; add.textContent='+ Add';
+      add.addEventListener('click',function(){ arr.push(''); autosave(); draw(); });
+      box.appendChild(add);
+    }
+    draw(); return box;
+  }
+  function card(title, num, openFirst){
+    var d=document.createElement('details'); d.className='card'; if(openFirst) d.open=true;
+    var s=document.createElement('summary');
+    s.innerHTML='<span class="num">'+num+'</span> '+title;
+    d.appendChild(s);
+    var body=document.createElement('div'); body.className='card-body'; d.appendChild(body);
+    editor.appendChild(d);
+    return body;
+  }
+
+  // ===== HERO =====
+  (function(){
+    var b=card('Hero','01',true), H=state.hero;
+    b.appendChild(field('Eyebrow (small label above name)',H.eyebrow,function(v){H.eyebrow=v;}));
+    b.appendChild(field('Name / headline',H.name,function(v){H.name=v;}));
+    b.appendChild(field('Tagline',H.tagline,function(v){H.tagline=v;},{area:true}));
+    var l=document.createElement('label');l.textContent='Meta chips (location, degree, tools)';b.appendChild(l);
+    b.appendChild(stringList(H.meta,'e.g. Athens, Georgia'));
+  })();
+
+  // ===== PROFILE =====
+  (function(){
+    var b=card('Profile','02'), P=state.profile;
+    b.appendChild(field('Lead sentence (large)',P.lead,function(v){P.lead=v;},{area:true}));
+    b.appendChild(field('Body paragraph',P.body,function(v){P.body=v;},{area:true}));
+    var l=document.createElement('label');l.textContent='Facts (right-hand list)';b.appendChild(l);
+    b.appendChild(objList(state.facts,['label','value'],['Label','Value'],'Fact'));
+  })();
+
+  // ===== EXPERIENCE =====
+  (function(){
+    var b=card('Experience','03');
+    var host=document.createElement('div'); b.appendChild(host);
+    function draw(){
+      host.innerHTML='';
+      state.experience.forEach(function(e,idx){ host.appendChild(expItem(e,idx,draw)); });
+      var add=document.createElement('button'); add.className='ghost addbtn'; add.textContent='+ Add role / entry';
+      add.addEventListener('click',function(){ state.experience.push({role:'',org:'',location:'',period:'',current:false,points:['']}); autosave(); draw(); });
+      host.appendChild(add);
+    }
+    draw();
+  })();
+  function expItem(e,idx,redraw){
+    if(!Array.isArray(e.points)) e.points=[];
+    var it=document.createElement('div'); it.className='item';
+    var head=document.createElement('div'); head.className='item-head';
+    var strong=document.createElement('strong'); strong.textContent=e.role||'(new entry)';
+    var del=document.createElement('button'); del.className='ghost mini'; del.textContent='Remove';
+    del.addEventListener('click',function(){ state.experience.splice(idx,1); autosave(); redraw(); });
+    head.appendChild(strong); head.appendChild(del); it.appendChild(head);
+    it.appendChild(field('Role / title',e.role,function(v){e.role=v;strong.textContent=v||'(new entry)';}));
+    var g=document.createElement('div'); g.className='grid2';
+    g.appendChild(field('Organisation',e.org,function(v){e.org=v;}));
+    g.appendChild(field('Location',e.location,function(v){e.location=v;}));
+    it.appendChild(g);
+    var g2=document.createElement('div'); g2.className='grid2';
+    g2.appendChild(field('Period',e.period,function(v){e.period=v;},{placeholder:'May 2026 – Present'}));
+    var pad=document.createElement('div'); pad.appendChild(checkbox('Mark as current (adds pulsing dot on timeline)',e.current,function(v){e.current=v;})); g2.appendChild(pad);
+    it.appendChild(g2);
+    var l=document.createElement('label');l.textContent='Bullet points';it.appendChild(l);
+    it.appendChild(stringList(e.points,'Describe a responsibility or result'));
+    return it;
+  }
+
+  // ===== EDUCATION =====
+  (function(){
+    var b=card('Education','04');
+    b.appendChild(objList(state.education,['degree','school','location','period','detail'],['Degree','School','Location','Period','Detail'],'Degree'));
+  })();
+
+  // ===== PROJECTS =====
+  (function(){
+    var b=card('Projects','05');
+    var host=document.createElement('div'); b.appendChild(host);
+    function draw(){
+      host.innerHTML='';
+      state.projects.forEach(function(p,idx){ host.appendChild(projItem(p,idx,draw)); });
+      var add=document.createElement('button'); add.className='ghost addbtn'; add.textContent='+ Add project';
+      add.addEventListener('click',function(){ state.projects.push({title:'',tag:'',period:'',stack:[''],description:'',featured:false,links:[{label:'View site',url:''},{label:'Source',url:''}]}); autosave(); draw(); });
+      host.appendChild(add);
+    }
+    draw();
+  })();
+  function projItem(p,idx,redraw){
+    if(!Array.isArray(p.stack)) p.stack=[]; if(!Array.isArray(p.links)) p.links=[];
+    var it=document.createElement('div'); it.className='item';
+    var head=document.createElement('div'); head.className='item-head';
+    var strong=document.createElement('strong'); strong.textContent=p.title||'(new project)';
+    var del=document.createElement('button'); del.className='ghost mini'; del.textContent='Remove';
+    del.addEventListener('click',function(){ state.projects.splice(idx,1); autosave(); redraw(); });
+    head.appendChild(strong); head.appendChild(del); it.appendChild(head);
+    it.appendChild(field('Title',p.title,function(v){p.title=v;strong.textContent=v||'(new project)';}));
+    var g=document.createElement('div'); g.className='grid2';
+    g.appendChild(field('Tag (category)',p.tag,function(v){p.tag=v;},{placeholder:'OSINT · Grid Resilience'}));
+    g.appendChild(field('Period',p.period,function(v){p.period=v;},{placeholder:'2026'}));
+    it.appendChild(g);
+    it.appendChild(field('Description',p.description,function(v){p.description=v;},{area:true}));
+    var l=document.createElement('label');l.textContent='Tech stack chips';it.appendChild(l);
+    it.appendChild(stringList(p.stack,'e.g. Python'));
+    var l2=document.createElement('label');l2.textContent='Links (leave URL blank to hide a link)';it.appendChild(l2);
+    it.appendChild(objList(p.links,['label','url'],['Label','URL'],'Link'));
+    it.appendChild(checkbox('Feature this project (full-width, larger)',p.featured,function(v){p.featured=v;}));
+    return it;
+  }
+
+  // ===== RECORD =====
+  (function(){
+    var b=card('Activities & Leadership','06');
+    b.appendChild(objList(state.activities,['name','role','period'],['Name','Role','Period'],'Activity'));
+  })();
+  (function(){
+    var b=card('Awards & Honours','07');
+    b.appendChild(objList(state.awards,['name','detail'],['Award','Detail / issuer'],'Award'));
+  })();
+  (function(){
+    var b=card('Memberships','08');
+    b.appendChild(stringList(state.memberships,'Organisation name'));
+  })();
+  (function(){
+    var b=card('Technical Skills','09');
+    var host=document.createElement('div'); b.appendChild(host);
+    function draw(){
+      host.innerHTML='';
+      state.skills.forEach(function(s,idx){
+        var r=document.createElement('div'); r.className='row-mini';
+        var inp=document.createElement('input'); inp.value=s.name||''; inp.placeholder='Skill';
+        inp.addEventListener('input',function(){ s.name=inp.value; autosave(); });
+        var lab=document.createElement('label'); lab.className='chk'; lab.style.margin='0';
+        var cb=document.createElement('input'); cb.type='checkbox'; cb.checked=!!s.solid;
+        cb.addEventListener('change',function(){ s.solid=cb.checked; autosave(); });
+        lab.appendChild(cb); lab.appendChild(document.createTextNode('filled'));
+        var del=document.createElement('button'); del.className='ghost mini'; del.textContent='✕';
+        del.addEventListener('click',function(){ state.skills.splice(idx,1); autosave(); draw(); });
+        r.appendChild(inp); r.appendChild(lab); r.appendChild(del); host.appendChild(r);
+      });
+      var add=document.createElement('button'); add.className='ghost mini addbtn'; add.textContent='+ Add skill';
+      add.addEventListener('click',function(){ state.skills.push({name:'',solid:false}); autosave(); draw(); });
+      host.appendChild(add);
+    }
+    draw();
+  })();
+
+  // ===== CONTACT =====
+  (function(){
+    var b=card('Contact','10'), C=state.contact;
+    b.appendChild(field('Headline: before link',C.headlinePre,function(v){C.headlinePre=v;}));
+    var g=document.createElement('div'); g.className='grid2';
+    g.appendChild(field('Linked word',C.headlineLink,function(v){C.headlineLink=v;}));
+    g.appendChild(field('Headline: after link',C.headlinePost,function(v){C.headlinePost=v;}));
+    b.appendChild(g);
+    var g2=document.createElement('div'); g2.className='grid2';
+    g2.appendChild(field('Email',C.email,function(v){C.email=v;}));
+    g2.appendChild(field('Phone',C.phone,function(v){C.phone=v;}));
+    b.appendChild(g2);
+    var g3=document.createElement('div'); g3.className='grid2';
+    g3.appendChild(field('LinkedIn (no https://)',C.linkedin,function(v){C.linkedin=v;},{placeholder:'linkedin.com/in/tobynsmith'}));
+    g3.appendChild(field('GitHub (no https://)',C.github,function(v){C.github=v;},{placeholder:'github.com/tobyn-smith'}));
+    b.appendChild(g3);
+  })();
+
+  // generic list of objects with fixed keys
+  function objList(arr, keys, labels, itemName){
+    var box=document.createElement('div');
+    function draw(){
+      box.innerHTML='';
+      arr.forEach(function(obj,idx){
+        var it=document.createElement('div'); it.className='item';
+        var head=document.createElement('div'); head.className='item-head';
+        var strong=document.createElement('strong'); strong.textContent=(obj[keys[0]]||('('+itemName.toLowerCase()+')'));
+        var del=document.createElement('button'); del.className='ghost mini'; del.textContent='Remove';
+        del.addEventListener('click',function(){ arr.splice(idx,1); autosave(); draw(); });
+        head.appendChild(strong); head.appendChild(del); it.appendChild(head);
+        keys.forEach(function(k,ki){
+          it.appendChild(field(labels[ki],obj[k],function(v){ obj[k]=v; if(ki===0) strong.textContent=v||('('+itemName.toLowerCase()+')'); }));
+        });
+        box.appendChild(it);
+      });
+      var add=document.createElement('button'); add.className='ghost addbtn'; add.textContent='+ Add '+itemName.toLowerCase();
+      add.addEventListener('click',function(){ var o={}; keys.forEach(function(k){o[k]='';}); arr.push(o); autosave(); draw(); });
+      box.appendChild(add);
+    }
+    draw(); return box;
+  }
+
+  // ---- footer buttons ----
+  function download(){
+    var header='/* =====================================================================\n'
+      +'   PORTFOLIO CONTENT  (generated by admin.html)\n'
+      +'   Replace data.js in your website folder with this file, then re-publish.\n'
+      +'   ===================================================================== */\n';
+    var body='window.PORTFOLIO_DATA = '+JSON.stringify(state,null,2)+';\n';
+    var blob=new Blob([header+body],{type:'text/javascript'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='data.js';
+    document.body.appendChild(a); a.click(); a.remove();
+    autosave(); toast('data.js downloaded — replace the file and re-publish');
+  }
+  function preview(){ autosave(); window.open('index.html?preview=1','_blank'); }
+
+  document.getElementById('btnDownload').addEventListener('click',download);
+  document.getElementById('btnPreview').addEventListener('click',preview);
+  document.getElementById('btnPreview2').addEventListener('click',preview);
+  document.getElementById('btnSave').addEventListener('click',function(){ autosave(); toast('Draft saved in this browser'); });
+  document.getElementById('btnReset').addEventListener('click',function(){
+    if(confirm('Discard your draft and reload the content from the saved data.js file?')){
+      localStorage.removeItem('portfolio_draft'); location.reload();
+    }
+  });
+})();
+</script>
+</body>
+</html>
