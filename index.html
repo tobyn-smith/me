@@ -115,6 +115,24 @@
   @media(min-width:721px){.mobile-menu{display:none!important}}
   @media(prefers-reduced-motion:reduce){.mobile-menu.open{animation:none}.nav-toggle span{transition:none}}
 
+  /* command palette */
+  .cmdk{position:fixed;inset:0;z-index:60;display:none;align-items:flex-start;justify-content:center;background:rgba(0,0,0,.38);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);padding-top:14vh}
+  .cmdk.open{display:flex}
+  .cmdk-panel{width:min(560px,92vw);background:var(--paper);border:1px solid var(--rule);border-radius:12px;box-shadow:0 30px 80px -20px rgba(0,0,0,.55);overflow:hidden}
+  .cmdk-input{width:100%;border:none;border-bottom:1px solid var(--rule);background:transparent;color:var(--ink);font-family:var(--sans);font-size:1.05rem;padding:1.1rem 1.3rem;outline:none}
+  .cmdk-list{list-style:none;max-height:52vh;overflow:auto;padding:.4rem;margin:0}
+  .cmdk-item{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.7rem .9rem;border-radius:8px;cursor:pointer;font-family:var(--sans);font-size:.95rem;color:var(--ink)}
+  .cmdk-item.sel,.cmdk-item:hover{background:var(--paper-2)}
+  .cmdk-item.sel{box-shadow:inset 3px 0 0 var(--accent)}
+  .cmdk-hint{font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;color:var(--ink-faint);text-transform:uppercase;white-space:nowrap}
+  .cmdk-chip{display:inline-flex;align-items:center;gap:.12rem;font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);border:1px solid var(--rule);border-radius:6px;padding:.28rem .5rem;background:transparent;cursor:pointer;transition:color .2s,border-color .2s;flex:none}
+  .cmdk-chip span{font-size:.9em}
+  .cmdk-chip:hover{color:var(--accent);border-color:var(--accent)}
+  .cmdk-toast{position:fixed;bottom:1.3rem;left:50%;transform:translateX(-50%) translateY(20px);z-index:70;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:.8rem;padding:.6rem 1.1rem;border-radius:100px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+  .cmdk-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:720px){.cmdk-chip{display:none}}
+  @media(prefers-reduced-motion:reduce){.cmdk{backdrop-filter:none;-webkit-backdrop-filter:none}}
+
   /* globe */
   #globe{position:absolute;top:50%;right:-8%;transform:translateY(-50%);width:min(46vw,620px);height:min(46vw,620px);z-index:1;opacity:.9;cursor:grab;touch-action:none}
   #globe.dragging{cursor:grabbing}
@@ -669,6 +687,50 @@
     });
   }
 
+  // ---- command palette (Cmd/Ctrl-K) ----
+  (function(){
+    function go(hash){ var el=document.querySelector(hash); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+    function toast(msg){ var el=document.createElement('div'); el.className='cmdk-toast'; el.textContent=msg; document.body.appendChild(el);
+      requestAnimationFrame(function(){el.classList.add('show');}); setTimeout(function(){el.classList.remove('show'); setTimeout(function(){el.remove();},300);},1600); }
+    function copyText(t){ if(t&&navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(function(){toast('Copied '+t);},function(){toast(t);}); } else if(t){ toast(t); } }
+    var actions=[
+      {label:'Go to Profile',hint:'section',run:function(){go('#about');}},
+      {label:'Go to Experience',hint:'section',run:function(){go('#experience');}},
+      {label:'Go to Education',hint:'section',run:function(){go('#education');}},
+      {label:'Go to Projects',hint:'section',run:function(){go('#projects');}},
+      {label:'Go to Writing',hint:'section',run:function(){go('#writing');}},
+      {label:'Go to Record',hint:'section',run:function(){go('#record');}},
+      {label:'Go to Contact',hint:'section',run:function(){go('#contact');}},
+      {label:'Toggle dark mode',hint:'theme',run:function(){var tb=document.getElementById('themeToggle');if(tb)tb.click();}},
+      ct.cvUrl?{label:'Download résumé',hint:'file',run:function(){var a=document.createElement('a');a.href=safeUrl(ct.cvUrl);a.download='';document.body.appendChild(a);a.click();a.remove();}}:null,
+      ct.email?{label:'Copy email',hint:ct.email,run:function(){copyText(ct.email);}}:null,
+      ct.linkedin?{label:'Open LinkedIn',hint:'external',run:function(){window.open('https://'+ct.linkedin,'_blank','noopener,noreferrer');}}:null,
+      ct.github?{label:'Open GitHub',hint:'external',run:function(){window.open('https://'+ct.github,'_blank','noopener,noreferrer');}}:null
+    ].filter(Boolean);
+    var overlay=document.createElement('div'); overlay.className='cmdk'; overlay.setAttribute('role','dialog'); overlay.setAttribute('aria-modal','true'); overlay.setAttribute('aria-label','Command menu');
+    overlay.innerHTML='<div class="cmdk-panel"><input class="cmdk-input" type="text" placeholder="Type a command… sections, theme, résumé, email" aria-label="Command"><ul class="cmdk-list"></ul></div>';
+    document.body.appendChild(overlay);
+    var input=overlay.querySelector('.cmdk-input'), list=overlay.querySelector('.cmdk-list');
+    var filtered=[], sel=0, open=false;
+    function render(){ list.innerHTML=filtered.map(function(a,i){ return '<li class="cmdk-item'+(i===sel?' sel':'')+'" data-i="'+i+'"><span>'+esc(a.label)+'</span><span class="cmdk-hint">'+esc(a.hint)+'</span></li>'; }).join(''); }
+    function filt(){ var q=input.value.trim().toLowerCase(); filtered=actions.filter(function(a){return !q||a.label.toLowerCase().indexOf(q)>=0||String(a.hint).toLowerCase().indexOf(q)>=0;}); sel=0; render(); }
+    function openCmd(){ open=true; overlay.classList.add('open'); input.value=''; filt(); setTimeout(function(){input.focus();},20); }
+    function closeCmd(){ open=false; overlay.classList.remove('open'); }
+    function exec(i){ var a=filtered[i]; if(a){ closeCmd(); a.run(); } }
+    input.addEventListener('input',filt);
+    overlay.addEventListener('click',function(e){ if(e.target===overlay){ closeCmd(); return; } var li=e.target.closest('.cmdk-item'); if(li) exec(+li.getAttribute('data-i')); });
+    input.addEventListener('keydown',function(e){
+      if(e.key==='ArrowDown'){ e.preventDefault(); sel=Math.min(filtered.length-1,sel+1); render(); }
+      else if(e.key==='ArrowUp'){ e.preventDefault(); sel=Math.max(0,sel-1); render(); }
+      else if(e.key==='Enter'){ e.preventDefault(); exec(sel); }
+      else if(e.key==='Escape'){ closeCmd(); }
+    });
+    addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){ e.preventDefault(); open?closeCmd():openCmd(); } });
+    var chip=document.createElement('button'); chip.className='cmdk-chip'; chip.type='button'; chip.setAttribute('aria-label','Open command menu (Ctrl or Cmd + K)'); chip.innerHTML='<span>⌘</span>K';
+    chip.addEventListener('click',openCmd);
+    var navEl=document.querySelector('nav.top'); if(navEl) navEl.insertBefore(chip, navEl.firstChild);
+  })();
+
   // ---- interactive geopolitical globe ----
   (function(){
     var canvas=document.getElementById('globe'); if(!canvas||!canvas.getContext) return;
@@ -811,7 +873,9 @@
       canvas.style.pointerEvents='none';
     }
 
-    if(reduce){ draw();
+    // animate only on desktop; on mobile / reduced-motion draw a single static frame (saves battery)
+    var animate = !reduce && innerWidth>820;
+    if(!animate){ draw();
       new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
     } else {
       start();
