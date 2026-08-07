@@ -251,6 +251,10 @@
 
   /* interaction polish */
   #progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:40;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .08s linear}
+  #toTop{position:fixed;right:clamp(1rem,3vw,2rem);bottom:clamp(1rem,3vw,2rem);z-index:35;width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:blur(8px);color:var(--ink);font-size:1.15rem;line-height:1;cursor:pointer;display:grid;place-items:center;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .3s,transform .3s cubic-bezier(.2,.7,.2,1),color .25s,border-color .25s}
+  #toTop.show{opacity:1;transform:none;pointer-events:auto}
+  #toTop:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
+  @media print{#toTop{display:none!important}}
   main section[id]{scroll-margin-top:clamp(70px,10vh,96px)}
   a:focus-visible,button:focus-visible,.btn:focus-visible,.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
   .sec-head::after{width:0;transition:width .7s cubic-bezier(.2,.7,.2,1) .12s}
@@ -279,6 +283,7 @@
 <body>
 
 <div id="progress" aria-hidden="true"></div>
+<button id="toTop" type="button" aria-label="Back to top" title="Back to top">↑</button>
 <header class="bar" id="bar">
   <div class="brand" id="brand"></div>
   <nav class="top">
@@ -476,11 +481,21 @@
   // sticky bar border
   var bar=document.getElementById('bar');
   var prog=document.getElementById('progress');
+  var toTop=document.getElementById('toTop');
   addEventListener('scroll',function(){
     bar.classList.toggle('scrolled',scrollY>20);
     if(prog){ var max=document.documentElement.scrollHeight-innerHeight;
       prog.style.width=(max>0?Math.min(100,(scrollY/max)*100):0)+'%'; }
+    if(toTop) toTop.classList.toggle('show', scrollY>600);
   },{passive:true});
+  if(toTop) toTop.addEventListener('click',function(){ scrollTo({top:0,behavior:'smooth'}); });
+
+  // keyboard: press T to toggle theme (when not typing in a field)
+  addEventListener('keydown',function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey) return;
+    if(e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if(e.key==='t'||e.key==='T'){ var tb=document.getElementById('themeToggle'); if(tb) tb.click(); }
+  });
 
   // scroll reveal
   var io=new IntersectionObserver(function(es){
@@ -608,21 +623,29 @@
         }
       });
     }
-    var visible=true, running=false;
-    function loop(){ if(!visible){ running=false; return; } t++; if(!dragging){ rot+=spin; spin+=(base-spin)*0.03; } draw(); requestAnimationFrame(loop); }
+    var visible=true, running=false, focusing=false, rotTarget=0, tiltTarget=0;
+    function loop(){ if(!visible){ running=false; return; } t++;
+      if(focusing){ rot+=(rotTarget-rot)*0.07; tilt+=(tiltTarget-tilt)*0.07;
+        if(Math.abs(rotTarget-rot)<0.004 && Math.abs(tiltTarget-tilt)<0.004){ focusing=false; spin=base; } }
+      else if(!dragging){ rot+=spin; spin+=(base-spin)*0.03; }
+      draw(); requestAnimationFrame(loop); }
     function start(){ if(!running){ running=true; requestAnimationFrame(loop); } }
+    function focusHub(hb){ rotTarget=hb.lon*Math.PI/180;
+      while(rotTarget-rot>Math.PI) rotTarget-=2*Math.PI; while(rot-rotTarget>Math.PI) rotTarget+=2*Math.PI;
+      tiltTarget=Math.max(-1.0,Math.min(0.55,hb.lat*Math.PI/180)); focusing=true; spin=0; start(); }
 
     // ---- interaction ----
-    var tip=null, dragging=false, lastX=0, lastY=0;
+    var tip=null, dragging=false, lastX=0, lastY=0, dragDist=0, downX=0, downY=0;
     if(interactive){
       tip=document.createElement('div'); tip.className='globe-tip'; document.body.appendChild(tip);
       function hubClient(hb){ var p=project(hb.lon,hb.lat,rot); var r=canvas.getBoundingClientRect();
         return {x:r.left+p.x/DPR, y:r.top+p.y/DPR, z:p.z}; }
-      canvas.addEventListener('pointerdown',function(e){ dragging=true; lastX=e.clientX; lastY=e.clientY;
+      canvas.addEventListener('pointerdown',function(e){ dragging=true; focusing=false; lastX=e.clientX; lastY=e.clientY;
+        downX=e.clientX; downY=e.clientY; dragDist=0;
         canvas.classList.add('dragging'); tip.classList.remove('show'); hovered=-1;
         try{canvas.setPointerCapture(e.pointerId);}catch(_){} });
       addEventListener('pointermove',function(e){
-        if(dragging){ var dx=e.clientX-lastX, dy=e.clientY-lastY;
+        if(dragging){ var dx=e.clientX-lastX, dy=e.clientY-lastY; dragDist+=Math.abs(dx)+Math.abs(dy);
           rot+=dx*0.006; spin=Math.max(-0.12,Math.min(0.12,dx*0.006));
           tilt=Math.max(-1.15,Math.min(0.85,tilt+dy*0.006)); lastX=e.clientX; lastY=e.clientY; return; }
         // hover hit-test
@@ -630,11 +653,17 @@
         for(var i=0;i<hubs.length;i++){ var c=hubClient(hubs[i]); if(c.z<=0) continue;
           var d=Math.hypot(e.clientX-c.x, e.clientY-c.y); if(d<bd){ bd=d; best=i; } }
         hovered=best;
-        if(best>=0){ var c2=hubClient(hubs[best]); tip.innerHTML='<b>'+hubs[best].name+'</b> — '+hubs[best].note;
+        if(best>=0){ var c2=hubClient(hubs[best]); tip.innerHTML='<b>'+hubs[best].name+'</b> · '+hubs[best].note;
           tip.style.left=c2.x+'px'; tip.style.top=c2.y+'px'; tip.classList.add('show'); canvas.style.cursor='pointer'; }
         else { tip.classList.remove('show'); canvas.style.cursor='grab'; }
       });
-      function end(){ if(dragging){ dragging=false; canvas.classList.remove('dragging'); } }
+      function end(e){ if(!dragging) return; dragging=false; canvas.classList.remove('dragging');
+        if(dragDist<5){ // a click (not a drag): fly the nearest hub to the front
+          var bx=(e&&e.clientX!=null)?e.clientX:downX, by=(e&&e.clientY!=null)?e.clientY:downY, best=-1, bd=18;
+          for(var i=0;i<hubs.length;i++){ var c=hubClient(hubs[i]); if(c.z<=0) continue;
+            var d=Math.hypot(bx-c.x, by-c.y); if(d<bd){ bd=d; best=i; } }
+          if(best>=0) focusHub(hubs[best]);
+        } }
       addEventListener('pointerup',end); addEventListener('pointercancel',end);
       canvas.addEventListener('pointerleave',function(){ if(!dragging){ hovered=-1; if(tip) tip.classList.remove('show'); } });
     } else {
