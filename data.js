@@ -16,7 +16,7 @@ window.PORTFOLIO_DATA = {
   profile: {
     photo: "headshot.jpg",
     photoCaption: "University of Georgia, Athens",
-    lead: "I'm a graduate student in International Policy at the University of Georgia, concentrating in Energy Security.",
+    lead: "I'm a graduate student in International Policy at the University of Georgia, concentrating in Energy Security. My work runs from supply-chain risk intelligence for Fortune 500 clients at BSI to mapping geopolitical exposure across Baltic LNG corridors and scoring grid-resilience exposure for all 50 US states.",
     interests: [
       "Geopolitics",
       "International Affairs",
@@ -86,7 +86,7 @@ window.PORTFOLIO_DATA = {
       tag: "OSINT · Grid Resilience",
       period: "2026",
       stack: ["Python", "R", "GIS", "EIA Open Data"],
-      description: "A Python pipeline scoring all 50 U.S. states on grid resilience exposure using EIA open data, published as an interactive site with choropleth maps and a documented methodology.",
+      description: "A Python pipeline scoring all 50 U.S. states on grid-resilience exposure from EIA open data, published as an interactive choropleth site with a documented methodology. It surfaces where generation mix and transmission constraints leave states most exposed to supply shocks.",
       featured: true,
       links: [
         { label: "View site", url: "" },
@@ -98,12 +98,29 @@ window.PORTFOLIO_DATA = {
       tag: "Geopolitics · Energy Transit",
       period: "2026",
       stack: ["R (sf)", "GIS", "Quarto", "GitHub Actions"],
-      description: "Mapped and scored the geopolitical exposure of Baltic Sea LNG terminals and subsea corridors in R, published as a Quarto site with interactive maps built via GitHub Actions.",
+      description: "Mapped and scored the geopolitical exposure of Baltic Sea LNG terminals and subsea corridors in R (sf), published as a Quarto site with interactive maps built via GitHub Actions. The model highlights which terminals and corridors carry the greatest exposure to disruption.",
       featured: false,
       links: [
         { label: "View site", url: "" },
         { label: "Source", url: "https://github.com/tobyn-smith" }
       ]
+    }
+  ],
+
+  writing: [
+    {
+      title: "China's Rare-Earth Mineral Hegemony",
+      outlet: "Policy Memo · UGA Center for International Trade & Security",
+      date: "2025",
+      thesis: "How Beijing's 2025 rare-earth export controls turn supply-chain dependency into a tool of economic coercion, with four US policy responses.",
+      url: ""
+    },
+    {
+      title: "Columns on geopolitics & international security",
+      outlet: "Georgia Political Review",
+      date: "2024–2025",
+      thesis: "Regular columns as Columnist & Operations Director covering geopolitics, security, and energy.",
+      url: ""
     }
   ],
 
@@ -138,7 +155,7 @@ window.PORTFOLIO_DATA = {
     headlineLink: "collaboration",
     headlinePost: ".",
     email:    "tobynsmith@uga.edu",
-    phone:    "(706) 240-4258",
+    phone:    "",
     linkedin: "linkedin.com/in/tobynsmith",
     github:   "github.com/tobyn-smith",
     cvUrl:    "Tobyn-Smith-Resume.pdf"
