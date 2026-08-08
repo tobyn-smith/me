@@ -107,22 +107,15 @@ window.PORTFOLIO_DATA = {
     }
   ],
 
-  writing: [
-    {
-      title: "China's Rare-Earth Mineral Hegemony",
-      outlet: "Policy Memo · UGA Center for International Trade & Security",
-      date: "2025",
-      thesis: "How Beijing's 2025 rare-earth export controls turn supply-chain dependency into a tool of economic coercion, with four US policy responses.",
-      url: ""
-    },
-    {
-      title: "Columns on geopolitics & international security",
-      outlet: "Georgia Political Review",
-      date: "2024–2025",
-      thesis: "Regular columns as Columnist & Operations Director covering geopolitics, security, and energy.",
-      url: ""
-    }
-  ],
+  writing: {
+    publication: "Tobyn Smith's Substack",
+    url: "https://tobynsmith.substack.com",
+    blurb: "Essays and analysis on energy, policy, and international affairs.",
+    posts: [
+      { title: "The Security Dilemma Is Back, and We Learned Nothing", url: "https://tobynsmith.substack.com/p/the-security-dilemma-is-back-and" },
+      { title: "The Iran War: does London still hold institutional and economic authority in the world order?", url: "https://tobynsmith.substack.com/p/iran-war-a-stress-test-on-the-united" }
+    ]
+  },
 
   activities: [
     { name: "Office of Academic Honesty",          role: "Panelist & Chair",                 period: "2024 — Present" },
