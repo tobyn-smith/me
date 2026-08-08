@@ -89,8 +89,8 @@ window.PORTFOLIO_DATA = {
       description: "A Python pipeline scoring all 50 U.S. states on grid-resilience exposure from EIA open data, published as an interactive choropleth site with a documented methodology. It surfaces where generation mix and transmission constraints leave states most exposed to supply shocks.",
       featured: true,
       links: [
-        { label: "View site", url: "" },
-        { label: "Source", url: "https://github.com/tobyn-smith" }
+        { label: "View site", url: "https://tobyn-smith.github.io/energyosint/" },
+        { label: "Source", url: "https://github.com/tobyn-smith/energyosint" }
       ]
     },
     {
@@ -101,8 +101,8 @@ window.PORTFOLIO_DATA = {
       description: "Mapped and scored the geopolitical exposure of Baltic Sea LNG terminals and subsea corridors in R (sf), published as a Quarto site with interactive maps built via GitHub Actions. The model highlights which terminals and corridors carry the greatest exposure to disruption.",
       featured: false,
       links: [
-        { label: "View site", url: "" },
-        { label: "Source", url: "https://github.com/tobyn-smith" }
+        { label: "View site", url: "https://tobyn-smith.github.io/transit/" },
+        { label: "Source", url: "https://github.com/tobyn-smith/transit" }
       ]
     }
   ],
