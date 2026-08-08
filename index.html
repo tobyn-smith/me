@@ -165,6 +165,16 @@
   @keyframes scrollLine{0%{transform:translateX(-15px)}100%{transform:translateX(40px)}}
   @media(max-width:600px){.scroll-cue{display:none}}
   @media(prefers-reduced-motion:reduce){.scroll-cue i::after{animation:none}}
+  /* hero entrance choreography */
+  @keyframes heroName{from{opacity:0;transform:translateY(24px) scale(.985)}to{opacity:1;transform:none}}
+  @keyframes heroRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+  @keyframes globeIn{from{opacity:0;transform:translateY(-50%) scale(.93)}to{opacity:.9;transform:translateY(-50%) scale(1)}}
+  .hero h1{animation:heroName 1.05s cubic-bezier(.2,.75,.2,1) .06s both}
+  .hero .lede{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) .34s both}
+  .hero-cta{animation:heroRise .9s cubic-bezier(.2,.7,.2,1) .54s both}
+  .scroll-cue{animation:heroRise .9s ease .85s both}
+  @media(min-width:821px){#globe{animation:globeIn 1.5s ease .1s both}}
+  @media(prefers-reduced-motion:reduce){.hero h1,.hero .lede,.hero-cta,.scroll-cue,#globe{animation:none!important}}
   .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(3.2rem,11vw,9rem);line-height:.92;letter-spacing:-.03em;margin-bottom:1.6rem}
   .hero .lede{display:flex;flex-direction:column;gap:1rem;max-width:42ch;margin-top:.3rem}
   .lede-role{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.4rem,3.4vw,2.2rem);line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
@@ -182,7 +192,8 @@
   /* nav active */
   nav.top a.active{color:var(--accent)}
   nav.top a.active::after{width:100%}
-  .nav-cv{border:1px solid var(--accent);color:var(--accent)!important;border-radius:100px;padding:.3rem .85rem!important;transition:background .25s,color .25s}
+  .nav-cv{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--accent);color:var(--accent)!important;border-radius:100px;padding:.45rem 1rem!important;line-height:1;transition:background .25s,color .25s}
+  .nav-cv svg{width:13px;height:13px;flex:none}
   .nav-cv::after{display:none}
   .nav-cv:hover{background:var(--accent);color:#fff!important}
   .theme-toggle{background:transparent;border:1px solid var(--rule);color:var(--ink-soft);border-radius:100px;width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex:none;transition:color .25s,border-color .25s,transform .25s}
@@ -395,7 +406,7 @@
     <a href="#writing">Substack</a>
     <a href="#record">Record</a>
     <a href="#contact">Contact</a>
-    <a class="nav-cv" id="navCv" href="#" download>Résumé ↓</a>
+    <a class="nav-cv" id="navCv" href="#" download><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 20h16"/></svg>Résumé</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"></button>
     <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu"><span></span><span></span><span></span></button>
   </nav>
@@ -461,8 +472,8 @@
   html += '<section class="hero wrap">'
     + '<canvas id="globe" aria-hidden="true"></canvas>'
     + '<div class="hero-content">'
-    + '<h1 class="reveal">'+esc(h.name)+'</h1>'
-    + '<div class="lede reveal">'+(function(){
+    + '<h1>'+esc(h.name)+'</h1>'
+    + '<div class="lede">'+(function(){
         var parts=String(h.tagline||'').split('|');
         if(parts.length>=2){
           var role=parts[0].trim();
@@ -471,12 +482,12 @@
         }
         return '<span class="lede-role">'+esc(h.tagline)+'</span>';
       })()+'</div>'
-    + '<div class="hero-cta reveal">'
+    + '<div class="hero-cta">'
       + (ct.cvUrl?'<a class="btn btn-solid" href="'+esc(safeUrl(ct.cvUrl))+'" download>'+ICONS.download+'Download résumé</a>':'')
       + '<a class="btn btn-ghost" href="#contact">Get in touch'+ICONS.arrow+'</a>'
     + '</div>'
     + '</div>'
-    + '<div class="scroll-cue reveal" aria-hidden="true"><i></i>Scroll</div>'
+    + '<div class="scroll-cue" aria-hidden="true"><i></i>Scroll</div>'
     + '</section>';
 
   /* ABOUT */
