@@ -157,8 +157,14 @@
   @media(prefers-reduced-motion:reduce){.flow::before,.flow .flow-node{animation:none}.flow .flow-node{display:none}}
 
   /* hero */
-  .hero{position:relative;padding:clamp(7rem,16vh,11rem) 0 clamp(3rem,7vh,5rem);z-index:2}
+  .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:clamp(5rem,9vh,7rem) 0 clamp(5rem,9vh,7rem);z-index:2}
   .hero-content{position:relative;z-index:2}
+  .scroll-cue{position:absolute;left:0;bottom:clamp(1.6rem,4vh,2.6rem);display:flex;align-items:center;gap:.85rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);z-index:2}
+  .scroll-cue i{display:block;width:40px;height:1px;background:var(--rule);position:relative;overflow:hidden}
+  .scroll-cue i::after{content:"";position:absolute;top:0;bottom:0;left:0;width:15px;background:var(--accent);animation:scrollLine 2.2s ease-in-out infinite}
+  @keyframes scrollLine{0%{transform:translateX(-15px)}100%{transform:translateX(40px)}}
+  @media(max-width:600px){.scroll-cue{display:none}}
+  @media(prefers-reduced-motion:reduce){.scroll-cue i::after{animation:none}}
   .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(3.2rem,11vw,9rem);line-height:.92;letter-spacing:-.03em;margin-bottom:1.6rem}
   .hero .lede{display:flex;flex-direction:column;gap:1rem;max-width:42ch;margin-top:.3rem}
   .lede-role{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.4rem,3.4vw,2.2rem);line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
@@ -469,7 +475,9 @@
       + (ct.cvUrl?'<a class="btn btn-solid" href="'+esc(safeUrl(ct.cvUrl))+'" download>'+ICONS.download+'Download résumé</a>':'')
       + '<a class="btn btn-ghost" href="#contact">Get in touch'+ICONS.arrow+'</a>'
     + '</div>'
-    + '</div></section>';
+    + '</div>'
+    + '<div class="scroll-cue reveal" aria-hidden="true"><i></i>Scroll</div>'
+    + '</section>';
 
   /* ABOUT */
   html += flow();
@@ -805,25 +813,39 @@
     function draw(){
       themeColors();
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='rgba('+INK+',0.028)'; ctx.fill();
-      for(var lat=-60;lat<=60;lat+=30) (function(la){ stroke(function(lon){return project(lon,la,rot);},-180,180,4,'rgba('+INK+',0.12)',DPR); })(lat);
-      for(var lon=-180;lon<180;lon+=30) (function(lo){ stroke(function(la){return project(lo,la,rot);},-90,90,4,'rgba('+INK+',0.12)',DPR); })(lon);
-      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.strokeStyle='rgba('+INK+',0.20)'; ctx.lineWidth=DPR*1.2; ctx.stroke();
+      // sphere with top-left lit shading for volume
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+      var g=ctx.createRadialGradient(cx-R*0.38,cy-R*0.42,R*0.1,cx,cy,R*1.04);
+      g.addColorStop(0,'rgba('+INK+',0.015)'); g.addColorStop(0.72,'rgba('+INK+',0.035)'); g.addColorStop(1,'rgba('+INK+',0.09)');
+      ctx.fillStyle=g; ctx.fill();
+      // graticule
+      for(var lat=-60;lat<=60;lat+=30) (function(la){ stroke(function(lon){return project(lon,la,rot);},-180,180,4,'rgba('+INK+',0.16)',DPR); })(lat);
+      for(var lon=-180;lon<180;lon+=30) (function(lo){ stroke(function(la){return project(lo,la,rot);},-90,90,4,'rgba('+INK+',0.16)',DPR); })(lon);
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.strokeStyle='rgba('+INK+',0.32)'; ctx.lineWidth=DPR*1.3; ctx.stroke();
+      // connection arcs + travelling pulses (glow)
+      ctx.save(); ctx.shadowColor='rgba('+ACC+',0.6)';
       arcPts.forEach(function(pts,ai){
+        ctx.shadowBlur=0;
         ctx.beginPath(); var on=false;
         for(var k=0;k<pts.length;k++){var p=project(pts[k][0],pts[k][1],rot);
           if(p.z>0){ if(!on){ctx.moveTo(p.x,p.y);on=true;} else ctx.lineTo(p.x,p.y);} else on=false; }
-        ctx.strokeStyle='rgba('+ACC+',0.32)'; ctx.lineWidth=DPR; ctx.stroke();
+        ctx.strokeStyle='rgba('+ACC+',0.5)'; ctx.lineWidth=DPR*1.15; ctx.stroke();
         var prog=((t*0.006)+ai*0.11)%1, idx=Math.min(pts.length-1,Math.floor(prog*pts.length));
         var pp=project(pts[idx][0],pts[idx][1],rot);
-        if(pp.z>0){ ctx.beginPath(); ctx.arc(pp.x,pp.y,DPR*2.1,0,Math.PI*2); ctx.fillStyle='rgba('+ACC+',0.9)'; ctx.fill(); }
+        if(pp.z>0){ ctx.shadowBlur=DPR*8; ctx.beginPath(); ctx.arc(pp.x,pp.y,DPR*2.3,0,Math.PI*2); ctx.fillStyle='rgba('+ACC+',1)'; ctx.fill(); }
       });
+      ctx.restore();
+      // hub nodes (glow + pulse ring)
+      ctx.save(); ctx.shadowColor='rgba('+ACC+',0.75)';
       hubs.forEach(function(hb,hi){var p=project(hb.lon,hb.lat,rot);
-        if(p.z>0){ var isH=hi===hovered, pulse=1+0.45*Math.sin(t*0.05+hb.lon), rad=DPR*(isH?3.6:2.3);
-          ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,Math.PI*2); ctx.fillStyle='rgba('+ACC+','+(isH?1:0.85)+')'; ctx.fill();
-          ctx.beginPath(); ctx.arc(p.x,p.y,rad*pulse+DPR,0,Math.PI*2); ctx.strokeStyle='rgba('+ACC+','+(isH?0.5:0.28)+')'; ctx.lineWidth=DPR; ctx.stroke();
+        if(p.z>0){ var isH=hi===hovered, pulse=1+0.5*Math.sin(t*0.05+hb.lon), rad=DPR*(isH?4.2:2.8);
+          ctx.shadowBlur=DPR*(isH?15:9);
+          ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,Math.PI*2); ctx.fillStyle='rgba('+ACC+','+(isH?1:0.92)+')'; ctx.fill();
+          ctx.shadowBlur=0;
+          ctx.beginPath(); ctx.arc(p.x,p.y,rad*pulse+DPR,0,Math.PI*2); ctx.strokeStyle='rgba('+ACC+','+(isH?0.55:0.34)+')'; ctx.lineWidth=DPR; ctx.stroke();
         }
       });
+      ctx.restore();
     }
     var visible=true, running=false, focusing=false, rotTarget=0, tiltTarget=0;
     function loop(){ if(!visible){ running=false; return; } t++;
