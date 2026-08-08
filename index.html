@@ -21,9 +21,9 @@
 <meta property="og:url" content="https://tobyn-smith.github.io/me/" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image:alt" content="Tobyn Smith — Energy Security & Policy Research" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="preload" as="font" type="font/woff2" href="fonts/fraunces-normal-300-600-latin.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/inter-normal-400-latin.woff2" crossorigin />
+<link rel="stylesheet" href="fonts.css" />
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Tobyn Smith","jobTitle":"Energy Security & Policy Researcher","description":"Energy-security and supply-chain risk analyst focused on OSINT grid-resilience scoring, Baltic LNG transit risk, and geospatial intelligence.","url":"https://tobyn-smith.github.io/me/","image":"https://tobyn-smith.github.io/me/og-card.png","email":"mailto:tobynsmith@uga.edu","alumniOf":{"@type":"CollegeOrUniversity","name":"University of Georgia"},"knowsAbout":["Energy security","Supply-chain risk","Geospatial analysis","OSINT","Geopolitics","International policy"],"sameAs":["https://linkedin.com/in/tobynsmith","https://github.com/tobyn-smith"]}
 </script>
@@ -386,7 +386,7 @@
     <a href="#experience">Experience</a>
     <a href="#education">Education</a>
     <a href="#projects">Projects</a>
-    <a href="#writing">Writing</a>
+    <a href="#writing">Substack</a>
     <a href="#record">Record</a>
     <a href="#contact">Contact</a>
     <a class="nav-cv" id="navCv" href="#" download>Résumé ↓</a>
@@ -399,7 +399,7 @@
   <a href="#experience">Experience</a>
   <a href="#education">Education</a>
   <a href="#projects">Projects</a>
-  <a href="#writing">Writing</a>
+  <a href="#writing">Substack</a>
   <a href="#record">Record</a>
   <a href="#contact">Contact</a>
 </nav>
@@ -555,11 +555,9 @@
     var posts=(wr.posts||[]).filter(function(p){return p&&p.title;});
     html += flow();
     html += '<section id="writing" class="wrap">'
-      + '<div class="sec-head reveal"><span class="sec-num">05</span><h2 class="sec-title">Writing</h2></div>'
+      + '<div class="sec-head reveal"><span class="sec-num">05</span><h2 class="sec-title">Substack</h2></div>'
       + '<div class="substack reveal">'
-      + '<p class="substack-lead">'+esc(wr.blurb||'')+' I publish at '
-        + (wr.url?'<a href="'+esc(safeUrl(wr.url))+'" target="_blank" rel="noopener noreferrer">'+esc(wr.publication||'Substack')+'</a>':esc(wr.publication||'Substack'))
-        + '.</p>'
+      + '<p class="substack-lead">'+esc(wr.blurb||'')+'</p>'
       + (posts.length?'<div class="writing-list">'
           + posts.map(function(p){
               return '<a class="wr-item wr-link" href="'+esc(safeUrl(p.url))+'" target="_blank" rel="noopener noreferrer">'
@@ -710,7 +708,7 @@
       {label:'Go to Experience',hint:'section',run:function(){go('#experience');}},
       {label:'Go to Education',hint:'section',run:function(){go('#education');}},
       {label:'Go to Projects',hint:'section',run:function(){go('#projects');}},
-      {label:'Go to Writing',hint:'section',run:function(){go('#writing');}},
+      {label:'Go to Substack',hint:'section',run:function(){go('#writing');}},
       {label:'Go to Record',hint:'section',run:function(){go('#record');}},
       {label:'Go to Contact',hint:'section',run:function(){go('#contact');}},
       {label:'Toggle dark mode',hint:'theme',run:function(){var tb=document.getElementById('themeToggle');if(tb)tb.click();}},
