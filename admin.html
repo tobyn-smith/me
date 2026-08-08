@@ -104,7 +104,9 @@
   }catch(e){ state = JSON.parse(JSON.stringify(FILE)); }
 
   // ensure arrays exist
-  ['experience','education','projects','writing','activities','awards','memberships','skills'].forEach(function(k){ if(!Array.isArray(state[k])) state[k]=[]; });
+  ['experience','education','projects','activities','awards','memberships','skills'].forEach(function(k){ if(!Array.isArray(state[k])) state[k]=[]; });
+  if(!state.writing || typeof state.writing!=='object' || Array.isArray(state.writing)) state.writing={posts:[]};
+  if(!Array.isArray(state.writing.posts)) state.writing.posts=[];
   state.hero=state.hero||{}; state.profile=state.profile||{}; state.contact=state.contact||{};
   if(!Array.isArray(state.profile.interests)) state.profile.interests=[];
   if(typeof state.footer!=='string') state.footer = (typeof FILE.footer==='string' ? FILE.footer : '');
@@ -270,10 +272,14 @@
     return it;
   }
 
-  // ===== WRITING =====
+  // ===== WRITING (Substack) =====
   (function(){
-    var b=card('Selected Writing','06');
-    b.appendChild(objList(state.writing,['title','outlet','date','thesis','url'],['Title','Outlet / type','Date','One-line thesis','URL (blank hides the link)'],'Piece'));
+    var b=card('Writing · Substack','06'), W=state.writing;
+    b.appendChild(field('Publication name',W.publication,function(v){W.publication=v;},{placeholder:"Tobyn Smith's Substack"}));
+    b.appendChild(field('Substack URL',W.url,function(v){W.url=v;},{placeholder:'https://tobynsmith.substack.com'}));
+    b.appendChild(field('Blurb (one line under the heading)',W.blurb,function(v){W.blurb=v;},{area:true}));
+    var l=document.createElement('label');l.textContent='Featured posts';b.appendChild(l);
+    b.appendChild(objList(W.posts,['title','url'],['Post title','URL'],'Post'));
   })();
 
   // ===== RECORD =====
