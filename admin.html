@@ -266,7 +266,6 @@
     it.appendChild(stringList(p.stack,'e.g. Python'));
     var l2=document.createElement('label');l2.textContent='Links (leave URL blank to hide a link)';it.appendChild(l2);
     it.appendChild(objList(p.links,['label','url'],['Label','URL'],'Link'));
-    it.appendChild(checkbox('Feature this project (subtle accent border highlight)',p.featured,function(v){p.featured=v;}));
     return it;
   }
 
@@ -302,13 +301,9 @@
         var r=document.createElement('div'); r.className='row-mini';
         var inp=document.createElement('input'); inp.value=s.name||''; inp.placeholder='Skill';
         inp.addEventListener('input',function(){ s.name=inp.value; autosave(); });
-        var lab=document.createElement('label'); lab.className='chk'; lab.style.margin='0';
-        var cb=document.createElement('input'); cb.type='checkbox'; cb.checked=!!s.solid;
-        cb.addEventListener('change',function(){ s.solid=cb.checked; autosave(); });
-        lab.appendChild(cb); lab.appendChild(document.createTextNode('filled'));
         var del=document.createElement('button'); del.className='ghost mini'; del.textContent='✕';
         del.addEventListener('click',function(){ state.skills.splice(idx,1); autosave(); draw(); });
-        r.appendChild(inp); r.appendChild(lab); r.appendChild(del); host.appendChild(r);
+        r.appendChild(inp); r.appendChild(del); host.appendChild(r);
       });
       var add=document.createElement('button'); add.className='ghost mini addbtn'; add.textContent='+ Add skill';
       add.addEventListener('click',function(){ state.skills.push({name:'',solid:false}); autosave(); draw(); });

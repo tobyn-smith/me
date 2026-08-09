@@ -16,7 +16,7 @@ window.PORTFOLIO_DATA = {
   profile: {
     photo: "headshot.jpg",
     photoCaption: "University of Georgia, Athens",
-    lead: "I'm a graduate student in International Policy at the University of Georgia, concentrating in Energy Security. My work runs from supply-chain risk intelligence for Fortune 500 clients at BSI to mapping geopolitical exposure across Baltic LNG corridors and scoring grid-resilience exposure for all 50 US states.",
+    lead: "I'm a graduate student in International Policy at the University of Georgia, concentrating in Energy Security. My work runs from supply-chain risk intelligence for Fortune 500 clients at BSI to mapping chokepoints along Baltic LNG corridors and scoring grid resilience across all 50 US states.",
     interests: [
       "Geopolitics",
       "International Affairs",
@@ -86,8 +86,7 @@ window.PORTFOLIO_DATA = {
       tag: "OSINT · Grid Resilience",
       period: "2026",
       stack: ["Python", "R", "GIS", "EIA Open Data"],
-      description: "A Python pipeline scoring all 50 U.S. states on grid-resilience exposure from EIA open data, published as an interactive choropleth site with a documented methodology. It surfaces where generation mix and transmission constraints leave states most exposed to supply shocks.",
-      featured: true,
+      description: "A Python pipeline scoring all 50 U.S. states on grid-resilience exposure from EIA open data, published as an interactive choropleth site with a documented methodology. It surfaces where generation mix and transmission constraints leave states most vulnerable to supply shocks.",
       links: [
         { label: "View site", url: "https://tobyn-smith.github.io/energyosint/" },
         { label: "Source", url: "https://github.com/tobyn-smith/energyosint" }
@@ -98,8 +97,7 @@ window.PORTFOLIO_DATA = {
       tag: "Geopolitics · Energy Transit",
       period: "2026",
       stack: ["R (sf)", "GIS", "Quarto", "GitHub Actions"],
-      description: "Mapped and scored the geopolitical exposure of Baltic Sea LNG terminals and subsea corridors in R (sf), published as a Quarto site with interactive maps built via GitHub Actions. The model highlights which terminals and corridors carry the greatest exposure to disruption.",
-      featured: false,
+      description: "Which Baltic LNG terminals are easiest to disrupt? I scored terminals and subsea corridors in R (sf) and published the results as a Quarto site with interactive maps, built and deployed via GitHub Actions.",
       links: [
         { label: "View site", url: "https://tobyn-smith.github.io/transit/" },
         { label: "Source", url: "https://github.com/tobyn-smith/transit" }
@@ -118,10 +116,10 @@ window.PORTFOLIO_DATA = {
   },
 
   activities: [
-    { name: "Office of Academic Honesty",          role: "Panelist & Chair",                 period: "2024 — Present" },
-    { name: "International Student Advisory Board",  role: "Board Member",                     period: "2024 — 2026" },
-    { name: "Loch Johnson Society",                 role: "Senior Advisor",                   period: "2024 — 2026" },
-    { name: "Georgia Political Review",             role: "Columnist & Operations Director",  period: "2024 — 2025" }
+    { name: "Office of Academic Honesty",          role: "Panelist & Chair",                 period: "2024 – Present" },
+    { name: "International Student Advisory Board",  role: "Board Member",                     period: "2024 – 2026" },
+    { name: "Loch Johnson Society",                 role: "Senior Advisor",                   period: "2024 – 2026" },
+    { name: "Georgia Political Review",             role: "Columnist & Operations Director",  period: "2024 – 2025" }
   ],
 
   awards: [
@@ -136,16 +134,14 @@ window.PORTFOLIO_DATA = {
   ],
 
   skills: [
-    { name: "Python",              solid: true },
-    { name: "R",                   solid: true },
-    { name: "GIS",                 solid: true },
-    { name: "Geospatial Analysis", solid: false },
-    { name: "Risk Intelligence",   solid: false }
+    { name: "Python" },
+    { name: "R" },
+    { name: "GIS" }
   ],
 
   contact: {
-    headlinePre:  "Open to research roles, policy work, and ",
-    headlineLink: "collaboration",
+    headlinePre:  "Open to research roles and policy work. ",
+    headlineLink: "Email me",
     headlinePost: ".",
     email:    "tobynsmith@uga.edu",
     phone:    "",
