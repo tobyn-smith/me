@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://api.github.com; frame-src 'self'; object-src 'none'; base-uri 'self'" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
 <title>Site Editor — Tobyn Smith</title>
@@ -506,7 +507,7 @@
     b.appendChild(field('Substack URL',W.url,function(v){W.url=v;}));
     b.appendChild(field('Blurb',W.blurb,function(v){W.blurb=v;},{area:true}));
     var l=document.createElement('label'); l.textContent='Featured posts'; b.appendChild(l);
-    b.appendChild(objList(W.posts,['title','url'],['Post title','URL'],'Post'));
+    b.appendChild(objList(W.posts,['title','date','url'],['Post title','Date (e.g. April 2026)','URL'],'Post'));
   })();
 
   (function(){ var b=card('Activities & Leadership');

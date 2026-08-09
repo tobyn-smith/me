@@ -110,8 +110,8 @@ window.PORTFOLIO_DATA = {
     url: "https://tobynsmith.substack.com",
     blurb: "Essays and analysis on energy, policy, and international affairs.",
     posts: [
-      { title: "The Security Dilemma Is Back, and We Learned Nothing", url: "https://tobynsmith.substack.com/p/the-security-dilemma-is-back-and" },
-      { title: "The Iran War: does London still hold institutional and economic authority in the world order?", url: "https://tobynsmith.substack.com/p/iran-war-a-stress-test-on-the-united" }
+      { title: "The Security Dilemma Is Back, and We Learned Nothing", date: "April 2026", url: "https://tobynsmith.substack.com/p/the-security-dilemma-is-back-and" },
+      { title: "The Iran War: does London still hold institutional and economic authority in the world order?", date: "March 2026", url: "https://tobynsmith.substack.com/p/iran-war-a-stress-test-on-the-united" }
     ]
   },
 

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Tobyn Smith — Energy Security &amp; Policy Research</title>
 <meta name="description" content="Tobyn Smith is an energy-security and supply-chain risk analyst: OSINT grid-resilience scoring across all 50 US states, Baltic LNG transit-risk mapping, and US-Mexico supply-chain intelligence delivered to Fortune 500 clients." />
@@ -291,6 +292,7 @@
   .wr-link{cursor:pointer}
   .wr-link:hover{padding-left:.6rem}
   .wr-title{font-family:var(--serif);font-size:clamp(1.35rem,2.6vw,1.75rem);font-weight:500;line-height:1.15}
+  .wr-date{font-family:var(--serif);font-style:italic;font-size:.92rem;color:var(--ink-faint);margin-top:.35rem}
   .wr-title .arw{font-size:.9em;color:var(--accent);display:inline-block;transition:transform .3s}
   .wr-link:hover .wr-title{color:var(--accent)}
   .wr-link:hover .wr-title .arw{transform:translate(3px,-3px)}
@@ -546,6 +548,7 @@
           + posts.map(function(p){
               return '<a class="wr-item wr-link" href="'+esc(safeUrl(p.url))+'" target="_blank" rel="noopener noreferrer">'
                 + '<h3 class="wr-title">'+esc(p.title)+' <span class="arw">↗</span></h3>'
+                + (p.date?'<div class="wr-date">'+esc(p.date)+'</div>':'')
                 + '</a>';
             }).join('')
           + '</div>':'')
