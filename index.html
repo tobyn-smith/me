@@ -419,7 +419,7 @@
       var draft = localStorage.getItem('portfolio_draft');
       if(draft){ DATA = JSON.parse(draft);
         var flag=document.createElement('div');flag.className='preview-flag';
-        flag.textContent='PREVIEW — unsaved draft from admin';document.body.appendChild(flag);
+        flag.textContent='Preview of unpublished edits';document.body.appendChild(flag);
       }
     }
   }catch(e){}
@@ -750,7 +750,7 @@
     }
     size(); addEventListener('resize',size);
 
-    var tilt=0.34; // tilt up toward the northern hemisphere so Tobyn's work nodes sit on the visible face
+    var tilt=0.9; // view from ~50°N: the node belt (27–56°N) crosses the middle of the face and stays visible ~80% of each spin
     function project(lon,lat,rot){
       var la=lat*Math.PI/180, lo=lon*Math.PI/180 - rot;
       var cl=Math.cos(la), sl=Math.sin(la);
@@ -786,7 +786,7 @@
     function themeColors(){ var dk=document.documentElement.getAttribute('data-theme')==='dark';
       INK = dk ? '236,231,220' : '27,26,23'; ACC = dk ? '212,89,63' : '140,47,36'; }
     themeColors();
-    var rot=0.4, spin=0.05, base=0.0016, t=0, hovered=-1; // spin starts fast, eases to rest
+    var rot=-0.96, spin=0.05, base=0.0016, t=0, hovered=-1; // start with the whole node cluster on the visible face; spin-up eases to rest
 
     function stroke(fn,start,end,step,style,w){
       ctx.beginPath(); var on=false;
@@ -840,7 +840,7 @@
     function start(){ if(!running){ running=true; requestAnimationFrame(loop); } }
     function focusHub(hb){ rotTarget=hb.lon*Math.PI/180;
       while(rotTarget-rot>Math.PI) rotTarget-=2*Math.PI; while(rot-rotTarget>Math.PI) rotTarget+=2*Math.PI;
-      tiltTarget=Math.max(-1.0,Math.min(0.55,hb.lat*Math.PI/180)); focusing=true; spin=0; start(); }
+      tiltTarget=Math.max(0.5,Math.min(1.15,hb.lat*Math.PI/180)); focusing=true; spin=0; start(); }
 
     // ---- interaction ----
     var tip=null, dragging=false, lastX=0, lastY=0, dragDist=0, downX=0, downY=0;
@@ -862,7 +862,7 @@
       addEventListener('pointermove',function(e){
         if(dragging){ var dx=e.clientX-lastX, dy=e.clientY-lastY; dragDist+=Math.abs(dx)+Math.abs(dy);
           rot+=dx*0.006; spin=Math.max(-0.12,Math.min(0.12,dx*0.006));
-          tilt=Math.max(-1.15,Math.min(0.85,tilt+dy*0.006)); lastX=e.clientX; lastY=e.clientY; return; }
+          tilt=Math.max(-0.4,Math.min(1.25,tilt+dy*0.006)); lastX=e.clientX; lastY=e.clientY; return; }
         // hover hit-test
         var best=-1, bd=14;
         for(var i=0;i<hubs.length;i++){ var c=hubClient(hubs[i]); if(c.z<=0) continue;
