@@ -150,16 +150,6 @@
   .globe-hint.show{opacity:.75}
   .globe-hint::before{content:"";width:18px;height:1px;background:var(--accent)}
 
-  /* energy-flow dividers */
-  .flow{position:relative;height:1px;background:var(--rule);overflow:visible}
-  .flow::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,color-mix(in srgb,var(--accent) 55%,transparent) 50%,transparent 100%);background-size:38% 100%;background-repeat:no-repeat;animation:flowSweep 5s linear infinite}
-  .flow .flow-node{position:absolute;top:50%;left:0;width:5px;height:5px;border-radius:50%;background:var(--accent);transform:translate(-50%,-50%);box-shadow:0 0 10px 1px color-mix(in srgb,var(--accent) 45%,transparent);animation:flowNode 7s linear infinite}
-  .flow::before{animation-duration:7s}
-  .flow.alt::before{animation-duration:9s;animation-direction:reverse}
-  .flow.alt .flow-node{animation-duration:9s;animation-direction:reverse}
-  @keyframes flowSweep{0%{background-position:-38% 0}100%{background-position:138% 0}}
-  @keyframes flowNode{0%{left:0;opacity:0}8%{opacity:1}92%{opacity:1}100%{left:100%;opacity:0}}
-  @media(prefers-reduced-motion:reduce){.flow::before,.flow .flow-node{animation:none}.flow .flow-node{display:none}}
 
   /* hero */
   .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:clamp(5rem,9vh,7rem) 0 clamp(5rem,9vh,7rem);z-index:2}
@@ -351,7 +341,7 @@
 
   /* print: clean, light, all content visible */
   @media print{
-    #globe,.theme-toggle,.flow,.hero-cta,nav.top,body::before{display:none!important}
+    #globe,.theme-toggle,.hero-cta,nav.top,body::before{display:none!important}
     :root,:root[data-theme="dark"]{--paper:#fff;--paper-2:#fff;--ink:#111;--ink-soft:#333;--ink-faint:#555;--rule:#ccc;--accent:#8c2f24;--accent-2:#8c2f24}
     body{background:#fff;color:#111}
     header.bar{position:static;background:#fff;border-bottom:1px solid #ccc}
@@ -440,8 +430,6 @@
   };
   var app = document.getElementById('app');
   var h = DATA.hero||{}, pr = DATA.profile||{}, ct = DATA.contact||{};
-  var flowN = 0;
-  function flow(){ flowN++; return '<div class="wrap"><div class="flow'+(flowN%2?'':' alt')+'"><span class="flow-node"></span></div></div>'; }
 
   document.getElementById('brand').innerHTML = (function(){
     var parts=(h.name||'Tobyn Smith').trim().split(' ');
@@ -475,7 +463,6 @@
     + '</section>';
 
   /* ABOUT */
-  html += flow();
   html += '<section id="about" class="wrap">'
     + '<div class="sec-head reveal"><h2 class="sec-title">Profile</h2></div>'
     + '<div class="about-grid">'
@@ -500,7 +487,6 @@
     + '</div></section>';
 
   /* EXPERIENCE */
-  html += flow();
   html += '<section id="experience" class="wrap">'
     + '<div class="sec-head reveal"><h2 class="sec-title">Experience</h2></div>'
     + '<div class="timeline">'
@@ -517,7 +503,6 @@
     + '</div></section>';
 
   /* EDUCATION */
-  html += flow();
   html += '<section id="education" class="wrap">'
     + '<div class="sec-head reveal"><h2 class="sec-title">Education</h2></div>'
     + '<div class="edu-list">'
@@ -531,7 +516,6 @@
     + '</div></section>';
 
   /* PROJECTS */
-  html += flow();
   html += '<section id="projects" class="wrap">'
     + '<div class="sec-head reveal"><h2 class="sec-title">Projects</h2></div>'
     + '<div class="proj-list">'
@@ -554,7 +538,6 @@
   var wr = DATA.writing || {};
   if(wr.url || (wr.posts && wr.posts.length)){
     var posts=(wr.posts||[]).filter(function(p){return p&&p.title;});
-    html += flow();
     html += '<section id="writing" class="wrap">'
       + '<div class="sec-head reveal"><h2 class="sec-title">Substack</h2></div>'
       + '<div class="substack reveal">'
@@ -581,7 +564,6 @@
     return '<div class="row"><div class="l1">'+esc(m)+'</div></div>';
   }).join('');
   var skills=(DATA.skills||[]).map(function(s){ return esc(s.name); }).join(' · ');
-  html += flow();
   html += '<section id="record" class="wrap">'
     + '<div class="sec-head reveal"><h2 class="sec-title">Record</h2></div>'
     + '<div class="ledger">'
@@ -597,7 +579,6 @@
   if(ct.phone)    cl+='<a href="tel:'+esc((ct.phone||'').replace(/[^+\d]/g,''))+'">'+ICONS.phone+' '+esc(ct.phone)+'</a>';
   if(ct.linkedin) cl+='<a href="https://'+esc(ct.linkedin)+'" target="_blank" rel="noopener noreferrer">'+ICONS.linkedin+' '+esc(ct.linkedin)+'</a>';
   if(ct.github)   cl+='<a href="https://'+esc(ct.github)+'" target="_blank" rel="noopener noreferrer">'+ICONS.github+' '+esc(ct.github)+'</a>';
-  html += flow();
   html += '<section id="contact" class="wrap contact">'
     + '<div class="sec-head reveal"><h2 class="sec-title">Contact</h2></div>'
     + '<div class="big reveal">'+esc(ct.headlinePre)+'<a href="mailto:'+esc(ct.email)+'">'+esc(ct.headlineLink)+'</a>'+esc(ct.headlinePost)+'</div>'
