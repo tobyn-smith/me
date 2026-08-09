@@ -270,6 +270,7 @@
   .proj-item{padding:2.2rem 0;border-top:1px solid var(--rule)}
   .proj-item:first-child{border-top:none;padding-top:.3rem}
   .proj-tag{font-family:var(--serif);font-style:italic;font-size:1.02rem;color:var(--accent-2)}
+  .proj-when{color:var(--ink-faint);font-style:normal;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;margin-left:.7rem}
   .proj-title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.05rem);font-weight:500;line-height:1.12;margin:.45rem 0 .75rem}
   .proj-desc{color:var(--ink-soft);font-size:.98rem;max-width:56ch;margin-bottom:.9rem}
   .proj-stack{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;color:var(--ink-faint);margin-bottom:1.05rem}
@@ -541,7 +542,7 @@
         }).join('');
         var stack=(p.stack||[]).map(function(s){return esc(s);}).join(' · ');
         return '<article class="proj-item reveal">'
-          + '<div class="proj-tag">'+esc(p.tag)+'</div>'
+          + '<div class="proj-tag">'+esc(p.tag)+(p.period?'<span class="proj-when">'+esc(p.period)+'</span>':'')+'</div>'
           + '<h3 class="proj-title">'+esc(p.title)+'</h3>'
           + '<p class="proj-desc">'+esc(p.description)+'</p>'
           + (stack?'<div class="proj-stack">'+stack+'</div>':'')
