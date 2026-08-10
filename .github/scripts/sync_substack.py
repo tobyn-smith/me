@@ -22,20 +22,34 @@ import sys
 import urllib.request
 import xml.etree.ElementTree as ET
 
-FEED = "https://tobynsmith.substack.com/feed"
+SITE = "https://tobynsmith.substack.com"
+FEED = SITE + "/feed"
+API = SITE + "/api/v1/archive?sort=new&limit=%d"
 DATA = "data.js"
 MAX_POSTS = 3
-UA = "Mozilla/5.0 (compatible; portfolio-substack-sync/1.0)"
+
+# Substack fronts both endpoints with bot protection that rejects datacenter
+# traffic sending a default urllib agent, so identify as a normal browser.
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    ),
+    "Accept": "application/rss+xml,application/xml,application/json;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-GB,en;q=0.9",
+}
 
 
-def fetch_posts():
-    req = urllib.request.Request(FEED, headers={"User-Agent": UA})
+def _get(url):
+    req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=30) as r:
-        xml = r.read()
-    channel = ET.fromstring(xml).find("channel")
+        return r.read()
+
+
+def _from_rss():
+    channel = ET.fromstring(_get(FEED)).find("channel")
     if channel is None:
         raise RuntimeError("feed has no <channel>")
-
     posts = []
     for item in channel.findall("item")[:MAX_POSTS]:
         title = (item.findtext("title") or "").strip()
@@ -50,6 +64,40 @@ def fetch_posts():
             date = ""
         posts.append({"title": title, "date": date, "url": link})
     return posts
+
+
+def _from_api():
+    import json
+
+    items = json.loads(_get(API % MAX_POSTS).decode("utf-8"))
+    posts = []
+    for p in items[:MAX_POSTS]:
+        title = (p.get("title") or "").strip()
+        link = (p.get("canonical_url") or "").strip()
+        raw = (p.get("post_date") or "")[:10]
+        if not title or not link:
+            continue
+        try:
+            date = datetime.datetime.strptime(raw, "%Y-%m-%d").strftime("%B %Y")
+        except ValueError:
+            date = ""
+        posts.append({"title": title, "date": date, "url": link})
+    return posts
+
+
+def fetch_posts():
+    """Try the RSS feed, then the JSON archive API. Either alone is enough."""
+    errors = []
+    for name, fn in (("RSS feed", _from_rss), ("archive API", _from_api)):
+        try:
+            posts = fn()
+            if posts:
+                print("read %d post(s) from the %s" % (len(posts), name))
+                return posts
+            errors.append("%s returned nothing" % name)
+        except Exception as e:
+            errors.append("%s: %s" % (name, e))
+    raise RuntimeError("; ".join(errors))
 
 
 def find_array(src, key):
