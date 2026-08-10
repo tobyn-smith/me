@@ -126,6 +126,7 @@
   </div>
   <div class="tb-actions">
     <button class="ghost" id="btnPvToggle">Preview</button>
+    <button class="ghost" id="btnLock" style="display:none">Lock</button>
     <button class="ghost" id="btnSettings">GitHub setup</button>
     <button class="ghost" id="btnDownload">Download data.js</button>
     <button class="primary" id="btnPublish">Publish to site</button>
@@ -173,8 +174,8 @@
     <input id="setRepo" placeholder="tobyn-smith/me" />
     <label>Fine-grained token</label>
     <input id="setToken" type="password" placeholder="github_pat_…" autocomplete="off" />
-    <label>Choose a passcode</label>
-    <input id="setPass" type="password" placeholder="Passcode you'll type to unlock" autocomplete="new-password" />
+    <label>Choose a passcode (8+ characters)</label>
+    <input id="setPass" type="password" placeholder="Passcode you'll type to unlock" autocomplete="new-password" minlength="8" />
     <div class="hint">Your token is <b>encrypted with this passcode</b> (AES-GCM) before it's stored, so it can't be read from this browser without it. There's no recovery — forget it and you just generate a new token.</div>
     <div class="okline" id="setResult"></div>
     <div class="panel-actions">
@@ -318,20 +319,23 @@
   function b64(bytes){ var s='',CH=0x8000; for(var i=0;i<bytes.length;i+=CH) s+=String.fromCharCode.apply(null,bytes.subarray(i,i+CH)); return btoa(s); }
   function unb64(str){ var bin=atob(str),out=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) out[i]=bin.charCodeAt(i); return out; }
   function hasVault(){ return !!localStorage.getItem(VKEY); }
-  async function deriveKey(pass,salt){
+  // OWASP's current floor for PBKDF2-HMAC-SHA256. The count is stored in the
+  // vault so older vaults keep opening if this is raised again later.
+  var KDF_ITERATIONS = 600000, MIN_PASSCODE = 8;
+  async function deriveKey(pass,salt,iterations){
     var km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
-    return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:250000,hash:'SHA-256'},
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:iterations||KDF_ITERATIONS,hash:'SHA-256'},
       km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
   }
   async function sealToken(pass,token){
     var salt=crypto.getRandomValues(new Uint8Array(16)), iv=crypto.getRandomValues(new Uint8Array(12));
-    var key=await deriveKey(pass,salt);
+    var key=await deriveKey(pass,salt,KDF_ITERATIONS);
     var ct=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(token));
-    localStorage.setItem(VKEY,JSON.stringify({s:b64(salt),i:b64(iv),c:b64(new Uint8Array(ct))}));
+    localStorage.setItem(VKEY,JSON.stringify({v:2,it:KDF_ITERATIONS,s:b64(salt),i:b64(iv),c:b64(new Uint8Array(ct))}));
   }
   async function openVault(pass){
     var v=JSON.parse(localStorage.getItem(VKEY));
-    var key=await deriveKey(pass,unb64(v.s)); // wrong passcode -> AES-GCM auth tag fails below
+    var key=await deriveKey(pass,unb64(v.s),v.it||250000); // v1 vaults were sealed at 250k
     var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(v.i)},key,unb64(v.c));
     return new TextDecoder().decode(pt);
   }
@@ -604,7 +608,7 @@
     var pass=document.getElementById('setPass').value;
     var out=document.getElementById('setResult');
     if(!tok){ out.textContent='Paste a token first.'; return; }
-    if(!pass||pass.length<4){ out.textContent='Choose a passcode of at least 4 characters.'; return; }
+    if(!pass||pass.length<MIN_PASSCODE){ out.textContent='Choose a passcode of at least '+MIN_PASSCODE+' characters — it is the only thing protecting the stored token.'; return; }
     localStorage.setItem(RKEY,repo);
     out.textContent='Testing…';
     var prev=TOKEN; TOKEN=tok;
@@ -612,6 +616,7 @@
       var r=await fetch('https://api.github.com/repos/'+repo,{headers:ghHeaders()});
       if(!r.ok) throw new Error(r.status===401?'token rejected':'cannot reach repo ('+r.status+')');
       await sealToken(pass,tok);
+      showLockBtn(true);
       out.innerHTML='<b style="color:var(--ok)">✓ Connected to '+repo+'</b> — token encrypted with your passcode. You can publish now.';
       toast('GitHub connected and token encrypted');
     }catch(e){ TOKEN=prev; out.innerHTML='<b style="color:var(--accent)">✗ '+e.message+'</b> — check the token has Contents read &amp; write on '+repo+'.'; }
@@ -626,9 +631,14 @@
     lockErr.textContent='Checking…';
     try{
       TOKEN=await openVault(pass);
-      hideLock(); setChip('Unlocked','ok'); syncStatus(); toast('Unlocked — publishing enabled');
+      hideLock(); setChip('Unlocked','ok'); syncStatus(); showLockBtn(true); toast('Unlocked, publishing enabled');
     }catch(e){ TOKEN=null; lockErr.textContent='Wrong passcode.'; lockInput.value=''; lockInput.focus(); }
   }
+  // the decrypted token lives only in memory; this drops it without closing the tab
+  function showLockBtn(on){ var b=document.getElementById('btnLock'); if(b) b.style.display=on?'':'none'; }
+  document.getElementById('btnLock').addEventListener('click',function(){
+    TOKEN=null; showLockBtn(false); syncStatus(); showLock(); toast('Locked, token cleared from memory');
+  });
   document.getElementById('lockGo').addEventListener('click',tryUnlock);
   lockInput.addEventListener('keydown',function(e){ if(e.key==='Enter') tryUnlock(); });
   document.getElementById('lockSkip').addEventListener('click',function(){ hideLock(); toast('Read-only: publishing stays locked'); });
