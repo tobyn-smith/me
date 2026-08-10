@@ -76,7 +76,7 @@ window.PORTFOLIO_DATA = {
       school: "University of Georgia",
       location: "Athens, GA",
       period: "May 2026",
-      detail: "GPA 3.6."
+      detail: ""
     }
   ],
 
