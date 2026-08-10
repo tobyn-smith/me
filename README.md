@@ -28,8 +28,10 @@ stored in readable form: it's sealed with AES-GCM under a PBKDF2-derived key and
 only decrypted into memory after a passcode is entered. Bypassing the UI yields
 ciphertext, not a token.
 
-**Automation.** A weekly GitHub Action reads the Substack RSS feed and refreshes
-the featured posts, so the writing section stays current on its own.
+**Substack sync.** `scripts/sync-substack.py` pulls the latest posts — exact
+titles, dates and URLs — from the feed and rewrites just that array in
+`data.js`. It runs locally rather than on a schedule: Substack's bot protection
+returns 403 to CI runner IP ranges, so a cron job would only ever log warnings.
 
 Also here: light/dark theming that respects the system setting and persists the
 choice without a flash of the wrong theme, a ⌘K command palette, self-hosted
@@ -45,7 +47,7 @@ data.js         all content; the only file you need to touch
 admin.html      browser-based editor and publisher
 404.html        themed not-found page
 fonts/          self-hosted woff2 subsets
-.github/        weekly Substack sync
+scripts/        Substack feed sync
 ```
 
 ## Editing it

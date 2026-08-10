@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
 """
-Refresh the featured Substack posts in data.js from the live RSS feed.
+Refresh the featured Substack posts in data.js from the live feed.
 
-Runs weekly from .github/workflows/sync-substack.yml so the site's Substack
-section never falls behind what has actually been published.
+Run it from the project root whenever you publish something new:
+
+    python scripts/sync-substack.py && git commit -am "Update posts" && git push
+
+Deliberately a local tool rather than a scheduled GitHub Action: Substack sits
+behind bot protection that returns 403 to the datacenter IP ranges CI runners
+use (verified — browser-identical headers don't help), while requests from an
+ordinary connection succeed.
 
 Design notes:
   * Only the `posts:` array is rewritten. Everything else in data.js is left
