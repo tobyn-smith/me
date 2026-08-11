@@ -102,6 +102,17 @@ window.PORTFOLIO_DATA = {
         { label: "View site", url: "https://tobyn-smith.github.io/transit/" },
         { label: "Source", url: "https://github.com/tobyn-smith/transit" }
       ]
+    },
+    {
+      title: "Schedule Reader",
+      tag: "Research Tooling · Document Parsing",
+      period: "2026",
+      stack: ["Python", "WebAssembly", "SQLite", "PDF extraction"],
+      description: "Turns a syllabus PDF into a schedule: readings as proper citations, deadlines, and a bibliography, then matches your reading PDFs against it and tells you each week what is missing. Extraction keeps page numbers, reads two-column layouts in the right order and separates footnotes, so full-text search returns a citation and a page. The same Python parser runs on the command line and, compiled to WebAssembly, in the browser, so both give identical answers. Files are parsed locally and never uploaded.",
+      links: [
+        { label: "View site", url: "https://tobyn-smith.github.io/reader/" },
+        { label: "Source", url: "https://github.com/tobyn-smith/reader" }
+      ]
     }
   ],
 
