@@ -108,7 +108,7 @@ window.PORTFOLIO_DATA = {
       tag: "Research Tooling · Document Parsing",
       period: "2026",
       stack: ["Python", "WebAssembly", "SQLite", "PDF extraction"],
-      description: "Turns a syllabus PDF into a schedule: readings as proper citations, deadlines, and a bibliography, then matches your reading PDFs against it and tells you each week what is missing. Extraction keeps page numbers, reads two-column layouts in the right order and separates footnotes, so full-text search returns a citation and a page. The same Python parser runs on the command line and, compiled to WebAssembly, in the browser, so both give identical answers. Files are parsed locally and never uploaded.",
+      description: "Give it a syllabus and it returns the schedule, the citations and the deadlines; drop your reading PDFs in a folder and it tells you what is missing that week. Extraction keeps page numbers all the way through, so a search returns a citation and a page rather than a filename. I wrote the parser once: it runs on the command line, and the same Python compiled to WebAssembly runs it in the browser, where nothing is uploaded.",
       links: [
         { label: "View site", url: "https://tobyn-smith.github.io/reader/" },
         { label: "Source", url: "https://github.com/tobyn-smith/reader" }
