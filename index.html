@@ -49,6 +49,7 @@
     --serif:"Fraunces",Georgia,"Times New Roman",serif;
     --sans:"Inter",system-ui,-apple-system,sans-serif;
     --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --header-h:64px; /* measured from the real header at runtime; this is the pre-JS fallback */
     color-scheme:light;
   }
   :root[data-theme="dark"]{
@@ -111,7 +112,7 @@
   .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
   .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
   @media(max-width:720px){.nav-toggle{display:flex}}
-  .mobile-menu{display:none;position:fixed;top:59px;left:0;right:0;z-index:19;background:var(--paper);border-bottom:1px solid var(--rule);flex-direction:column;padding:.3rem clamp(1.25rem,5vw,4rem) .9rem;box-shadow:0 22px 44px -26px rgba(0,0,0,.4)}
+  .mobile-menu{display:none;position:fixed;top:var(--header-h);left:0;right:0;z-index:19;background:var(--paper);border-bottom:1px solid var(--rule);flex-direction:column;padding:.3rem clamp(1.25rem,5vw,4rem) .9rem;box-shadow:0 22px 44px -26px rgba(0,0,0,.4)}
   .mobile-menu.open{display:flex;animation:menuIn .22s ease}
   .mobile-menu a{padding:.85rem 0;font-family:var(--sans);font-size:1.02rem;color:var(--ink-soft);border-bottom:1px solid var(--rule);transition:color .2s,padding-left .2s}
   .mobile-menu a:last-child{border-bottom:none}
@@ -327,7 +328,7 @@
   #toTop.show{visibility:visible;opacity:1;transform:none;pointer-events:auto}
   #toTop:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-2px)}
   @media print{#toTop{display:none!important}}
-  main section[id]{scroll-margin-top:clamp(70px,10vh,96px)}
+  main section[id]{scroll-margin-top:calc(var(--header-h) + 14px)}
   a:focus-visible,button:focus-visible,.btn:focus-visible,.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
   .sec-head::after{width:0;transition:width .7s cubic-bezier(.2,.7,.2,1) .12s}
   .sec-head.in::after{width:54px}
@@ -605,6 +606,22 @@
 
   // sticky bar border
   var bar=document.getElementById('bar');
+
+  // The fixed header's height varies with viewport and font loading. Publish it as
+  // a variable so the mobile menu sits flush under it and anchored sections don't
+  // scroll to a position hidden behind it.
+  function syncHeaderHeight(){
+    if(!bar) return;
+    var h=Math.round(bar.getBoundingClientRect().height);
+    if(h) document.documentElement.style.setProperty('--header-h',h+'px');
+  }
+  syncHeaderHeight();
+  if(bar && 'ResizeObserver' in window){
+    new ResizeObserver(syncHeaderHeight).observe(bar); // catches font swaps and wrapping too
+  } else {
+    addEventListener('resize',syncHeaderHeight,{passive:true});
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(syncHeaderHeight);
+  }
   var toTop=document.getElementById('toTop');
   addEventListener('scroll',function(){
     bar.classList.toggle('scrolled',scrollY>20);

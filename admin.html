@@ -404,11 +404,13 @@
       var w=Math.min(800,bmp.width), h=Math.round(bmp.height*w/bmp.width);
       var c=document.createElement('canvas'); c.width=w; c.height=h;
       c.getContext('2d').drawImage(bmp,0,0,w,h);
-      var jpgBlob=await new Promise(function(res){ c.toBlob(res,'image/jpeg',.82); });
-      var webpBlob=await new Promise(function(res){ c.toBlob(res,'image/webp',.8); });
       var name=(state.profile.photo||'headshot.jpg');
+      // encode to match the configured filename, so a .png name never holds JPEG bytes
+      var isPng=/\.png$/i.test(name);
+      var mainBlob=await new Promise(function(res){ c.toBlob(res, isPng?'image/png':'image/jpeg', isPng?undefined:.82); });
+      var webpBlob=await new Promise(function(res){ c.toBlob(res,'image/webp',.8); });
       var webpName=name.replace(/\.(jpe?g|png)$/i,'.webp');
-      await ghPut(name,new Uint8Array(await jpgBlob.arrayBuffer()),'Update profile photo');
+      await ghPut(name,new Uint8Array(await mainBlob.arrayBuffer()),'Update profile photo');
       if(webpBlob&&webpBlob.type==='image/webp'&&webpName!==name){
         await ghPut(webpName,new Uint8Array(await webpBlob.arrayBuffer()),'Update profile photo (webp)');
       } else if(webpName!==name){
