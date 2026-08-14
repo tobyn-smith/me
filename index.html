@@ -656,13 +656,18 @@
   // mobile hamburger menu
   var navToggle=document.getElementById('navToggle'), mobileMenu=document.getElementById('mobileMenu');
   if(navToggle&&mobileMenu){
-    var closeMenu=function(){ mobileMenu.classList.remove('open'); navToggle.setAttribute('aria-expanded','false'); };
+    var closeMenu=function(returnFocus){
+      if(!mobileMenu.classList.contains('open')) return;
+      mobileMenu.classList.remove('open'); navToggle.setAttribute('aria-expanded','false');
+      if(returnFocus) navToggle.focus();
+    };
     navToggle.addEventListener('click',function(){
       var open=mobileMenu.classList.toggle('open');
       navToggle.setAttribute('aria-expanded', open?'true':'false');
     });
-    mobileMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',closeMenu); });
-    addEventListener('keydown',function(e){ if(e.key==='Escape') closeMenu(); });
+    // on link click let the anchor keep focus; on Escape hand it back to the toggle
+    mobileMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ closeMenu(false); }); });
+    addEventListener('keydown',function(e){ if(e.key==='Escape') closeMenu(true); });
   }
 
   // dark mode toggle
@@ -720,8 +725,11 @@
     var filtered=[], sel=0, open=false;
     function render(){ list.innerHTML=filtered.map(function(a,i){ return '<li class="cmdk-item'+(i===sel?' sel':'')+'" data-i="'+i+'"><span>'+esc(a.label)+'</span><span class="cmdk-hint">'+esc(a.hint)+'</span></li>'; }).join(''); }
     function filt(){ var q=input.value.trim().toLowerCase(); filtered=actions.filter(function(a){return !q||a.label.toLowerCase().indexOf(q)>=0||String(a.hint).toLowerCase().indexOf(q)>=0;}); sel=0; render(); }
-    function openCmd(){ open=true; overlay.classList.add('open'); input.value=''; filt(); setTimeout(function(){input.focus();},20); }
-    function closeCmd(){ open=false; overlay.classList.remove('open'); }
+    var lastFocus=null;
+    function openCmd(){ lastFocus=document.activeElement; open=true; overlay.classList.add('open'); input.value=''; filt(); setTimeout(function(){input.focus();},20); }
+    function closeCmd(){ open=false; overlay.classList.remove('open');
+      // hand focus back to whatever opened it, or Tab would resume from a hidden node
+      if(lastFocus&&lastFocus.focus){ try{ lastFocus.focus(); }catch(e){} } lastFocus=null; }
     function exec(i){ var a=filtered[i]; if(a){ closeCmd(); a.run(); } }
     input.addEventListener('input',filt);
     overlay.addEventListener('click',function(e){ if(e.target===overlay){ closeCmd(); return; } var li=e.target.closest('.cmdk-item'); if(li) exec(+li.getAttribute('data-i')); });
@@ -730,6 +738,8 @@
       else if(e.key==='ArrowUp'){ e.preventDefault(); sel=Math.max(0,sel-1); render(); }
       else if(e.key==='Enter'){ e.preventDefault(); exec(sel); }
       else if(e.key==='Escape'){ closeCmd(); }
+      // the input is the only focusable node in the dialog, so keep Tab inside it
+      else if(e.key==='Tab'){ e.preventDefault(); }
     });
     addEventListener('keydown',function(e){ if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){ e.preventDefault(); open?closeCmd():openCmd(); } });
     var chip=document.createElement('button'); chip.className='cmdk-chip'; chip.type='button'; chip.setAttribute('aria-label','Open command menu (Ctrl or Cmd + K)'); chip.innerHTML='<span>⌘</span>K';
