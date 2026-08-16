@@ -110,7 +110,7 @@ window.PORTFOLIO_DATA = {
       stack: ["Python", "WebAssembly", "SQLite", "PDF extraction"],
       description: "Give it a syllabus and it returns the schedule, the citations and the deadlines; drop your reading PDFs in a folder and it tells you what is missing that week. Extraction keeps page numbers all the way through, so a search returns a citation and a page rather than a filename. I wrote the parser once: it runs on the command line, and the same Python compiled to WebAssembly runs it in the browser, where nothing is uploaded.",
       links: [
-        { label: "View site", url: "https://tobyn-smith.github.io/reader/" },
+        { label: "View site", url: "https://tobynsmith.me/reader/" },
         { label: "Source", url: "https://github.com/tobyn-smith/reader" }
       ]
     }

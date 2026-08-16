@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tobyn's Schedule Reader</title>
+<!-- a ruled page: heavy rule, two hairlines, one accent. inline so the tab
+     icon costs no request, and so the browser stops asking for a favicon.ico
+     that was never there -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230D0D0B'/><rect x='5' y='6' width='22' height='3' fill='%23EDE8DA'/><rect x='5' y='13' width='22' height='1.5' fill='%23A39D8E'/><rect x='5' y='18' width='22' height='1.5' fill='%23A39D8E'/><rect x='5' y='23' width='14' height='1.5' fill='%23D2704A'/></svg>">
+<!-- the manifest is what lets a browser install this as its own app: an icon
+     in the dock, its own window, offline from the cache the worker already
+     keeps. nothing to download and nothing to sign. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0D0D0B" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFDF8" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="vendor/fonts.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="print.css" media="print">
+</head>
+<body>
+
+<!-- a seven column ledger has no honest phone form, so small screens get a
+     plain statement instead of a broken page -->
+<div id="smallgate" role="status">
+  <p class="smallgate-mark">Tobyn's Schedule Reader</p>
+  <p>Due to the technicality of the website, I've restricted it to bigger
+  screens only. :)</p>
+</div>
+
+<header class="masthead">
+  <h1>Tobyn's Schedule Reader</h1>
+  <p class="masthead-note"><strong>Note:</strong> This is built for humanities
+  classes.</p>
+</header>
+
+<nav id="nav" class="coursebar" hidden></nav>
+
+<main>
+
+<!-- the first thing a new visitor sees. the one action that matters gets the
+     whole page, not a folded panel -->
+<section id="welcome" hidden>
+  <div class="welcome-grid">
+    <div>
+      <h2 class="welcome-head">Your classes, simplified.</h2>
+      <p class="welcome-run"><a href="running.html">Running it yourself</a>
+        <span class="secondary">if you'd rather have it on your own machine</span></p>
+      <ol class="welcome-steps">
+        <li>
+          <span class="step-n">1</span>
+          <span class="step-t">Drop it</span>
+          <p>Drag in the syllabus PDF your professor gave you.</p>
+        </li>
+        <li>
+          <span class="step-n">2</span>
+          <span class="step-t">Check it</span>
+          <p>Fix anything it misread before saving.</p>
+        </li>
+        <li>
+          <span class="step-n">3</span>
+          <span class="step-t">Use it all term</span>
+          <p>Readings, deadlines and grades in one place. Print it if paper is
+          more your thing!</p>
+        </li>
+      </ol>
+    </div>
+    <div id="welcome-drop" class="welcome-drop">
+      <p class="welcome-drop-line">Drop your syllabus here</p>
+      <p class="secondary">or</p>
+      <button type="button" id="welcome-choose">Choose a file</button>
+      <p class="secondary">Readings and more courses can follow in any order.</p>
+    </div>
+  </div>
+</section>
+
+<section id="review" hidden>
+  <h2>Review <span id="review-name" class="secondary"></span></h2>
+  <div id="review-table"></div>
+  <!-- the actions follow you down the page. a long review otherwise means
+       scrolling back to the bottom to commit it -->
+  <div class="actions">
+    <button type="button" id="confirm">Save</button>
+    <button type="button" id="discard">Discard</button>
+  </div>
+</section>
+
+<section id="views" hidden>
+  <nav class="tabs">
+    <!-- the views scroll sideways on a narrow screen; the controls beside them
+         must not be dragged off with them, so they sit outside the strip -->
+    <div class="tabstrip">
+      <button type="button" data-view="now">This week</button>
+      <button type="button" data-view="week">Week</button>
+      <button type="button" data-view="schedule">Schedule</button>
+      <button type="button" data-view="deadlines">Deadlines</button>
+      <button type="button" data-view="grades">Grades</button>
+      <button type="button" data-view="bibliography">Bibliography</button>
+      <button type="button" data-view="policies">Policies</button>
+      <button type="button" data-view="search">Search</button>
+    </div>
+    <span class="right">
+      <button type="button" id="print-top">Print</button>
+      <button type="button" id="edit-toggle" aria-pressed="false" hidden>Edit</button>
+      <label for="style-select">Style</label>
+      <select id="style-select"></select>
+    </span>
+  </nav>
+  <div id="record"></div>
+  <div class="sheet" id="sheet">
+    <div id="rail"></div>
+    <div id="view"></div>
+  </div>
+</section>
+
+<details id="tools">
+  <summary>Add files</summary>
+
+  <div id="file-drop" class="drop">
+    <label for="file-input">Drop syllabi and readings here, or</label>
+    <input type="file" id="file-input" accept="application/pdf" multiple>
+    <p class="note">Each file is sorted into a syllabus or a reading for you.</p>
+  </div>
+  <p id="intake-status" class="status" role="status"></p>
+  <div id="queue"></div>
+  <div id="unmatched"></div>
+</details>
+
+<!-- nothing here does anything until a course exists, so it stays hidden
+     until one does -->
+<details id="data-tools" hidden>
+  <summary>Export and backup</summary>
+  <p class="controls">
+    <button type="button" id="print">Print</button>
+    <button type="button" id="calendar" hidden></button>
+    <button type="button" id="export-notes" hidden></button>
+    <button type="button" id="export">Export a backup</button>
+    <label class="inline" for="import-input">Restore a backup</label>
+    <input type="file" id="import-input" accept="application/json" class="plain">
+  </p>
+  <p class="note">
+    Stored in this browser only. It will not follow you to another device, and
+    clearing browser data removes it.
+  </p>
+  <p class="controls">
+    <button type="button" id="remove-course" class="danger">Remove this course</button>
+    <button type="button" id="clear" class="danger">Delete everything</button>
+  </p>
+</details>
+
+<details id="accuracy">
+  <summary>How accurate is this</summary>
+  <p class="note">I've tested this on 31 syllabi. Below are the accuracy
+    scores as of 13 August 2026, measured the same way the page you are on
+    parses a file.</p>
+  <table>
+    <thead>
+      <tr><th>What</th><th class="num">Rate</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Course code</td><td class="num">100%</td></tr>
+      <tr><td>Term</td><td class="num">100%</td></tr>
+      <tr><td>Found the schedule</td><td class="num">81%</td></tr>
+      <tr><td>Readings turned into full citations</td><td class="num">91%</td></tr>
+      <tr><td>Grading read in full, out of every file tested</td>
+          <td class="num">13 of 31</td></tr>
+    </tbody>
+  </table>
+  <p class="note">
+    This personal project is pattern matching at the root of it, so a syllabus
+    with an odd layout may throw it off. Anything it cannot read will need you
+    to add or correct manually, rather than it quietly dropping a reading or
+    inventing one. If there is no schedule, the syllabus may not have one, or
+    there is a bug. Grading is the weakest of these: a lot of courses state it
+    in a sentence, or count in points rather than percentages, and those come
+    back empty for you to fill in rather than wrong.
+  </p>
+</details>
+
+</main>
+
+<footer class="colophon">
+  <p class="colophon-contrib">Want to help or contribute? Head over to
+    <a href="https://tobynsmith.me/">my personal page</a> and send
+    me an email. :)<br>
+    Prefer it on your own machine? <a href="running.html">Running it
+    yourself</a>, or
+    <!-- the button installs in one click where the browser offers it; the
+         link explains how everywhere else, so nobody is left without an
+         answer to "how do I install this" -->
+    <a href="running.html#install" id="install-help">install it as an app</a><!--
+    --><button type="button" id="install" class="quiet" hidden>install it as an
+    app</button>.</p>
+  <p class="colophon-sheet" id="print-meta"></p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

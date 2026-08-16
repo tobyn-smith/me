@@ -1,0 +1,1742 @@
+/* direction: institutional record.
+   a library catalogue, a ledger, a government index. the page is dense and
+   ruled, and every bit of hierarchy is carried by weight, scale and rule
+   thickness. colour does one job and no other.
+
+   the rule system is the whole structure, so it is fixed:
+     6px   top of page, above the masthead
+     3px   under the course bar, under the record header, above the colophon
+     2px   above every week separator
+     1px   between reading rows, in --hair
+   nothing else draws a line, and nothing is boxed, rounded or shadowed.
+
+   every text token clears wcag aa on its paper: dark ink 17.9, mid 7.2,
+   faint 5.2; light ink 20.7, mid 9.2, faint 5.2. re-measure on any change.
+
+   --flag marks three things only: a file not held, an overdue item, a
+   restricted ai policy. a completed row goes --faint and stays upright: no
+   strike, no tick, no green. */
+
+:root {
+  /* the browser draws the dropdown lists, date pickers and scrollbars itself,
+     and unless it is told the page is dark it draws them light, with this
+     page's light ink on them: an unreadable menu. color-scheme is that
+     declaration, not a decoration. */
+  color-scheme: dark;
+
+  --paper: #0D0D0B;
+  --ink:   #EDE8DA;
+  --mid:   #A39D8E;
+  --faint: #8A8478;
+  --hair:  #2B2924;
+  --rule:  #EDE8DA;
+  --flag:  #D2704A;
+  --tint:  #191813;
+
+  --display: "Archivo Narrow", "Arial Narrow", Haettenschweiler, sans-serif-condensed, sans-serif;
+  --body: "Source Serif 4", Charter, "Iowan Old Style", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    --paper: #FFFDF8;
+    --ink:   #000000;
+    --mid:   #4A4640;
+    --faint: #706B60;
+    --hair:  #C9C3B8;
+    --rule:  #000000;
+    --flag:  #7A1F1A;
+    --tint:  #F2EEE4;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html {
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  font-variant-numeric: tabular-nums;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0 18px 0;
+  border-top: 6px solid var(--rule);
+}
+
+/* ---- masthead ---------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 10px 0 9px;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+.masthead-note {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--faint);
+}
+
+.masthead-note strong { color: var(--ink); font-weight: 700; }
+
+/* selected text keeps the ledger's two colours rather than the browser blue */
+::selection { background: var(--ink); color: var(--paper); }
+
+/* ---- course bar -------------------------------------------------------- */
+
+.coursebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-bottom: 3px solid var(--rule);
+  padding-bottom: 0;
+}
+
+.coursebar a {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 14px 5px;
+  color: var(--mid);
+  text-decoration: none;
+  border: 1px solid var(--hair);
+  border-bottom: 0;
+  margin-right: -1px;
+}
+
+.coursebar a:hover { color: var(--ink); border-color: var(--rule); }
+/* still there, still openable, just not this term's work */
+.coursebar a.past-term { color: var(--faint); }
+
+.coursebar a[aria-current="page"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+/* ---- record header ----------------------------------------------------- */
+
+.record {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 14px 0 11px;
+  border-bottom: 3px solid var(--rule);
+}
+
+.record-code {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 0.94;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.record-title {
+  margin: 3px 0 0;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--mid);
+  max-width: 46ch;
+}
+
+/* a fixed three column grid wrapped a fourth fact onto a row of its own and
+   right-aligned it under nothing, which read as broken. flex lets however
+   many facts survive sit on one line and wrap as a unit. */
+.record-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 26px;
+  margin: 0;
+}
+
+.record-facts > div { text-align: right; }
+
+.record-facts dt {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.record-facts dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.record-facts .is-flag dd { color: var(--flag); }
+
+/* ---- sheet: rail + ledger ---------------------------------------------- */
+
+.sheet {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  align-items: start;
+}
+
+/* only the ledger has a rail. the rest of the views get the whole width
+   rather than an empty column and a permanent indent. */
+.sheet.no-rail { grid-template-columns: minmax(0, 1fr); }
+.sheet.no-rail > #view { padding-left: 0; }
+
+.rail {
+  position: sticky;
+  top: 0;
+  border-right: 1px solid var(--rule);
+  padding: 10px 14px 30px 0;
+  max-height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.rail-sec { padding: 9px 0; border-top: 1px solid var(--hair); }
+.rail-sec:first-child { border-top: 0; padding-top: 2px; }
+
+.rail-fold > summary {
+  cursor: pointer;
+  list-style: none;
+  margin: 0 0 5px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.rail-fold > summary::after { content: "  +"; }
+.rail-fold[open] > summary::after { content: "  2"; }
+.rail-fold > summary:hover { color: var(--ink); }
+.rail-fold > summary::-webkit-details-marker { display: none; }
+
+.rail-sec h3 {
+  margin: 0 0 5px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.rail-index { list-style: none; margin: 0; padding: 0; }
+
+/* the topic sets in the serif, not the mono. a monospaced face fits about
+   eleven characters in this column, which turned every entry into an
+   ellipsis; the serif fits roughly twice that in the same width. */
+.rail-index a {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 0 7px;
+  padding: 1px 0;
+  color: var(--mid);
+  text-decoration: none;
+  line-height: 1.5;
+}
+
+.rail-n { font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
+.rail-t { font-family: var(--body); font-size: 13px; }
+
+.rail-index a:hover { color: var(--ink); background: var(--tint); }
+.rail-index .is-current a { color: var(--ink); font-weight: 500; }
+/* two lines rather than an ellipsis. two thirds of these topics are longer
+   than the column and an index of half-words is not an index. */
+.rail-t {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* the filters live in the rail rather than in a bar over the ledger: the rail
+   is the ledger's control column and already had the room, so nothing new is
+   added across the top of the page. */
+.rail-filters { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.chip {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 3px 8px;
+  border: 1px solid var(--hair);
+  color: var(--mid);
+}
+
+.chip:hover { background: var(--tint); color: var(--ink); border-color: var(--mid); }
+
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.rail-facts { margin: 0; }
+/* :not(.meter) matters: a bare class loses to this selector's extra element,
+   so the meter below was being laid out as a flex row and its bar, meant to
+   span the full width underneath, sat squeezed beside the label instead */
+.rail-facts > div:not(.meter) { display: flex; justify-content: space-between; gap: 6px; }
+
+/* a ruled bar, squared off, filled in the ink. no rounding, no gradient, no
+   second colour: it is a measure printed on a record, not a status light. */
+.meter { display: grid; grid-template-columns: 1fr auto; gap: 0 8px; margin-bottom: 7px; }
+
+.meter .bar {
+  grid-column: 1 / -1;
+  height: 4px;
+  margin-top: 3px;
+  border: 1px solid var(--hair);
+  background: var(--tint);
+}
+
+.meter .bar > span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.rail-keys { margin: 0; }
+
+.rail-keys > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 1px 0;
+}
+
+.rail-keys dt {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.rail-keys dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.rail-facts dt {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--mid);
+}
+
+.rail-facts dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink);
+}
+
+.rail-facts dd.is-flag { color: var(--flag); }
+
+.rail-due { list-style: none; margin: 0; padding: 0; }
+.rail-due li { padding: 2px 0; }
+
+.rail-due-d {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--mid);
+}
+
+.rail-due-d.is-flag { color: var(--flag); }
+
+.rail-due-t {
+  display: block;
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.rail-none, .rail-due-t { margin: 0; }
+.rail-none { font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
+
+/* ---- the ledger -------------------------------------------------------- */
+
+#view { padding-left: 20px; min-width: 0; }
+
+/* separate, not collapse. a collapsed table hands its borders to the table
+   itself, and chrome then refuses to stick a table cell, so the column header
+   silently scrolled away on a twenty seven week ledger. border-spacing is
+   zeroed so the ruling looks identical; the only cost is that a bottom rule
+   and the separator's top rule would stack, which the :has rule below drops. */
+table.ledger {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+/* the band has to stick to the group, not to the cell. a sticky th is bounded
+   by its containing block, which is the thead and only one row tall, so it
+   scrolled straight off the top; sticking the thead instead holds it against
+   the viewport for the whole ledger. tested, not assumed. */
+table.ledger thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* the single reversed band is the loudest thing on the page, on purpose */
+table.ledger thead th {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  text-align: left;
+  padding: 4px 8px 3px 0;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+table.ledger thead th:first-child { padding-left: 8px; }
+
+.c-tick { width: 26px; }
+.c-num  { width: 30px; }
+.c-date { width: 46px; }
+.c-src  { width: 132px; }
+.c-pp   { width: 74px; }
+.c-stat { width: 84px; }
+
+table.ledger td {
+  padding: 6px 10px 6px 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--hair);
+}
+
+table.ledger td.c-tick { padding-left: 8px; padding-right: 0; }
+
+
+.c-num, .c-date, .c-pp {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--mid);
+}
+
+/* a source wraps like everything else. "A Very Short Introd..." on four rows
+   running is not a source, and the row has the height to spare.
+
+   the clamp goes on a span inside the cell, not on the cell. a td given
+   display:-webkit-box stops being a table cell, and the browser then let a
+   clipped third line bleed under the row rule instead of hiding it. */
+td.c-src {
+  font-family: var(--body);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--mid);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+td.c-src > span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* the status column is empty for the ordinary case. before term starts every
+   reading is unread, so labelling all of them said nothing and coloured the
+   whole page. only a reading wanted this week is marked. */
+.c-stat {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+}
+
+.c-stat.is-due { color: var(--flag); }
+.rail-n.is-flag { color: var(--flag); }
+
+/* a record held reads quieter, not crossed out */
+tr.struck .c-stat { color: var(--faint); }
+tr.struck .c-title, tr.struck .c-src { color: var(--faint); }
+
+/* where the keyboard is. a tint and a rule in the left margin, in the ink
+   rather than the accent: this is a place in a document, not a warning. */
+tr.rec.is-cursor > td { background: var(--tint); }
+
+tr.rec.is-cursor > td.c-tick {
+  box-shadow: inset 3px 0 0 var(--ink);
+}
+
+/* a week with nothing assigned is not a file that is missing. only the three
+   named conditions take the accent, so this one stays out of it. */
+.c-stat.is-none { color: var(--faint); }
+
+/* citations wrap; they are never cut off with an ellipsis */
+.c-title {
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.c-title em, tr.empty .c-title { font-style: italic; color: var(--mid); }
+
+.cwarn {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--flag);
+  margin-top: 1px;
+}
+
+/* ---- week separator rows ----------------------------------------------- */
+
+tr.sep > td {
+  border-top: 2px solid var(--rule);
+  border-bottom: 0;
+  padding-top: 9px;
+  padding-bottom: 4px;
+  vertical-align: bottom;
+  background: var(--paper);
+}
+
+/* the last record of a week keeps no bottom hair, so the 2px week rule below
+   it reads as one line rather than three stacked */
+tr.rec:has(+ tr.sep) > td { border-bottom: 0; }
+
+/* jumping from the index must not park a week under the sticky header */
+tr.sep { scroll-margin-top: 26px; }
+
+
+.sep-n {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 0.9;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+.sep-d {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mid);
+  vertical-align: bottom;
+}
+
+.sep-topic {
+  display: block;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 15.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  line-height: 1.1;
+}
+
+.sep-sub {
+  display: block;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--mid);
+  line-height: 1.25;
+}
+
+.sep-c {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mid);
+  text-align: left;
+  vertical-align: bottom;
+}
+
+.sep-c.is-flag { color: var(--flag); }
+tr.sep.current .sep-n { border-left: 3px solid var(--flag); padding-left: 5px; margin-left: -8px; }
+
+/* ---- controls ---------------------------------------------------------- */
+
+button, input, select, textarea { font: inherit; color: var(--ink); background: transparent; }
+
+button {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  padding: 5px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+button:hover { background: var(--ink); color: var(--paper); }
+button:disabled { color: var(--faint); border-color: var(--hair); cursor: default; }
+
+#confirm, button.primary { background: var(--ink); color: var(--paper); }
+#confirm:hover, button.primary:hover { background: var(--paper); color: var(--ink); }
+
+/* withdrawing and purging are not one of the three conditions the accent is
+   reserved for, so they carry no colour. they are set apart by rule weight
+   instead, and both sit inside a closed panel. */
+button.danger { border-width: 2px; }
+
+button.quiet {
+  border: 0;
+  padding: 0 0 0 8px;
+  color: var(--mid);
+  text-decoration: underline;
+}
+
+button.quiet:hover { background: none; color: var(--ink); }
+
+select, input[type="text"], input[type="search"], input[type="date"], input[type="number"] {
+  border: 0;
+  border-bottom: 1px solid var(--hair);
+  border-radius: 0;
+  padding: 1px 2px;
+  font-family: var(--body);
+  font-size: 13px;
+}
+
+select { font-family: var(--mono); font-size: 12px; }
+
+/* belt and braces under the color-scheme declaration: browsers that let a
+   page style the popup get told directly */
+option { background: var(--paper); color: var(--ink); }
+
+:focus-visible { outline: 2px solid var(--flag); outline-offset: 1px; }
+
+/* 11px was a smudge rather than a control, and its filled state was hard to
+   tell from its empty one at a glance down a column of thirty */
+input[type="checkbox"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--mid);
+  border-radius: 0;
+  vertical-align: -2px;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:hover { border-color: var(--ink); }
+
+input[type="checkbox"]:checked {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* a notch out of the filled square, so held reads at a distance without a
+   tick glyph or a second colour */
+input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background: var(--paper);
+}
+
+/* the note stays out of the way until it holds something */
+input.note {
+  display: block;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--mid);
+  height: 0;
+  opacity: 0;
+}
+
+/* it also opens on the row the keyboard is on, and on anything already read.
+   hidden until focused, nobody knew the field was there at all; shown on every
+   row, thirty empty note lines are the loudest thing on the page. a record you
+   have read is exactly where a note gets written. */
+input.note:focus,
+input.note:not(:placeholder-shown),
+tr.is-cursor input.note,
+tr.struck input.note {
+  height: auto;
+  opacity: 1;
+  margin-top: 2px;
+}
+
+tr.struck input.note::placeholder, tr.is-cursor input.note::placeholder {
+  color: var(--faint);
+}
+
+input.cite { width: 100%; font-size: 13px; }
+
+.rowdel {
+  border: 0;
+  padding: 0;
+  color: var(--flag);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+.rowdel:hover { background: none; color: var(--flag); text-decoration: underline; }
+
+.addrow {
+  border: 1px dashed var(--hair);
+  color: var(--mid);
+  width: 100%;
+  text-align: left;
+}
+
+.addrow:hover { background: none; border-color: var(--flag); color: var(--flag); }
+
+/* ---- tabs -------------------------------------------------------------- */
+
+nav.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 0 8px;
+}
+
+.tabstrip { display: flex; gap: 0; min-width: 0; }
+
+nav.tabs button[data-view] {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border: 1px solid var(--hair);
+  margin-right: -1px;
+  color: var(--mid);
+  padding: 5px 13px;
+}
+
+nav.tabs button[data-view]:hover { background: var(--tint); color: var(--ink); }
+
+nav.tabs button[data-view][aria-current="true"] {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  position: relative;
+  z-index: 1;
+}
+
+nav.tabs .right { display: flex; align-items: center; gap: 8px; }
+
+nav.tabs .right label {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+#edit-toggle[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+/* ---- other views ------------------------------------------------------- */
+
+h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  margin: 18px 0 8px;
+}
+
+h3 { font-family: var(--display); font-weight: 700; font-size: 12px;
+     text-transform: uppercase; letter-spacing: 0.12em; margin: 14px 0 4px; }
+
+p { margin: 4px 0; max-width: 76ch; }
+
+a { color: var(--ink); }
+
+.secondary, .note, .status, .statement {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--mid);
+}
+
+table { width: 100%; border-collapse: collapse; margin: 2px 0 12px; }
+
+th {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  text-align: left;
+  color: var(--faint);
+  border-bottom: 2px solid var(--rule);
+  padding: 4px 8px 4px 0;
+}
+
+td { padding: 6px 10px 6px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+
+.when, .num { font-family: var(--mono); font-size: 12px; color: var(--mid); }
+.num { text-align: right; }
+
+.flagged, tr.missing td { color: var(--flag); }
+
+/* the schedule table: the week column is a label, not a paragraph, and the
+   topic wants enough room to say a title on one or two lines rather than
+   five. the readings take what is left, which is most of it. */
+table.schedule { table-layout: fixed; }
+table.schedule .wk { width: 88px; }
+table.schedule .topic { width: 24%; }
+
+table.schedule td.wk {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink);
+}
+
+.wk-date {
+  display: block;
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 11.5px;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  color: var(--mid);
+}
+
+/* readings in a table cell are a list of citations, not bullets to scan */
+table.schedule ul { margin: 0; padding-left: 15px; }
+table.schedule li.entry { margin-bottom: 4px; line-height: 1.45; }
+table.schedule li.entry:last-child { margin-bottom: 0; }
+
+ol, ul { margin: 4px 0; padding-left: 18px; }
+
+/* a citation list is prose, and prose set to the full width of a wide monitor
+   is a line the eye loses its place on. the hanging indent stays. */
+ol.bibliography { list-style: none; padding-left: 0; max-width: 96ch; }
+
+ol.bibliography li {
+  padding-left: 22px;
+  text-indent: -22px;
+  margin-bottom: 7px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* deadline bands */
+.band {
+  display: flex;
+  gap: 7px;
+  align-items: baseline;
+  margin: 14px 0 2px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.bandcount { font-family: var(--mono); font-weight: 400; }
+.band.band-late, .band.band-soon { color: var(--flag); }
+/* work already handed in reads quieter, the same way a held reading does */
+.band.band-done { color: var(--faint); }
+table.marks tr.struck td { color: var(--faint); }
+.relday { display: block; font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.band-late + table .relday { color: var(--flag); }
+
+/* what kind of thing a search hit is: a reading, a topic, an assignment, a
+   policy, or something the student wrote themselves */
+.hitkind {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--faint);
+  white-space: nowrap;
+  width: 88px;
+}
+
+/* a link off a reading. small and quiet: the citation is the record, this is
+   just the way to the thing itself. */
+.golink {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mid);
+  text-decoration: none;
+  border-bottom: 1px solid var(--hair);
+  white-space: nowrap;
+}
+
+.golink:hover { color: var(--ink); border-color: var(--ink); }
+
+/* the same affordance as a link, for a file already on this machine */
+button.golink.onfile {
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--hair);
+  padding: 0;
+  cursor: pointer;
+}
+
+button.golink.onfile:hover { background: none; color: var(--ink); border-color: var(--ink); }
+
+/* what an assignment has to be, under its name */
+.due-spec {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  margin-top: 2px;
+}
+
+/* a week whose readings are all held reads quieter, not louder */
+.sep-count.is-done { color: var(--mid); }
+
+/* ---- this week --------------------------------------------------------- */
+
+/* the facts across the top: the four numbers that answer "how much is there"
+   before any of the detail is read */
+.weekfacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 34px;
+  margin: 10px 0 4px;
+  padding: 9px 0;
+  border-top: 2px solid var(--rule);
+  border-bottom: 1px solid var(--hair);
+}
+
+.weekfacts > div { display: flex; flex-direction: column; }
+
+.weekfacts dt {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.weekfacts dd { margin: 0; font-family: var(--mono); font-size: 17px; }
+
+/* the course code is the column this view exists for: without it the rows are
+   an undifferentiated pile from four different classes */
+.w-course {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mid);
+  white-space: nowrap;
+  width: 92px;
+}
+
+table.ledger th.w-course, table.ledger td.w-course { width: 92px; }
+
+/* ---- grades ------------------------------------------------------------ */
+
+/* one card per course in the term views. the 2px weight marks a section the
+   same way it marks a week in the ledger, and the course code gets the
+   display size a record deserves rather than a label's. */
+.course-grades, .course-deadlines { margin-bottom: 34px; }
+
+.course-grades > h3, .course-deadlines > h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 2px solid var(--rule);
+  padding-top: 8px;
+  margin: 18px 0 10px;
+  font-size: 21px;
+  letter-spacing: 0.04em;
+  max-width: 74rem;
+}
+
+.course-grades > h3 .flagged, .course-grades > h3 .secondary,
+.course-deadlines > h3 .flagged, .course-deadlines > h3 .secondary {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+/* the work on the left, the figures on the right. stacked, the three numbers
+   a student actually wants sat under a full-width table as three sentences of
+   prose, and the right half of a wide screen held nothing at all. */
+.gradebody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 268px;
+  gap: 0 40px;
+  align-items: start;
+  max-width: 74rem;
+}
+
+.gradework { min-width: 0; }
+
+.gradesum { border-left: 1px solid var(--hair); padding-left: 22px; }
+
+/* the summary column carries its own measure. a paragraph in a 268px column
+   does not need the 76ch cap the page sets for body text. */
+.gradesum p { max-width: none; }
+
+/* the figures as a fact list, in the same idiom as the record header */
+.sumfacts { margin: 0 0 12px; }
+
+.sumfacts > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--hair);
+}
+
+.sumfacts dt {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.sumfacts dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink);
+}
+
+/* the number the page exists to show. it is set at the size of a heading
+   because a student opening this view is looking for one figure. */
+.standing {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--rule);
+}
+
+.standing-figure { font-family: var(--mono); font-size: 34px; line-height: 1; }
+
+.standing-letter {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+/* the numbers belong beside the thing they describe. left to itself the
+   weight sat against the right edge of a wide monitor, a hand's width from
+   the assignment it weighs. */
+/* a bonus row is in the list but not in the hundred, and has to say so where
+   it sits, or the weights column looks like it does not add up */
+.ontop {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+}
+
+table.marks { table-layout: fixed; }
+table.marks th.when, table.marks td.when { width: 88px; }
+table.marks th.num, table.marks td.num { width: 92px; }
+table.marks th.src, table.marks td.src { width: 108px; }
+table.marks .pct { width: 100%; text-align: right; }
+
+.targetrow {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin: 9px 0 0;
+  padding-top: 7px;
+  border-top: 1px solid var(--hair);
+  max-width: none;
+}
+
+/* in the narrow summary column the label sits over its control rather than
+   beside it, or the sentence after it is squeezed to two words a line */
+.gradesum .targetrow { border-top: 0; padding-top: 0; margin-top: 4px; }
+
+.targetrow label {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.targetsay { flex: 1 1 16em; color: var(--mid); font-size: 13px; }
+.targetsay strong { color: var(--ink); }
+
+/* the custom cutoff editor: one small labelled box per letter */
+.cuts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px 12px;
+}
+
+.cut {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--mid);
+}
+
+.cut input { width: 4.2em; }
+
+.cutnote {
+  flex-basis: 100%;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--faint);
+}
+
+/* ---- review ------------------------------------------------------------ */
+
+.rstats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 30px;
+  margin: 8px 0 10px;
+  padding: 7px 0;
+  border-top: 2px solid var(--rule);
+  border-bottom: 1px solid var(--hair);
+}
+
+.rstats > div { display: flex; flex-direction: column; }
+
+.rstats dt {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+}
+
+.rstats dd { margin: 0; font-family: var(--mono); font-size: 17px; }
+.rstats dd.flagged { color: var(--flag); }
+
+.rlead { font-family: var(--mono); font-size: 12px; color: var(--mid); margin: 0 0 10px; }
+.rwarn { margin: 0 0 10px; padding-left: 16px; font-size: 12px; color: var(--flag); }
+
+.whead {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  background: var(--paper);
+  border-bottom: 2px solid var(--rule);
+  padding: 4px 0 2px;
+  margin: 14px 0 0;
+}
+
+.whead .when { font-family: var(--display); font-weight: 700; font-size: 11px;
+               text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink); }
+.whead .wtopic { font-family: var(--body); font-style: italic; font-size: 12px; color: var(--mid); }
+
+.rlist { list-style: none; margin: 0; padding: 0; }
+
+.rrow {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 0 8px;
+  padding: 4px 0 5px 8px;
+  border-left: 2px solid transparent;
+  border-bottom: 1px solid var(--hair);
+}
+
+.rrow.needs-check { border-left-color: var(--flag); }
+.rnum { font-family: var(--mono); font-size: 11.5px; color: var(--faint); text-align: right; }
+
+.rsource {
+  margin: 2px 0 0;
+  padding-left: 8px;
+  border-left: 1px solid var(--hair);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--faint);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rrow:hover .rsource, .rrow:focus-within .rsource {
+  -webkit-line-clamp: unset; line-clamp: unset; overflow: visible;
+}
+
+.actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  padding: 9px 0;
+  margin-top: 14px;
+  background: var(--paper);
+  border-top: 3px solid var(--rule);
+}
+
+/* ---- deposit and management panels ------------------------------------- */
+
+details { margin-top: 16px; border-top: 1px solid var(--hair); padding-top: 6px; }
+
+summary {
+  cursor: pointer;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--mid);
+  padding: 2px 0;
+}
+
+summary:hover { color: var(--ink); }
+
+.drop { border: 1px dashed var(--hair); padding: 12px 14px; margin: 8px 0; }
+.drop:hover, .drop[data-active="true"] { border-color: var(--flag); border-style: solid; }
+.drop label { font-family: var(--display); font-weight: 700; font-size: 13px;
+              text-transform: uppercase; letter-spacing: 0.12em; }
+
+input[type="file"] { border: 0; font-family: var(--mono); font-size: 11.5px; color: var(--mid); }
+
+input[type="file"]::file-selector-button {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 4px 11px;
+  margin-right: 9px;
+  cursor: pointer;
+}
+
+.controls { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+
+/* ---- policies ----------------------------------------------------------
+   quoted from the syllabus, so it is set as prose with a measure rather than
+   as a record. the heading weight is the same one the grades cards use. */
+
+.policy-block { margin-bottom: 22px; max-width: 74ch; }
+
+.policy-block h3 {
+  border-top: 2px solid var(--rule);
+  padding-top: 8px;
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+
+.policy-body, details.policy p { font-size: 14px; line-height: 1.55; margin: 0 0 8px; }
+
+details.policy { border: 0; margin: 0 0 8px; padding: 0; }
+
+details.policy > summary {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  padding: 0;
+}
+
+details.policy > summary::after {
+  content: " more";
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--faint);
+}
+
+details.policy[open] > summary { display: none; }
+
+/* ---- copying a citation ------------------------------------------------ */
+
+.bibtools { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 12px; }
+
+ol.bibliography li { position: relative; }
+
+.copyone {
+  border: 0;
+  padding: 0 0 0 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+  text-indent: 0;
+  opacity: 0;
+}
+
+/* it appears on the entry you are pointing at, so twenty of them do not sit
+   down the page shouting at once */
+ol.bibliography li:hover .copyone,
+ol.bibliography li:focus-within .copyone { opacity: 1; }
+.copyone:hover { background: none; color: var(--ink); text-decoration: underline; }
+
+/* ---- the written pages -------------------------------------------------
+   prose rather than a record, so it takes a measure and a little more air
+   than the ledger. same rules, same weights, nothing new introduced. */
+
+body.doc .masthead h1 a { text-decoration: none; color: inherit; }
+body.doc .masthead { border-bottom: 3px solid var(--rule); }
+
+/* the same two column sheet the ledger uses: an index that stays put on the
+   left, the reading on the right. a page of prose alone left half a wide
+   screen empty and gave no sense of how much there was. */
+.doc-sheet {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  align-items: start;
+}
+
+.doc-rail {
+  position: sticky;
+  top: 0;
+  border-right: 1px solid var(--rule);
+  padding: 20px 18px 30px 0;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.doc-rail h3 {
+  margin: 0 0 6px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--faint);
+  border: 0;
+  padding: 0;
+}
+
+.doc-index { list-style: none; margin: 0; padding: 0; counter-reset: doc; }
+
+.doc-index li { counter-increment: doc; }
+
+.doc-index a {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 0 8px;
+  padding: 3px 0;
+  color: var(--mid);
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.doc-index a::before {
+  content: counter(doc, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.doc-index a:hover { color: var(--ink); background: var(--tint); }
+
+.doc-railback {
+  margin: 14px 0 0;
+  padding-top: 9px;
+  border-top: 1px solid var(--hair);
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+/* the column is wide enough for the tables, and the running text keeps its own
+   measure inside it. a line of prose set to the full width of a monitor is one
+   the eye loses; a table squeezed to the width of a paragraph is one that
+   wraps for no reason. */
+main.prose { max-width: 62rem; padding: 20px 0 0 26px; }
+
+main.prose > p,
+main.prose > ol,
+main.prose > ul { max-width: 68ch; }
+
+.doc-head {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin: 30px 0 12px;
+}
+
+.doc-lead { font-size: 18px; line-height: 1.55; margin: 0 0 10px; max-width: 60ch; }
+
+main.prose h3 {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  border-top: 2px solid var(--rule);
+  padding-top: 8px;
+  margin: 32px 0 10px;
+  /* jumping from the index must not tuck a heading under the top of the page */
+  scroll-margin-top: 12px;
+}
+
+main.prose p { margin: 0 0 10px; }
+
+/* a command is a thing you copy, so it is set apart by a rule down its left
+   rather than a box, and it scrolls on its own if the line is long */
+pre.cmd {
+  margin: 8px 0 12px;
+  padding: 9px 0 9px 14px;
+  border-left: 3px solid var(--rule);
+  background: var(--tint);
+  overflow-x: auto;
+}
+
+pre.cmd code { font-size: 12.5px; line-height: 1.7; }
+
+code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+p code, td code, li code { background: var(--tint); padding: 0 4px; }
+
+.doc-table { table-layout: auto; }
+.doc-table td:first-child { white-space: nowrap; width: 1%; padding-right: 20px; }
+.doc-table td { vertical-align: top; }
+/* a long command must not drag the page wider than the screen */
+.doc-table td:first-child code { overflow-wrap: anywhere; }
+
+.doc-steps { padding-left: 20px; margin: 8px 0 12px; }
+.doc-steps li { margin-bottom: 6px; }
+
+.doc-back { margin-top: 26px; padding-top: 10px; border-top: 2px solid var(--rule); }
+
+/* ---- colophon ---------------------------------------------------------- */
+
+.colophon {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 26px;
+  padding: 8px 0 20px;
+  border-top: 3px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.01em;
+  color: var(--mid);
+}
+
+.colophon p { margin: 0; }
+
+/* ---- narrow ------------------------------------------------------------ */
+
+/* the citation is what the page is for, and the fixed columns were taking
+   more than half the table to hold metadata that is usually empty. at 980px
+   the title had 349px of 741 and two thirds of the citations ran to three
+   lines. the least useful columns give their width back first: the entry
+   number is decoration, then pages and source, which are blank on most rows
+   anyway. */
+/* hiding a column here does not work: the week separator spans three of them
+   with a colspan, and dropping one out of a fixed layout throws that span off
+   and collapses the title to a third of its width. every column stays, and
+   the ones carrying least give width back by shrinking. */
+@media (max-width: 1240px) {
+  .c-tick { width: 28px; }
+  .c-num  { width: 26px; }
+  .c-date { width: 42px; }
+  .c-src  { width: 96px; }
+  .c-pp   { width: 48px; }
+  .c-stat { width: 56px; }
+  table.ledger td { padding-right: 8px; }
+}
+
+@media (max-width: 1100px) {
+  /* under this the fact column is narrower than its own labels */
+  .gradebody { grid-template-columns: minmax(0, 1fr); gap: 14px 0; }
+  .gradesum { border-left: 0; padding-left: 0; }
+}
+
+@media (max-width: 900px) {
+  .sheet { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; border-right: 0; border-bottom: 1px solid var(--rule);
+          max-height: none; padding: 6px 0 10px; }
+  .rail-index { columns: 2; }
+  #view { padding-left: 0; }
+  .record-facts { grid-template-columns: repeat(2, auto); text-align: left; }
+  .record-code { font-size: 34px; }
+}
+
+/* ---- the small-screen gate ---------------------------------------------
+   the ledger has no honest phone form, and a broken table helps nobody. under
+   720px wide (or a phone held sideways) the app hides and a plain statement
+   shows instead. everything saved stays saved; only the viewport is refused. */
+
+#smallgate { display: none; }
+
+@media (max-width: 719px), ((max-height: 480px) and (max-width: 1000px)) {
+  #smallgate {
+    display: block;
+    padding: 18vh 24px 0;
+    text-align: left;
+  }
+
+  #smallgate .smallgate-mark {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    border-bottom: 3px solid var(--rule);
+    padding-bottom: 8px;
+    margin: 0 0 14px;
+  }
+
+  #smallgate p {
+    margin: 0 0 6px;
+    font-family: var(--body);
+    font-size: 17px;
+  }
+
+  /* the written pages are prose and read perfectly well on a phone. the gate
+     is here for the ledger, which has no honest narrow form, so it applies to
+     the app and not to everything wearing the same stylesheet. */
+  body:not(.doc) .masthead,
+  body:not(.doc) .coursebar,
+  body:not(.doc) main,
+  body:not(.doc) footer { display: none !important; }
+
+  body.doc #smallgate { display: none; }
+  body.doc main.prose { max-width: none; padding: 14px 0 0; }
+  body.doc .doc-head { font-size: 30px; }
+
+  /* a command is longer than a phone is wide. the block scrolls on its own
+     and the table stops holding its first column open, so the page itself
+     never has to scroll sideways. */
+  body.doc .doc-table td:first-child { white-space: normal; width: auto; }
+  body.doc pre.cmd code { white-space: pre; }
+}
+
+/* the index needs a column of its own to be worth having */
+@media (max-width: 860px) {
+  .doc-sheet { grid-template-columns: minmax(0, 1fr); }
+  main.prose { padding-left: 0; }
+  .doc-rail {
+    position: static;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 12px 0 10px;
+  }
+  .doc-index { columns: 2; }
+  .doc-railback { display: none; }
+}
+
+/* ---- first load --------------------------------------------------------
+   an empty app used to open on a folded panel. the one action that matters
+   gets the page: what this is on the left, where to drop the file on the
+   right. */
+
+/* the cover is kept shallow on purpose: the accuracy table under it must
+   land inside the first screen, because trust should not require scrolling */
+.welcome-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+  gap: 44px;
+  align-items: start;
+  padding: 22px 0 18px;
+  border-bottom: 3px solid var(--rule);
+}
+
+.welcome-head {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 0.98;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.welcome-drop {
+  border: 1px dashed var(--mid);
+  padding: 22px 28px;
+  text-align: center;
+}
+
+.welcome-drop:hover, .welcome-drop[data-active="true"] {
+  border-color: var(--flag);
+  border-style: solid;
+}
+
+.welcome-drop-line {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 19px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 3px;
+}
+
+.welcome-drop button {
+  margin: 6px 0;
+  font-size: 13.5px;
+  padding: 8px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.welcome-drop button:hover { background: var(--paper); color: var(--ink); }
+.welcome-drop .secondary { max-width: none; }
+
+/* the way to the written page, directly under the headline. it sits above the
+   steps because someone who wants it on their own machine wants to know that
+   before being walked through dropping a file in. */
+.welcome-run {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 9px;
+  margin: 12px 0 0;
+}
+
+.welcome-run a {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  text-decoration: none;
+  border-bottom: 2px solid var(--rule);
+  padding-bottom: 1px;
+}
+
+.welcome-run a:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.welcome-run .secondary { font-size: 12px; }
+
+/* the three steps sit under the headline as an index: number, title, line.
+   stacked, ruled in the hairline weight, nothing boxed. this is what fills
+   the column so the cover has no dead space to begin with. */
+.welcome-steps {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.welcome-steps li {
+  display: grid;
+  grid-template-columns: 16px 128px minmax(0, 1fr);
+  gap: 0 12px;
+  align-items: baseline;
+  border-top: 1px solid var(--hair);
+  padding: 8px 0 7px;
+}
+
+.step-n {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.step-t {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.welcome-steps p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--mid);
+}
+
+/* a stored parse older than the running parser */
+.stale-note {
+  flex: 1 1 100%;
+  margin: 6px 0 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mid);
+}
+
+/* the reading count rides the topic line in words, not a bare digit under
+   the status header */
+.sep-count {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  color: var(--faint);
+  margin-left: 8px;
+}

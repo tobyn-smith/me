@@ -1,7 +1,7 @@
 name: Sync project sites
 
-# Rebuilds the two project subsites from their source repos and vendors them
-# into this repo as /usagrid and /baltic. GitHub Pages can only serve one
+# Rebuilds the three project subsites from their source repos and vendors them
+# into this repo as /usagrid, /baltic and /reader. GitHub Pages can only serve one
 # repository per custom domain, so the built output lives here as subdirectories
 # rather than being mapped from the source repos directly.
 #
@@ -9,8 +9,10 @@ name: Sync project sites
 #   is copied verbatim.
 # - transit: the site is rendered with Quarto in CI (it is not committed), so it
 #   is rebuilt here exactly like its own publish.yml does.
+# - reader: the browser app and demo are built from source exactly like its own
+#   pages.yml does.
 #
-# Both sites are then rewritten from their github.io URLs to the canonical
+# Each site is then rewritten from its github.io URLs to the canonical
 # tobynsmith.me paths, and Quarto's render timestamps are stripped from the
 # sitemap so unchanged content does not produce noisy commits.
 
@@ -100,12 +102,64 @@ jobs:
           # Drop render timestamps so identical content yields an empty diff.
           sed -i 's|<lastmod>[^<]*</lastmod>||g' baltic/sitemap.xml
 
+      # ---- reader: build the app and demo from source, then copy ----
+      - name: Checkout reader
+        uses: actions/checkout@v4
+        with:
+          repository: tobyn-smith/reader
+          path: .sync-src/reader
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install reader dependencies
+        working-directory: .sync-src/reader
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -qy libpango-1.0-0 libpangoft2-1.0-0 libharfbuzz-subset0
+          pip install -q -e . weasyprint
+
+      - name: Install pagefind
+        run: |
+          curl -sSfL --retry 5 --retry-all-errors --retry-delay 3 \
+            -o pagefind.tar.gz \
+            https://github.com/CloudCannon/pagefind/releases/download/v1.3.0/pagefind-v1.3.0-x86_64-unknown-linux-musl.tar.gz
+          tar xzf pagefind.tar.gz
+          sudo mv pagefind /usr/local/bin/
+          rm pagefind.tar.gz
+
+      - name: Build reader browser app
+        working-directory: .sync-src/reader
+        run: python scripts/build_app.py --vendor --site _site
+
+      - name: Build reader demo site
+        working-directory: .sync-src/reader
+        run: |
+          test -f data/public.json || { echo "no data/public.json, nothing to publish"; exit 1; }
+          vault build --public --pdf
+          mkdir -p _site/demo
+          cp -r _site_public/* _site/demo/
+
+      - name: Check reader publish output
+        working-directory: .sync-src/reader
+        run: python scripts/check_publish.py _site
+
+      - name: Copy reader site
+        run: |
+          rm -rf reader
+          mkdir -p reader
+          cp -a .sync-src/reader/_site/. reader/
+          grep -rIlF 'tobyn-smith.github.io' reader \
+            | xargs -r sed -i -e 's|https://tobyn-smith.github.io/me/|https://tobynsmith.me/|g' \
+                                -e 's|tobyn-smith.github.io/reader|tobynsmith.me/reader|g'
+
       - name: Commit and push
         run: |
           rm -rf .sync-src
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add usagrid baltic
+          git add usagrid baltic reader
           if git diff --cached --quiet; then
             echo "No changes to sync."
           else
