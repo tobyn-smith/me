@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Analysis – Baltic Energy Transit Risk</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./favicon.svg" rel="icon" type="image/svg+xml">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b0d0bc6f6760d8e46120f3b11008aa15.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script src="site_libs/core-js-2.5.3/shim.min.js"></script>
+<script src="site_libs/react-18.2.0/react.min.js"></script>
+<script src="site_libs/react-18.2.0/react-dom.min.js"></script>
+<script src="site_libs/reactwidget-2.0.0/react-tools.js"></script>
+<link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="site_libs/reactable-0.4.5/reactable.css" rel="stylesheet">
+<script src="site_libs/reactable-binding-0.4.5/reactable.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="site_libs/leaflet-binding-2.2.3/leaflet.js"></script>
+<script src="site_libs/leaflet-providers-3.0.0/leaflet-providers.js"></script>
+<script src="site_libs/leaflet-providers-plugin-2.2.3/leaflet-providers-plugin.js"></script>
+<link href="site_libs/leaflet-minimap-3.3.1/Control.MiniMap.min.css" rel="stylesheet">
+<script src="site_libs/leaflet-minimap-3.3.1/Control.MiniMap.min.js"></script>
+<script src="site_libs/leaflet-minimap-3.3.1/Minimap-binding.js"></script>
+
+
+<meta property="og:title" content="Analysis – Baltic Energy Transit Risk">
+<meta property="og:description" content="Spatial exposure of post-2022 Baltic energy import infrastructure">
+<meta property="og:image" content="https://tobynsmith.me/baltic/02-analysis_files/figure-html/coverage-1.png">
+<meta property="og:site_name" content="Baltic Energy Transit Risk">
+<meta property="og:image:alt" content="Bar chart of terminal capacity as a share of national gas demand, with Finland and Lithuania far above 100 percent, Poland and Germany well below, and Estonia, Latvia, Sweden and Denmark at zero.">
+<meta property="og:image:height" content="806">
+<meta property="og:image:width" content="1440">
+<meta name="twitter:title" content="Analysis – Baltic Energy Transit Risk">
+<meta name="twitter:description" content="Spatial exposure of post-2022 Baltic energy import infrastructure">
+<meta name="twitter:image" content="https://tobynsmith.me/baltic/02-analysis_files/figure-html/coverage-1.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image:alt" content="Bar chart of terminal capacity as a share of national gas demand, with Finland and Lithuania far above 100 percent, Poland and Germany well below, and Estonia, Latvia, Sweden and Denmark at zero.">
+<meta name="twitter:image-height" content="806">
+<meta name="twitter:image-width" content="1440">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Baltic Transit Risk</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Overview</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./01-data.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./02-analysis.html" aria-current="page"> 
+<span class="menu-text">Analysis</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./slides.html"> 
+<span class="menu-text">Slides</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/tobyn-smith/transit"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-was-replaced" id="toc-what-was-replaced" class="nav-link active" data-scroll-target="#what-was-replaced">What was replaced</a></li>
+  <li><a href="#concentration" id="toc-concentration" class="nav-link" data-scroll-target="#concentration">Concentration</a></li>
+  <li><a href="#transit-corridors" id="toc-transit-corridors" class="nav-link" data-scroll-target="#transit-corridors">Transit corridors</a></li>
+  <li><a href="#proximity" id="toc-proximity" class="nav-link" data-scroll-target="#proximity">Proximity</a></li>
+  <li><a href="#proximity-zones" id="toc-proximity-zones" class="nav-link" data-scroll-target="#proximity-zones">Proximity zones</a></li>
+  <li><a href="#dependence" id="toc-dependence" class="nav-link" data-scroll-target="#dependence">Dependence</a></li>
+  <li><a href="#import-capacity-by-country" id="toc-import-capacity-by-country" class="nav-link" data-scroll-target="#import-capacity-by-country">Import capacity by country</a></li>
+  <li><a href="#is-the-capacity-enough" id="toc-is-the-capacity-enough" class="nav-link" data-scroll-target="#is-the-capacity-enough">Is the capacity enough?</a></li>
+  <li><a href="#what-if-the-biggest-terminal-goes-down" id="toc-what-if-the-biggest-terminal-goes-down" class="nav-link" data-scroll-target="#what-if-the-biggest-terminal-goes-down">What if the biggest terminal goes down?</a></li>
+  <li><a href="#exposure-ranking" id="toc-exposure-ranking" class="nav-link" data-scroll-target="#exposure-ranking">Exposure ranking</a></li>
+  <li><a href="#change-the-weights-yourself" id="toc-change-the-weights-yourself" class="nav-link" data-scroll-target="#change-the-weights-yourself">Change the weights yourself</a></li>
+  <li><a href="#interactive-map" id="toc-interactive-map" class="nav-link" data-scroll-target="#interactive-map">Interactive map</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Every map and figure on this page is built from the public data listed on the <a href="./01-data.html">Data</a> page, and all distances are reported in kilometres. Each chart has a “Show code” toggle if you want to see how it was made, but you do not need to read any code to follow the analysis.</p>
+<p>The terminal capacities come from operator reporting and the Global Energy Monitor tracker, current to 2024 and 2025 (see the <a href="./01-data.html">Data</a> page). Capacities change, so read the rankings as a picture of exposure rather than precise figures.</p>
+<section id="what-was-replaced" class="level2">
+<h2 class="anchored" data-anchor-id="what-was-replaced">What was replaced</h2>
+<p>Before looking at where the terminals sit, it is worth seeing the size of the hole they were built to fill. Russian pipeline gas into these eight countries has all but stopped, and the LNG capacity built since covers only part of what went.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/swap-1.png" class="img-fluid figure-img" alt="Bar chart comparing 70.1 bcm of Russian pipeline gas imported in 2021 with 0.3 bcm in 2023 and 23.4 bcm of operating LNG import capacity today." width="720"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In 2021 these countries took 70.1 bcm of gas from Russia by pipeline. By 2023 that was 0.3 bcm, essentially nothing, and only Finland and Sweden recorded any at all. Germany alone accounted for 55.4 bcm of the 2021 total and Poland 10.5 bcm.</p>
+<p>The operating LNG terminals amount to 23.4 bcm a year, roughly a third of what stopped arriving. The gap did not close through terminals alone. It closed through lower demand, Norwegian pipeline gas, and imports arriving overland from the west, which is worth remembering before reading these terminals as the whole of the region’s answer.</p>
+</section>
+<section id="concentration" class="level2">
+<h2 class="anchored" data-anchor-id="concentration">Concentration</h2>
+<p>Where the import terminals sit, with each point sized by how much gas it can bring in. Russian territory is shaded for reference.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/map-concentration-1.png" class="img-fluid figure-img" alt="Map of the Baltic Sea showing LNG import terminals as points sized by capacity and coloured by exposure, with Russian territory shaded and the Danish Straits marked by a dashed box." width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="transit-corridors" class="level2">
+<h2 class="anchored" data-anchor-id="transit-corridors">Transit corridors</h2>
+<p>The terminals are only part of the picture. They replaced, or now sit alongside, a network of subsea pipelines and cables, several of which have been damaged or sabotaged since 2022. The map shows the main corridors as schematic straight lines between their landing points.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/map-corridors-1.png" class="img-fluid figure-img" alt="Map of the Baltic showing the main subsea pipelines and cables as lines, coloured blue where operating and red where damaged or sabotaged since 2022, with LNG terminals as grey points." width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="proximity" class="level2">
+<h2 class="anchored" data-anchor-id="proximity">Proximity</h2>
+<p>Distance from each terminal to the nearest Russian territory, meaning the mainland near the Gulf of Finland or the Kaliningrad exclave, with the share of total capacity sitting within a given band.</p>
+<p>Only 17% of the region’s operating import capacity sits within 200 km of Russian territory. The two largest terminals, Świnoujście and Mukran, lie more than 350 km back, so the exposure concentrates in the smaller terminals closest to the border.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/dist-plot-1.png" class="img-fluid figure-img" alt="Bar chart of each terminal's distance to the nearest Russian territory, ranging from Hamina at about 34 km to Mukran at about 388 km." width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="proximity-zones" class="level2">
+<h2 class="anchored" data-anchor-id="proximity-zones">Proximity zones</h2>
+<p>The rings mark distance from Russian territory in 100 km steps. The terminals inside 100 km are the small ones, near Kaliningrad and at the eastern end of the Gulf of Finland. The largest capacity sits in the outer band, well back from the border.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/map-zones-1.png" class="img-fluid figure-img" alt="Map of the Baltic with distance rings at 100, 200 and 300 km around Russian territory, shaded darker closer to Russia, showing which terminals fall in each band." width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="uwyaapbxdf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uwyaapbxdf table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#uwyaapbxdf thead, #uwyaapbxdf tbody, #uwyaapbxdf tfoot, #uwyaapbxdf tr, #uwyaapbxdf td, #uwyaapbxdf th {
+  border-style: none;
+}
+
+#uwyaapbxdf p {
+  margin: 0;
+  padding: 0;
+}
+
+#uwyaapbxdf .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#uwyaapbxdf .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#uwyaapbxdf .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#uwyaapbxdf .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 1.5px;
+  border-bottom-color: #12263F;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: 600;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#uwyaapbxdf .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: 600;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#uwyaapbxdf .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#uwyaapbxdf .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#uwyaapbxdf .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 1.5px;
+  border-bottom-color: #12263F;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#uwyaapbxdf .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#uwyaapbxdf .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#uwyaapbxdf .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#uwyaapbxdf .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#uwyaapbxdf .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#uwyaapbxdf .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: rgba(18, 38, 63, 0.13);
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#uwyaapbxdf .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uwyaapbxdf .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#uwyaapbxdf .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#uwyaapbxdf .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#uwyaapbxdf .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uwyaapbxdf .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#uwyaapbxdf .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uwyaapbxdf .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#uwyaapbxdf .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uwyaapbxdf .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#uwyaapbxdf .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uwyaapbxdf .gt_left {
+  text-align: left;
+}
+
+#uwyaapbxdf .gt_center {
+  text-align: center;
+}
+
+#uwyaapbxdf .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#uwyaapbxdf .gt_font_normal {
+  font-weight: normal;
+}
+
+#uwyaapbxdf .gt_font_bold {
+  font-weight: bold;
+}
+
+#uwyaapbxdf .gt_font_italic {
+  font-style: italic;
+}
+
+#uwyaapbxdf .gt_super {
+  font-size: 65%;
+}
+
+#uwyaapbxdf .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#uwyaapbxdf .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#uwyaapbxdf .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#uwyaapbxdf .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#uwyaapbxdf .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#uwyaapbxdf .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#uwyaapbxdf .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#uwyaapbxdf .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#uwyaapbxdf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="Band" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Band</th>
+<th id="Terminals" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Terminals</th>
+<th id="Capacity-(bcm)" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Capacity (bcm)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="Band">Under 100 km</td>
+<td class="gt_row gt_right" headers="Terminals">3</td>
+<td class="gt_row gt_right" headers="Capacity (bcm)">10.2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Band">200 to 300 km</td>
+<td class="gt_row gt_right" headers="Terminals">1</td>
+<td class="gt_row gt_right" headers="Capacity (bcm)">5.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Band">Over 300 km</td>
+<td class="gt_row gt_right" headers="Terminals">2</td>
+<td class="gt_row gt_right" headers="Capacity (bcm)">14.3</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="dependence" class="level2">
+<h2 class="anchored" data-anchor-id="dependence">Dependence</h2>
+<p>Gas import dependency for each country (Eurostat <code>nrg_ind_id</code>, natural gas, 2023). The figure is the share of a country’s gas demand met by imports rather than its own production, so values above 100% reflect stock draws or re-exports.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/dependence-map-1.png" class="img-fluid figure-img" alt="Choropleth map of Baltic countries shaded by gas import dependency in 2023, with most of the region near 100 percent and Denmark much lower." width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="import-capacity-by-country" class="level2">
+<h2 class="anchored" data-anchor-id="import-capacity-by-country">Import capacity by country</h2>
+<p>Not every country has its own terminal. This rolls the operating terminals up by country, next to each country’s gas import dependency.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="reactable html-widget html-fill-item" id="htmlwidget-db5514e8048d01edf6b2" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-db5514e8048d01edf6b2">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Country":["Finland","Sweden","Latvia","Estonia","Lithuania","Germany","Poland","Denmark"],"Operating terminals":[2,0,0,0,1,1,1,0],"Capacity (bcm)":[5.3,0,0,0,3.8,6,8.3,0],"Import dependency (%)":[103.5,102.3,100.1,100,96,93.7,81.3,13.5]},"columns":[{"id":"Country","name":"Country","type":"character"},{"id":"Operating terminals","name":"Operating terminals","type":"numeric","align":"center"},{"id":"Capacity (bcm)","name":"Capacity (bcm)","type":"numeric","align":"center"},{"id":"Import dependency (%)","name":"Import dependency (%)","type":"numeric","align":"center"}],"pagination":false,"highlight":true,"borderless":true,"theme":{"borderColor":"rgba(18,38,63,0.13)","highlightColor":"#eef2f6","style":{"fontFamily":"\"Source Sans 3\", system-ui, sans-serif","fontSize":"13px"},"headerStyle":{"borderBottom":"1.5px solid #12263f","fontWeight":600}},"dataKey":"e2f134ea2b077f1426210b380ca9d35e"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Estonia, Latvia and Sweden have no terminal of their own, yet almost all their gas is imported; they lean on neighbours through the Balticconnector and regional pipelines. Lithuania, Germany and Poland each run a single terminal, so that one asset carries the country’s seaborne supply. Denmark stands apart, with low dependency on the back of its North Sea production.</p>
+</section>
+<section id="is-the-capacity-enough" class="level2">
+<h2 class="anchored" data-anchor-id="is-the-capacity-enough">Is the capacity enough?</h2>
+<p>Capacity only means something next to demand. This compares each country’s operating terminal capacity with the gas it actually burned in 2023, so a bar at 100% means the terminals alone could cover a normal year’s consumption.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/coverage-1.png" class="img-fluid figure-img" alt="Bar chart of terminal capacity as a share of national gas demand, with Finland and Lithuania far above 100 percent, Poland and Germany well below, and Estonia, Latvia, Sweden and Denmark at zero." width="720"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Across the eight countries the operating terminals could land 22% of the gas the region burns in a year. That regional figure hides the more interesting split. Finland and Lithuania built capacity well beyond their own consumption, so their terminals are not just national supply but a regional buffer that neighbours can draw on. Poland and Germany, with far larger demand, cover only part of it by sea and still lean on pipelines from the west and north.</p>
+<p>Four countries show no terminal, but they are not in the same position. Estonia, Latvia and Sweden import all their gas through neighbours, so the empty bar is a dependency. Denmark’s empty bar is not: it produces its own gas from the North Sea and is the one country here that does not need a terminal.</p>
+<p>Read alongside the exposure score, this sharpens the picture. The terminals sitting closest to Russian territory are the small ones, but two of them, Klaipėda and Inkoo, are precisely the assets carrying spare capacity for their neighbours. The most exposed sites are also the ones the region’s fallback depends on.</p>
+</section>
+<section id="what-if-the-biggest-terminal-goes-down" class="level2">
+<h2 class="anchored" data-anchor-id="what-if-the-biggest-terminal-goes-down">What if the biggest terminal goes down?</h2>
+<p>EU gas security rules use an idea called the N-1 standard: can a country still meet demand if its single largest piece of supply infrastructure fails? The test below borrows that logic and applies it to seaborne capacity alone, removing each country’s largest terminal and asking what the rest could still land.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-analysis_files/figure-html/n1-1.png" class="img-fluid figure-img" alt="Grouped bar chart showing that with all terminals running Finland and Lithuania exceed their demand, but with the largest terminal offline Finland falls to about 20 percent and Lithuania, Poland and Germany fall to zero." width="720"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The result is stark. Finland and Lithuania comfortably clear their own demand while everything is running, but each depends on one large terminal. Take Inkoo out and Finland is left with Hamina, a small-scale site covering about a fifth of demand. Take out Klaipėda, Świnoujście or Mukran and Lithuania, Poland and Germany have no seaborne capacity at all.</p>
+<p>Two caveats matter here. The real N-1 standard counts every source of supply, including pipelines, storage and domestic production, so these countries are not failing the actual regulatory test. They have other ways to get gas, which is the point: lose a terminal and you fall back onto exactly the pipelines and interconnectors that have been damaged since 2022. And this compares against annual demand, while a failure in January would bite harder than the average suggests.</p>
+</section>
+<section id="exposure-ranking" class="level2">
+<h2 class="anchored" data-anchor-id="exposure-ranking">Exposure ranking</h2>
+<p>Click any column heading to re-sort the table.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="reactable html-widget html-fill-item" id="htmlwidget-0a7dff8989122779df8f" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-0a7dff8989122779df8f">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Terminal":["Hamina LNG","Gdansk FSRU","Klaipeda FSRU","Inkoo FSRU","Swinoujscie LNG","Mukran (Deutsche Ostsee)"],"Country":["Finland","Poland","Lithuania","Finland","Poland","Germany"],"Status":["operating","planned","operating","operating","operating","operating"],"Capacity":[0.3,6.1,3.75,5,8.3,6],"km to Russia":[34,62,50,216,353,388],"km to Straits":[955,370,507,774,146,69],"Exposure":[0.71,0.69,0.67,0.61,0.37,0.22]},"columns":[{"id":"Terminal","name":"Terminal","type":"character"},{"id":"Country","name":"Country","type":"character"},{"id":"Status","name":"Status","type":"character"},{"id":"Capacity","name":"Capacity (bcm)","type":"numeric","align":"center"},{"id":"km to Russia","name":"km to Russia","type":"numeric","align":"center"},{"id":"km to Straits","name":"km to Straits","type":"numeric","align":"center"},{"id":"Exposure","name":"Exposure","type":"numeric","align":"center","style":[{"background":"#8F1D17","color":"#ffffff","fontWeight":600},{"background":"#94261D","color":"#ffffff","fontWeight":600},{"background":"#992F24","color":"#ffffff","fontWeight":600},{"background":"#A94B38","color":"#ffffff","fontWeight":600},{"background":"#D9B39E","color":"#12263f","fontWeight":600},{"background":"#E9EEF2","color":"#12263f","fontWeight":600}]}],"defaultSorted":[{"id":"Exposure","desc":true}],"pagination":false,"highlight":true,"borderless":true,"theme":{"borderColor":"rgba(18,38,63,0.13)","highlightColor":"#eef2f6","style":{"fontFamily":"\"Source Sans 3\", system-ui, sans-serif","fontSize":"13px"},"headerStyle":{"borderBottom":"1.5px solid #12263f","fontWeight":600}},"dataKey":"72c4a6f1688395194e21d5088813509d"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="change-the-weights-yourself" class="level2">
+<h2 class="anchored" data-anchor-id="change-the-weights-yourself">Change the weights yourself</h2>
+<p>The weights are a choice, so rather than defend one set, here they are to move. Drag a slider or take one of the presets, and the ranking recomputes as you go. The weights are rescaled to sum to one, so only their balance matters.</p>
+<script>window.terminalScores = [{"name":"Hamina LNG","p":1,"c":0.0361,"k":1},{"name":"Gdansk FSRU","p":0.9199,"c":0.7349,"k":0.3402},{"name":"Klaipeda FSRU","p":0.9556,"c":0.4518,"k":0.494},{"name":"Inkoo FSRU","p":0.4852,"c":0.6024,"k":0.7955},{"name":"Swinoujscie LNG","p":0.098,"c":1,"k":0.0871},{"name":"Mukran (Deutsche Ostsee)","p":0,"c":0.7229,"k":0}];</script>
+<div class="wx">
+  <div class="wx-presets">
+    <span>Presets:</span>
+    <button type="button" data-w="40,30,30">Balanced</button>
+    <button type="button" data-w="60,20,20">Proximity-led</button>
+    <button type="button" data-w="20,60,20">Capacity-led</button>
+    <button type="button" data-w="20,20,60">Transit-led</button>
+  </div>
+  <div class="wx-controls">
+    <label>Proximity to Russia <output id="wx-p-out">40%</output>
+      <input type="range" id="wx-p" min="0" max="100" step="5" value="40"></label>
+    <label>Share of capacity <output id="wx-c-out">30%</output>
+      <input type="range" id="wx-c" min="0" max="100" step="5" value="30"></label>
+    <label>Route past the Straits <output id="wx-k-out">30%</output>
+      <input type="range" id="wx-k" min="0" max="100" step="5" value="30"></label>
+  </div>
+  
+<table class="wx-table caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Rank</th>
+<th data-quarto-table-cell-role="th">Terminal</th>
+<th data-quarto-table-cell-role="th">Exposure</th>
+</tr>
+</thead>
+<tbody id="wx-rows">
+</tbody>
+</table>
+
+</div>
+
+<style>
+.wx { border: 1px solid rgba(18,38,63,0.13); padding: 1rem 1.1rem; margin: 1.2rem 0; }
+.wx-presets { font-size: 0.85rem; color: #5a6675; margin-bottom: 0.9rem; }
+.wx-presets button {
+  font: inherit; font-size: 0.82rem; color: #12263f; background: #fff;
+  border: 1px solid rgba(18,38,63,0.3); padding: 0.2rem 0.6rem; margin-right: 0.3rem;
+  cursor: pointer; border-radius: 2px;
+}
+.wx-presets button:hover { background: #eef2f6; }
+.wx-presets button[aria-pressed="true"] { background: #12263f; color: #fff; border-color: #12263f; }
+.wx-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.9rem; }
+.wx-controls label { display: block; font-size: 0.85rem; color: #24303f; }
+.wx-controls output { font-weight: 600; color: #12263f; }
+.wx-controls input[type=range] { width: 100%; margin-top: 0.3rem; accent-color: #8f1d17; }
+.wx-table { width: 100%; margin-top: 1.1rem; font-size: 0.9rem; border-collapse: collapse; }
+.wx-table th { text-align: left; border-bottom: 2px solid #12263f; padding: 0.3rem 0.4rem; }
+.wx-table td { border-bottom: 1px solid rgba(18,38,63,0.13); padding: 0.35rem 0.4rem; }
+.wx-table td:first-child { width: 2.6rem; color: #5a6675; font-variant-numeric: tabular-nums; }
+.wx-bar { display: inline-block; height: 0.7rem; background: #8f1d17; vertical-align: middle;
+  margin-right: 0.5rem; min-width: 2px; }
+.wx-val { font-variant-numeric: tabular-nums; color: #24303f; }
+</style>
+
+<script>
+(function () {
+  var data = window.terminalScores;
+  var rows = document.getElementById('wx-rows');
+  if (!data || !rows) return;
+  var ids = ['p', 'c', 'k'];
+  var inputs = {}, outs = {};
+  ids.forEach(function (i) {
+    inputs[i] = document.getElementById('wx-' + i);
+    outs[i]   = document.getElementById('wx-' + i + '-out');
+  });
+
+  function render() {
+    var raw = {}, total = 0;
+    ids.forEach(function (i) { raw[i] = Number(inputs[i].value); total += raw[i]; });
+    if (total === 0) { total = 1; raw.p = 1; }
+    ids.forEach(function (i) {
+      outs[i].textContent = Math.round(100 * raw[i] / total) + '%';
+    });
+    var scored = data.map(function (d) {
+      return { name: d.name,
+               score: (raw.p * d.p + raw.c * d.c + raw.k * d.k) / total };
+    }).sort(function (a, b) { return b.score - a.score; });
+
+    var max = scored[0].score || 1;
+    rows.innerHTML = scored.map(function (d, i) {
+      var w = Math.max(2, Math.round(120 * d.score / max));
+      return '<tr><td>' + (i + 1) + '</td><td>' + d.name + '</td>' +
+             '<td><span class="wx-bar" style="width:' + w + 'px"></span>' +
+             '<span class="wx-val">' + d.score.toFixed(2) + '</span></td></tr>';
+    }).join('');
+
+    var current = ids.map(function (i) { return raw[i]; }).join(',');
+    document.querySelectorAll('.wx-presets button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.dataset.w === current ? 'true' : 'false');
+    });
+  }
+
+  ids.forEach(function (i) { inputs[i].addEventListener('input', render); });
+  document.querySelectorAll('.wx-presets button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var w = b.dataset.w.split(',');
+      ids.forEach(function (id, n) { inputs[id].value = w[n]; });
+      render();
+    });
+  });
+  render();
+})();
+</script>
+<p>Weighting towards proximity lifts the terminals nearest Russian territory, Hamina, Klaipėda and Gdańsk. Weighting towards capacity lifts Świnoujście, the largest in the region. That the order moves at all is the point: the ranking is a function of the assumptions, and the assumptions are yours to set.</p>
+</section>
+<section id="interactive-map" class="level2">
+<h2 class="anchored" data-anchor-id="interactive-map">Interactive map</h2>
+<p>Toggle the layers in the top-right, hover a corridor or terminal for its name, and click a terminal for its figures.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-f43e342794813bb6dcf7" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-f43e342794813bb6dcf7">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addPolygons","args":[[[[{"lng":[21.18886718750002,21.22285156250002,21.23574218750003,21.29755859375001,21.3892578125,21.44707031250001,21.5546875,21.68271484375,21.87392578125003,22.07236328125001,22.13789062500002,22.34638671875,22.56728515625002,22.62744140625,22.73652343750002,22.82470703125001,22.83125,22.70966796875002,22.68447265625004,22.67988281250001,22.72431640625001,22.7662109375,22.73183593750003,22.16845703125,21.63417968750002,21.14052734375002,20.66474609375001,20.20820312500002,19.92431640625,19.64423828125001,19.60439453125002,19.75849609375001,19.85888671874999,19.94414062500001,19.95322265625,19.97451171875002,20.10761718750001,20.39667968750001,20.52031250000002,20.67890625000001,20.84570312499999,20.89980468750002,20.95781250000002,20.85937500000001,20.59482421875001,20.677734375,20.7740234375,20.88750000000002,20.99589843750001,21.18886718750002],"lat":[54.93520507602523,55.10776366980162,55.26411132607506,55.26445312295012,55.27553710732674,55.23442382607062,55.1953124979398,55.16035156043456,55.10073241980057,55.0636718729199,55.05937499791931,55.06425781041996,55.05913085729421,54.9707031229057,54.92885741977425,54.87128906039032,54.83847656038525,54.63261718535276,54.56293945096662,54.49301757595529,54.40561523219107,54.35678710718302,54.350097654057,54.35986327905858,54.3764648415613,54.39179687281382,54.40664062281619,54.42075195094357,54.4339843728207,54.44707031032283,54.45917968532482,54.54482421658868,54.63383788847793,54.74999999787137,54.83046874788401,54.92119140414802,54.95649413852853,54.95126952915272,54.99487304478443,55.10263671667589,55.23203124794526,55.28666991982839,55.27890624795223,55.18364257606302,54.98237304478251,54.95566406040344,54.94702148227704,54.90947265414624,54.90268554477026,54.93520507602523]}],[{"lng":[35.55859374999999,35.52890625,35.58574218750002,35.60869140625001,35.69096920865478,35.83321216119744,35.84843750000001,35.85839843749999,35.82734374999999,35.84228515625001,35.77871093750002,35.68007812500003,35.62138671875002,35.55859374999999],"lat":[65.09360351445369,65.15107421758167,65.16708984258261,65.15712890508199,65.18477904720282,65.16124862605611,65.14267578008132,65.07792968632796,65.03647460820078,65.00146484257385,64.97666015507261,65.05761718632685,65.05878906132691,65.09360351445369]}],[{"lng":[30.79882812500001,30.79101562499999,30.8044921875,30.82988281250001,30.866796875,30.97773437500001,30.97773437500001,30.95888671875002,30.87744140624999,30.814453125,30.810546875,30.82099609375,30.86181640625,30.90058593750001,30.9087890625,30.90683593750002,30.88222656250002,30.85595703124999,30.80078125,30.72167968749999,30.66230468750001,30.6255859375,30.58671875,30.47539062500001,30.45625,30.23359375000001,30.04267578125001,29.93701171874999,29.881640625,29.82392578125001,29.744140625,29.68457031249999,29.63007812500001,29.48222656250002,29.41298828125003,29.35341796875002,29.37314453125,29.39794921875001,29.39609375,29.37499999999999,29.28300781250001,29.08740234375,29.03173828124999,28.94746093750001,28.79472656250001,28.74082031250001,28.69082031250002,28.63691406250001,28.56396484375,28.40703125000001,28.39208984375,28.31630859375002,28.28427734375001,28.14794921874999,28.17333984375,28.20205078125001,28.19169921875,28.16923828125002,28.11083984375,28.10312500000002,28.00751953125001,27.99160156250002,27.94140624999999,27.89208984375,27.88154296875,27.8486328125,27.80605468750003,27.65566406250003,27.63945312500002,27.7111328125,27.71738281249999,27.76279296875001,27.81455078125001,27.83027343750001,27.83828125000002,27.82861328124999,27.796875,27.67275390625002,27.53867187500001,27.51113281250003,27.46972656249999,27.35195312500001,27.35429687500001,27.37177734375,27.4,27.49199218750002,27.51474609375,27.54208984375,27.75283203125001,27.77695312500001,27.77851562500001,27.76875000000001,27.72197265625002,27.67343750000001,27.644140625,27.57109375000001,27.50244140624999,27.48779296875001,27.50556640625001,27.53007812500002,27.53134765625,27.42705078125002,27.43417968750001,27.46445312500001,27.51308593750002,27.62177734375,27.75761718750001,27.84951171875002,27.89765625000001,27.93818359375001,28.01640625000001,28.04609375000002,28.06132812500001,28.12832031250002,28.15107421875001,28.1330078125,28.06582031250002,28.01250000000002,28.06396484375,28.04628906250001,28.01396484375001,28.05800781250003,28.13115234375002,28.21250000000001,28.3345703125,28.42373046875,28.45390625000001,28.51816406250001,28.60390625000003,28.74765625000001,28.86689453125,28.94726562499999,28.98154296875001,29.01337890625001,29.0791015625,29.14726562500001,29.66972656250002,30.12255859375,30.15683593750001,30.17265625000003,30.05996093750003,29.97675781250002,29.872265625,29.72119140625001,29.56933593750001,29.37041015625001,29.06914062500001,28.81269531249999,28.6431640625,28.52226562500001,28.49160156250002,28.62246093750002,28.64033203125001,28.65058593750001,28.57783203125001,28.51279296875002,28.179296875,27.79765625000001,28.151953125,28.40742187500001,28.455078125,28.56816406250001,28.66289062500002,28.73906250000002,28.99296875000001,29.25166015625001,29.49238281250001,29.57939453125,29.69013671875,29.93320312500001,30.00996093750001,30.30644531250002,30.47968750000001,30.56562499999999,30.93574218750001,31.18671875000001,31.28564453124999,31.382421875,31.4373046875,31.53398437500001,31.53652343750001,31.50927734374999,31.43701171875,31.33671875000001,31.24746093750002,31.180859375,30.97480468750003,30.65527343749999,30.4185546875,30.05537109375,29.99150390625001,30.00410156250001,30.21025390625002,30.41533203124999,30.50390624999999,30.52607421875001,30.5279296875,30.51376953125001,30.487890625,30.390625,30.10810546874998,30.04189453125004,29.98662109375001,29.98554687500001,30.1201171875,30.12617187500002,30.11025390625001,30.0728515625,29.783203125,29.70166015624999,29.63750000000002,29.60419921875,29.60087890625001,29.62246093750002,29.72001953125002,29.81083984375001,29.82695312500001,29.82617187500001,29.81054687499999,29.62968750000001,29.61240234375001,29.60800781249999,29.61718749999999,29.71484375,29.72802734375,29.81943359375,29.71591796875,29.72392578125002,29.88261718749999,30.02900390625001,30.09531250000001,30.102734375,30.08749999999999,29.94722286965001,34.41401056571413,34.53593750000001,34.67109374999999,34.80351562500001,34.82714843750001,34.83261718750001,34.95224609374999,34.90546875000002,34.85830078125002,34.86953125000001,35.0353515625,35.28408203125001,35.43203125000003,35.64707031250001,35.80205078125001,36.14648437499999,36.301953125,36.36494140625,36.71376953125002,36.97519531249999,37.37275390625001,37.4421875,37.63509780537075,30.8779513955299,30.79882812500001],"lat":[54.78325195100161,54.80600585725517,54.86093749788876,54.9149902322721,54.94072265415108,55.05048827916789,55.08779296667356,55.13759765418112,55.22343749794399,55.2787109354522,55.3069824198314,55.33027343545984,55.3604003885893,55.39741210734476,55.52534179486331,55.57001952924476,55.59638671674853,55.60751952925009,55.60112304487416,55.62211913862722,55.65546874800691,55.66625976363348,55.70029296676327,55.76879882614797,55.78681640427544,55.8452148417836,55.83642577928236,55.8452636699086,55.83232421678182,55.79511718552664,55.77041015427312,55.76972656052305,55.75117187302045,55.68457031051108,55.7248535136418,55.78437499802507,55.83471679490715,55.88105468553854,55.91220702929292,55.93872070117153,55.96787109180053,56.02114257618278,56.0217773418079,56.00209960743024,55.94257812304705,55.95537109179886,56.00263671680532,56.06176757618834,56.09199218556745,56.089013669942,56.08671874806674,56.05253906056208,56.05590820118753,56.14291991994929,56.19033202933067,56.26040038871493,56.31557616997222,56.38686523248158,56.51069335749764,56.5457031231272,56.59985351375909,56.64531249813987,56.70371093564724,56.74106445127693,56.82416992003729,56.85341796691587,56.86708984191757,56.84321288878962,56.84565429503994,56.97807617005619,57.05463867006542,57.13510742007518,57.16689452945395,57.19448242008221,57.24770507633855,57.2933105450939,57.31694335759668,57.36811523260261,57.4297851544848,57.50815429511875,57.5240234357456,57.52812499824604,57.55029296699863,57.61254882638072,57.66679687326185,57.72495117014333,57.76420898264763,57.79941406077661,57.84101562328111,57.85673827953288,57.87070312328444,57.88413085766085,57.90546874828821,57.93461913891644,58.01391601392505,58.13808593581329,58.22133788894712,58.27006835770219,58.32626952958302,58.38149413896377,58.43525390459429,58.73305663899929,58.7872558577547,58.84130859213498,58.88627929526446,58.94497070152006,59.05200195153035,59.19267577966865,59.27763671717664,59.29702148280337,59.3017089828038,59.3278320296812,59.34326171718267,59.35756835780895,59.37441406093556,59.40307617031318,59.45317382656772,59.48427734219558,59.55400390470194,59.64716796721025,59.72475585784204,59.78154296722209,59.78652343597253,59.72465820159209,59.69252929533923,59.73408202971797,59.81425781097496,59.84956054535308,59.81806640472531,59.80668945159928,59.81191406097475,59.8287597641012,59.85478515472851,59.90156249848258,59.96098632661264,59.99975585786594,59.95566406098722,59.87358398285512,59.90429687348274,59.95712890473735,60.00258788911619,60.02636718599322,60.12084960787625,60.1953124985075,60.20185546725804,60.17592773288089,60.19145507663221,60.33154296726882,60.37529296727239,60.48295898290615,60.54013671728578,60.49160156103191,60.54287109228597,60.61098632666649,60.65253906104475,60.67729492042177,60.57099609228829,60.53613281103547,60.74584960792713,60.89692382668895,60.91962890481569,60.96020507669378,61.00283202982204,61.05874023295128,61.16904296733465,61.28779296734343,61.44423827985499,61.49345702985853,61.54609374861238,61.7115722642492,61.75737304550238,61.96484374864185,62.06821288927392,62.12758788927795,62.32377929554108,62.48139648305147,62.56782226430711,62.69165038931516,62.77612304557054,62.88540038932749,62.92163085807969,62.95532226433187,63.00771484246004,63.06806640496385,63.14189452996841,63.20830077997248,63.30063476435308,63.41748046748506,63.50405273311527,63.68901367062607,63.73515624875379,63.74731445187962,63.80332031125782,63.94750976439113,64.02060546752028,64.07729492064843,64.14111328002708,64.19999999878034,64.23652343628241,64.28242187378498,64.36611328003954,64.44335937379391,64.52426757692329,64.55771484255021,64.6446289050548,64.68808593630713,64.73256835818455,64.76503906131131,64.80429687381346,64.84575195194063,64.91176757694417,64.96840820194721,65.00195312382395,65.03950195195085,65.08032226445299,65.10791015507941,65.14506835820646,65.18530273320856,65.20473632695952,65.22387695196051,65.23476562383614,65.24868163946178,65.26533203008772,65.33696288946642,65.47343749884836,65.56874999885322,65.62456054573111,65.63437499885661,65.66362304573299,65.67070312385844,65.681689451984,65.7262695301112,65.78652343636419,66.00645662296127,65.38889589337214,65.27792968633837,65.16811523320764,64.98598632694809,64.91269531131917,64.80019531131323,64.75595703006088,64.73867187380993,64.70668945193319,64.56000976442525,64.44023437379369,64.36254882691453,64.34677734253857,64.37832031129027,64.33535156128794,64.18901367065477,64.03437499877104,64.00283203001926,63.94506835814096,63.90952148313897,63.8167480456336,63.81337890500834,63.89330355045136,54.74603690598107,54.78325195100161]}],[{"lng":[37.9537109375,37.84355468750001,37.74062500000002,37.42958984375002,37.28955078124999,37.18369140625001,37.04042968750002,36.76933593750002,36.62421875,36.57871093749999,36.52822265625002,36.5345703125,36.65292968749999,36.7859375,36.79179540743326,38.48708679030874,37.97476973687218,37.9537109375],"lat":[64.32011718628715,64.3663085925397,64.3969726550413,64.37358398316502,64.37792968629023,64.40849609254195,64.48916015504641,64.68525390505707,64.75053710818554,64.79096679568771,64.84736328006565,64.93862304569556,64.93544921757039,64.98715820194819,64.99844787199758,64.69207611944749,64.21852398102583,64.32011718628715]}]]],null,"Russian territory",{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":0,"opacity":0.5,"fill":true,"fillColor":"#8f1d17","fillOpacity":0.16,"smoothFactor":1,"noClip":false},null,null,"Russian territory",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},{"fillOpacity":0.32}]},{"method":"addRectangles","args":[54.99999999791019,10.5,56.19999999808194,13.00000000000001,null,"Danish Straits",{"interactive":true,"className":"","stroke":true,"color":"#12263f","weight":2,"opacity":0.5,"fill":false,"fillColor":"#12263f","fillOpacity":0.2,"dashArray":"5,5","smoothFactor":1,"noClip":false},null,null,"Danish Straits",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addPolylines","args":[[[[{"lng":[28.75,13.68],"lat":[60.69999999854858,54.13999999777194]}]],[[{"lng":[12.4,15.05000000000001],"lat":[55.24999999794791,54.0899999977635]}]],[[{"lng":[24.02,24.07999999999999],"lat":[60.04999999849529,59.35999999843418]}]],[[{"lng":[26.39999999999999,26.90000000000001],"lat":[60.49999999853259,59.35999999843418]}]]],null,"Transit corridors",{"interactive":true,"className":"","stroke":true,"color":["#8f1d17","#2c5d7c","#8f1d17","#8f1d17"],"weight":3,"opacity":0.9,"fill":false,"fillColor":["#8f1d17","#2c5d7c","#8f1d17","#8f1d17"],"fillOpacity":0.2,"smoothFactor":1,"noClip":false},null,null,["Nord Stream (sabotaged 2022)","Baltic Pipe (operating)","Balticconnector (damaged 2023; repaired 2024)","Estlink 2 (damaged 2024; repaired 2025)"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},{"weight":6,"opacity":1}]},{"method":"addCircleMarkers","args":[[60.5499999985366,54.39999999781513,55.71999999801606,60.04999999849527,53.91999999773443,54.49999999783142],[27.18,18.64999999999999,21.07999999999999,24,14.27,13.62],[5,12.975,9.74375,11.4625,16,12.8375],null,"LNG terminals",{"interactive":true,"className":"","stroke":true,"color":"#12263f","weight":1,"opacity":0.5,"fill":true,"fillColor":["#8F1D17","#95291D","#9C3625","#AA4E36","#DDB49F","#E9EEF2"],"fillOpacity":0.85},null,null,["<b>Hamina LNG<\/b><br>Finland<br>Capacity: 0.3 bcm/yr<br>Status: operating<br>Exposure: 0.71","<b>Gdansk FSRU<\/b><br>Poland<br>Capacity: 6.1 bcm/yr<br>Status: planned<br>Exposure: 0.69","<b>Klaipeda FSRU<\/b><br>Lithuania<br>Capacity: 3.75 bcm/yr<br>Status: operating<br>Exposure: 0.67","<b>Inkoo FSRU<\/b><br>Finland<br>Capacity: 5 bcm/yr<br>Status: operating<br>Exposure: 0.61","<b>Swinoujscie LNG<\/b><br>Poland<br>Capacity: 8.3 bcm/yr<br>Status: operating<br>Exposure: 0.37","<b>Mukran (Deutsche Ostsee)<\/b><br>Germany<br>Capacity: 6 bcm/yr<br>Status: operating<br>Exposure: 0.22"],null,["Hamina LNG","Gdansk FSRU","Klaipeda FSRU","Inkoo FSRU","Swinoujscie LNG","Mukran (Deutsche Ostsee)"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLegend","args":[{"colors":["#E9EEF2 , #E4CDC3 16.8292682926829%, #D9A78C 37.0731707317073%, #C67F5D 57.3170731707317%, #AD543A 77.5609756097561%, #92241A 97.8048780487805%, #8F1D17 "],"labels":["0.3","0.4","0.5","0.6","0.7"],"na_color":null,"na_label":"NA","opacity":0.9,"position":"bottomright","type":"numeric","title":"Exposure","extra":{"p_1":0.1682926829268294,"p_n":0.9780487804878053},"layerId":null,"className":"info legend","group":null}]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addMiniMap","args":[null,null,"bottomright",110,110,19,19,-5,false,false,false,true,false,false,{"color":"#ff7800","weight":1,"clickable":false},{"color":"#000000","weight":1,"clickable":false,"opacity":0,"fillOpacity":0},{"hideText":"Hide MiniMap","showText":"Show MiniMap"},[]]},{"method":"addLayersControl","args":[[],["LNG terminals","Transit corridors","Russian territory","Danish Straits"],{"collapsed":false,"autoZIndex":true,"position":"topright"}]}],"fitBounds":[53.11999999773443,12.12,61.3499999985366,28.68,[]],"limits":{"lat":[53.91999999773443,66.00645662296127],"lng":[10.5,38.48708679030874]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/tobyn-smith\.github\.io\/transit");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Public data only. Sources on the Data page.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with R, sf and Quarto.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

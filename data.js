@@ -88,7 +88,7 @@ window.PORTFOLIO_DATA = {
       stack: ["Python", "R", "GIS", "EIA Open Data"],
       description: "A Python pipeline scoring all 50 U.S. states on grid-resilience exposure from EIA open data, published as an interactive choropleth site with a documented methodology. It surfaces where generation mix and transmission constraints leave states most vulnerable to supply shocks.",
       links: [
-        { label: "View site", url: "https://tobyn-smith.github.io/energyosint/" },
+        { label: "View site", url: "https://tobynsmith.me/usagrid/" },
         { label: "Source", url: "https://github.com/tobyn-smith/energyosint" }
       ]
     },
@@ -99,7 +99,7 @@ window.PORTFOLIO_DATA = {
       stack: ["R (sf)", "GIS", "Quarto", "GitHub Actions"],
       description: "Which Baltic LNG terminals are easiest to disrupt? I scored terminals and subsea corridors in R (sf) and published the results as a Quarto site with interactive maps, built and deployed via GitHub Actions.",
       links: [
-        { label: "View site", url: "https://tobyn-smith.github.io/transit/" },
+        { label: "View site", url: "https://tobynsmith.me/baltic/" },
         { label: "Source", url: "https://github.com/tobyn-smith/transit" }
       ]
     },

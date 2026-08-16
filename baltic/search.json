@@ -1,0 +1,338 @@
+[
+  {
+    "objectID": "slides.html#the-question",
+    "href": "slides.html#the-question",
+    "title": "Baltic Energy Transit Risk",
+    "section": "The question",
+    "text": "The question\nBefore 2022, most of the Baltic region’s gas came by pipeline from Russia.\nAfter the invasion of Ukraine and the sabotage of the Nord Stream pipelines, that supply was cut. What replaced a continental pipeline network is, in practice, five working coastal terminals for liquefied natural gas (LNG).\nHow concentrated is that infrastructure, and how exposed is it?"
+  },
+  {
+    "objectID": "slides.html#the-size-of-the-hole",
+    "href": "slides.html#the-size-of-the-hole",
+    "title": "Baltic Energy Transit Risk",
+    "section": "The size of the hole",
+    "text": "The size of the hole\nRussian pipeline gas into these eight countries:\n\n2021: about 70 bcm\n2023: about 0.3 bcm, essentially nothing\n\nOperating LNG capacity built in the region: around 23 bcm, roughly a third of what stopped arriving. The rest closed through lower demand and pipeline gas from the west and north."
+  },
+  {
+    "objectID": "slides.html#the-terminals",
+    "href": "slides.html#the-terminals",
+    "title": "Baltic Energy Transit Risk",
+    "section": "The terminals",
+    "text": "The terminals\n\n\n\n\n\n\n\nHover for a name, click for the detail. Each point is sized by capacity."
+  },
+  {
+    "objectID": "slides.html#what-the-project-measures",
+    "href": "slides.html#what-the-project-measures",
+    "title": "Baltic Energy Transit Risk",
+    "section": "What the project measures",
+    "text": "What the project measures\nAn exposure score for each terminal, from three plain ingredients:\n\nhow close it sits to Russian territory,\nhow much of the region’s import capacity it holds,\nhow long its supply route past the Danish Straits runs.\n\nThe weights are a stated judgement, not a result. Anyone can change them."
+  },
+  {
+    "objectID": "slides.html#finding-1-concentration",
+    "href": "slides.html#finding-1-concentration",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Finding 1: concentration",
+    "text": "Finding 1: concentration\nImport capacity is lopsided.\n\nTwo southern terminals, Świnoujście (Poland) and Mukran (Germany), hold most of the region’s capacity.\nThe northeast leans on one or two terminals each: Inkoo for the Gulf of Finland, Klaipėda for Lithuania."
+  },
+  {
+    "objectID": "slides.html#finding-2-proximity",
+    "href": "slides.html#finding-2-proximity",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Finding 2: proximity",
+    "text": "Finding 2: proximity\nThe terminals closest to Russia are the small ones:\n\nHamina, at the eastern end of the Gulf of Finland,\nKlaipėda and Gdańsk, beside the Kaliningrad exclave.\n\nThe two largest terminals sit farthest from Russia. Size and proximity do not line up, which is what the score is built to show."
+  },
+  {
+    "objectID": "slides.html#finding-3-one-way-in",
+    "href": "slides.html#finding-3-one-way-in",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Finding 3: one way in",
+    "text": "Finding 3: one way in\nEvery LNG cargo passes the Danish Straits.\nThe Kiel Canal is the only other entrance, and it is far too small for LNG carriers, so the Straits are the effective door.\nTerminals deep in the Gulf of Finland run the longest exposed route to reach port."
+  },
+  {
+    "objectID": "slides.html#this-is-not-hypothetical",
+    "href": "slides.html#this-is-not-hypothetical",
+    "title": "Baltic Energy Transit Risk",
+    "section": "This is not hypothetical",
+    "text": "This is not hypothetical\n\n\n\n\n\n\n\n\nDate\nAsset\nWhat happened\n\n\n\n\nSep 2022\nNord Stream 1 & 2\nPipelines sabotaged off Bornholm\n\n\nOct 2023\nBalticconnector\nPipeline and cable damaged by an anchor; repaired 2024\n\n\nDec 2024\nEstlink 2\nPower and telecoms cables cut; back in service 2025\n\n\n\nBaltic energy and data links have been hit repeatedly, mostly by ships dragging anchors across the seabed."
+  },
+  {
+    "objectID": "slides.html#who-leans-on-whom",
+    "href": "slides.html#who-leans-on-whom",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Who leans on whom",
+    "text": "Who leans on whom\nNot every country has its own terminal.\n\nEstonia, Latvia, Sweden: no terminal; they depend on neighbours through the Balticconnector and regional pipelines.\nLithuania, Germany, Poland: a single terminal each, one point of failure.\nDenmark: low dependency, on the back of its own North Sea gas."
+  },
+  {
+    "objectID": "slides.html#is-the-capacity-enough",
+    "href": "slides.html#is-the-capacity-enough",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Is the capacity enough?",
+    "text": "Is the capacity enough?\nCapacity only means something next to demand.\n\nFinland and Lithuania hold several times their own annual consumption. They built a regional buffer, not just national supply.\nGermany and Poland cover only part of much larger demand by sea, and still lean on pipelines from the west and north.\nEstonia, Latvia, Sweden have no terminal at all.\n\nThe most exposed terminals are also the ones carrying the region’s spare capacity."
+  },
+  {
+    "objectID": "slides.html#lose-one-terminal",
+    "href": "slides.html#lose-one-terminal",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Lose one terminal",
+    "text": "Lose one terminal\nApplying the logic of the EU’s N-1 standard to seaborne capacity alone:\n\nFinland falls from over three times its demand to about a fifth, on Hamina alone.\nLithuania, Poland and Germany fall to zero seaborne capacity.\n\nThey are not failing the real N-1 test, which counts pipelines and storage too. But the fallback is precisely the pipelines and cables that have been cut."
+  },
+  {
+    "objectID": "slides.html#what-follows-for-policy",
+    "href": "slides.html#what-follows-for-policy",
+    "title": "Baltic Energy Transit Risk",
+    "section": "What follows for policy",
+    "text": "What follows for policy\n\nNo spare door in the north-east: Finland and Lithuania each lean on one terminal; the fallback is the very pipelines that have been hit.\nThe connectors are the soft layer: Estonia, Latvia and Sweden import through neighbours, not terminals of their own.\nThe Straits are shared: one entrance for all eight countries, so patrols there protect everyone at once.\nFSRUs cut both ways: quick to add and movable, but few and chartered."
+  },
+  {
+    "objectID": "slides.html#limitations",
+    "href": "slides.html#limitations",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Limitations",
+    "text": "Limitations\n\nThis measures geographic exposure, not the probability of disruption.\nThe score uses proxies (distance, capacity share), not a causal model.\nIt is a single snapshot; capacity, routes and terminals change.\n\nIt shows where the exposure sits. It is not a risk forecast."
+  },
+  {
+    "objectID": "slides.html#explore-the-full-project",
+    "href": "slides.html#explore-the-full-project",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Explore the full project",
+    "text": "Explore the full project\nThe maps, the data, and the exposure ranking, all built from public sources:\ntobynsmith.me/baltic\nCode and open issues on GitHub."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Baltic Energy Transit Risk",
+    "section": "",
+    "text": "Russian pipeline gas into the eight Baltic littoral states collapsed from roughly 70 bcm in 2021 to almost nothing by 2023. In its place the region now leans on seaborne LNG, landed at a handful of coastal terminals that together hold about a third of the capacity which stopped arriving.\nThe problem is not the size of that gap. Lower demand and pipeline gas from the west and north have largely closed it. It is that what replaced the pipelines is concentrated in a few fixed points, sits closest to Russian territory precisely where it is smallest, and is one asset deep in every country that has it. Remove any single country’s largest terminal and its seaborne cover disappears.\nThis project maps that infrastructure and scores how exposed each terminal is, using distance to Russian territory, share of regional capacity, and the length of the supply route past the Danish Straits. The infrastructure has already been struck three times since 2022, so none of this is hypothetical.\nTerminal capacities are current to 2024 and 2025; gas import dependency is Eurostat data for 2023. Every source is listed on the Data page."
+  },
+  {
+    "objectID": "index.html#in-brief",
+    "href": "index.html#in-brief",
+    "title": "Baltic Energy Transit Risk",
+    "section": "",
+    "text": "Russian pipeline gas into the eight Baltic littoral states collapsed from roughly 70 bcm in 2021 to almost nothing by 2023. In its place the region now leans on seaborne LNG, landed at a handful of coastal terminals that together hold about a third of the capacity which stopped arriving.\nThe problem is not the size of that gap. Lower demand and pipeline gas from the west and north have largely closed it. It is that what replaced the pipelines is concentrated in a few fixed points, sits closest to Russian territory precisely where it is smallest, and is one asset deep in every country that has it. Remove any single country’s largest terminal and its seaborne cover disappears.\nThis project maps that infrastructure and scores how exposed each terminal is, using distance to Russian territory, share of regional capacity, and the length of the supply route past the Danish Straits. The infrastructure has already been struck three times since 2022, so none of this is hypothetical.\nTerminal capacities are current to 2024 and 2025; gas import dependency is Eurostat data for 2023. Every source is listed on the Data page."
+  },
+  {
+    "objectID": "index.html#the-question",
+    "href": "index.html#the-question",
+    "title": "Baltic Energy Transit Risk",
+    "section": "The question",
+    "text": "The question\nBefore 2022, much of the Baltic region’s gas arrived by pipeline from Russia. After the invasion of Ukraine and the sabotage of the Nord Stream pipelines, that supply was cut or abandoned, and imports moved onto a small set of coastal terminals for liquefied natural gas (LNG), such as Klaipėda, Świnoujście, and Inkoo. These are the sites where tankers unload gas that has been chilled to a liquid for shipping, and turn it back into gas for the pipeline network.\nThat shift did not simply change where the gas comes from. It concentrated the supply of eight countries onto a handful of fixed coastal sites, each of which can be located on a map and counted. This project asks how concentrated, and how exposed:\n\nAfter 2022, Baltic energy imports shifted onto a small set of coastal LNG terminals and ports. How concentrated is that infrastructure, and how exposed is it, measured by capacity, by distance to Russian territory, and by reliance on passage through the Danish Straits?\n\nThe terminals, at a glance. Hover for a name, click for the detail; each point is sized by capacity."
+  },
+  {
+    "objectID": "index.html#findings",
+    "href": "index.html#findings",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Findings",
+    "text": "Findings\n\nConcentration. Capacity is lopsided. Two southern terminals, Świnoujście in Poland and Mukran in Germany, hold about three fifths of the region’s operating import capacity, while the northeast leans on one or two terminals each: Inkoo for the Gulf of Finland and Klaipėda for Lithuania. The replacement for a continental pipeline network is, in practice, five working coastal sites, with a sixth planned at Gdańsk.\nProximity. The terminals closest to Russian territory are Hamina, at the eastern end of the Gulf of Finland, and Klaipėda and Gdańsk, which sit beside the Kaliningrad exclave. Proximity and capacity do not always line up: the two largest terminals, Świnoujście and Mukran, are among the farthest from Russia, which is what the exposure score is built to show.\nTransit through the Straits. Every LNG cargo bound for these terminals passes the Danish Straits. The Kiel Canal is the only other way in, and it is far too small for LNG carriers, so the Straits are the effective entrance. The terminals deepest inside the sea, in the Gulf of Finland, run the longest exposed route to reach port.\nThe small states overbuilt on purpose. Set against what each country actually burns, Finland and Lithuania hold terminal capacity worth several times their own demand, while Germany and Poland cover only part of theirs by sea. The northeast did not build to meet its own consumption. It built a buffer, and its neighbours draw on it. That is a deliberate strategic choice, and it explains why the region’s most exposed assets are also its most useful ones."
+  },
+  {
+    "objectID": "index.html#the-exposure-score",
+    "href": "index.html#the-exposure-score",
+    "title": "Baltic Energy Transit Risk",
+    "section": "The exposure score",
+    "text": "The exposure score\nEach terminal gets a score built from three things, each with a stated weight:\n\nhow close it is to Russian territory (weight 0.4),\nhow much of the region’s import capacity it holds (0.3),\nhow long its supply route past the Danish Straits runs (0.3).\n\nProximity gets the most weight because the question is about exposure to pressure from one actor, and distance is the most direct measure the public data supports. Capacity matters because a larger terminal does more damage if it goes down, and transit matters because a terminal deep inside the Baltic runs a longer voyage to be resupplied.\nThe weights are a judgement, not a finding. They sit in plain view on the Analysis page, changing them changes the ranking, and the sensitivity table there shows by how much. There is no hidden model. It is a starting point, not a final score."
+  },
+  {
+    "objectID": "index.html#disruption-to-the-infrastructure-since-2022",
+    "href": "index.html#disruption-to-the-infrastructure-since-2022",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Disruption to the infrastructure since 2022",
+    "text": "Disruption to the infrastructure since 2022\nThis exposure is not hypothetical. Baltic energy and data links have been damaged on several occasions since 2022, mostly by vessels dragging anchors across the seabed.\n\n\n\n\n\n\n\n\nDate\nAsset\nWhat happened\n\n\n\n\nSep 2022\nNord Stream 1 and 2\nSubsea gas pipelines ruptured by underwater explosions off Bornholm.\n\n\nOct 2023\nBalticconnector\nThe Finland-Estonia gas pipeline and a telecoms cable were damaged by a ship’s anchor. The pipeline was shut for six months and returned to commercial use on 22 April 2024.\n\n\nDec 2024\nEstlink 2\nThe Estonia-Finland power cable and four telecoms cables were cut on Christmas Day; a shadow-fleet tanker is the prime suspect. Repairs ran into 2025 and the link returned to commercial use on 20 June 2025.\n\n\n\nThese incidents are context, not events modelled here, but they are why the geography in this project is worth looking at closely. The Analysis page maps the main corridors and which have been hit.\nSources: Balticconnector return to service (Gasgrid), Estlink 2 return to service (Fingrid), Estlink 2 incident (Wikipedia)."
+  },
+  {
+    "objectID": "index.html#what-follows-for-policy",
+    "href": "index.html#what-follows-for-policy",
+    "title": "Baltic Energy Transit Risk",
+    "section": "What follows for policy",
+    "text": "What follows for policy\nFour points follow from the maps rather than from theory. Each is a consequence of where the infrastructure physically sits:\n\nThe north-east has no spare door. Borrowing the logic of the EU’s N-1 standard and removing each country’s largest terminal, the cover vanishes. Finland is left with Hamina, covering about a fifth of demand; Lithuania, Poland and Germany are left with no seaborne capacity at all. Backup then arrives by pipeline from neighbours, over exactly the links that have been damaged since 2022. Because Inkoo and Klaipėda also carry the spare capacity the region leans on, an outage there is not only a national problem.\nThe connectors matter as much as the terminals. Estonia, Latvia and Sweden import through neighbours rather than terminals of their own, so their supply runs on pipes and cables like the Balticconnector. The incidents above hit precisely that layer.\nThe Danish Straits are a shared dependency. Every cargo for all eight countries passes one entrance, so monitoring and patrol arrangements there, of the kind NATO stood up after the December 2024 cable cuts, protect the whole region at once.\nFloating terminals cut both ways. FSRUs were quick to add and can be moved to where they are needed, but they are few, chartered, and easy to count. Much of the region’s flexibility rests on a handful of ships."
+  },
+  {
+    "objectID": "index.html#limitations",
+    "href": "index.html#limitations",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Limitations",
+    "text": "Limitations\nThis measures geographic exposure, not the probability of disruption. A terminal close to a maritime boundary is not a prediction that anything will happen to it. It is a statement about geography.\nA few specific caveats:\n\nThe score uses proxy measures (distance, capacity share) rather than a causal model. Different reasonable weights would shift the rankings.\nIt is a single snapshot. Capacity, routes, and terminals change.\nThe terminal capacities are compiled from operator reporting and Global Energy Monitor, current to 2024 and 2025. The dependence figures are Eurostat data for\n\nSee the Data page.\n\nUndersea cable and pipeline incidents in the region between 2023 and 2025 are context for the question, not events modelled here.\n\nThis shows where the exposure sits. It is not a risk forecast."
+  },
+  {
+    "objectID": "index.html#terms-used-here",
+    "href": "index.html#terms-used-here",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Terms used here",
+    "text": "Terms used here\n\nLNG (liquefied natural gas): natural gas chilled to a liquid so it can be carried by ship rather than a pipeline.\nLNG terminal: the coastal site where those ships unload and the cargo is turned back into gas for the pipeline network. Some are built on land; some are a moored ship, known as an FSRU (a floating storage and regasification unit).\nCapacity (bcm): how much gas a terminal can bring in over a year, measured in billion cubic metres.\nImport dependency: the share of a country’s gas that comes from abroad rather than from its own production."
+  },
+  {
+    "objectID": "index.html#where-to-look-next",
+    "href": "index.html#where-to-look-next",
+    "title": "Baltic Energy Transit Risk",
+    "section": "Where to look next",
+    "text": "Where to look next\n\nThe Data page lists every source, all public, and says what is solid and what is still rough.\nThe Analysis page holds the maps, the distance measurements, and the exposure ranking.\nThe Slides walk through the whole argument as a short deck.\nThe printable brief is a two page PDF version.\n\nNo technical background is needed for any of it. The code behind each chart is tucked away and can be ignored."
+  },
+  {
+    "objectID": "02-analysis.html",
+    "href": "02-analysis.html",
+    "title": "Analysis",
+    "section": "",
+    "text": "Every map and figure on this page is built from the public data listed on the Data page, and all distances are reported in kilometres. Each chart has a “Show code” toggle if you want to see how it was made, but you do not need to read any code to follow the analysis.\nThe terminal capacities come from operator reporting and the Global Energy Monitor tracker, current to 2024 and 2025 (see the Data page). Capacities change, so read the rankings as a picture of exposure rather than precise figures."
+  },
+  {
+    "objectID": "02-analysis.html#what-was-replaced",
+    "href": "02-analysis.html#what-was-replaced",
+    "title": "Analysis",
+    "section": "What was replaced",
+    "text": "What was replaced\nBefore looking at where the terminals sit, it is worth seeing the size of the hole they were built to fill. Russian pipeline gas into these eight countries has all but stopped, and the LNG capacity built since covers only part of what went.\n\n\n\n\n\n\n\n\n\nIn 2021 these countries took 70.1 bcm of gas from Russia by pipeline. By 2023 that was 0.3 bcm, essentially nothing, and only Finland and Sweden recorded any at all. Germany alone accounted for 55.4 bcm of the 2021 total and Poland 10.5 bcm.\nThe operating LNG terminals amount to 23.4 bcm a year, roughly a third of what stopped arriving. The gap did not close through terminals alone. It closed through lower demand, Norwegian pipeline gas, and imports arriving overland from the west, which is worth remembering before reading these terminals as the whole of the region’s answer."
+  },
+  {
+    "objectID": "02-analysis.html#concentration",
+    "href": "02-analysis.html#concentration",
+    "title": "Analysis",
+    "section": "Concentration",
+    "text": "Concentration\nWhere the import terminals sit, with each point sized by how much gas it can bring in. Russian territory is shaded for reference."
+  },
+  {
+    "objectID": "02-analysis.html#transit-corridors",
+    "href": "02-analysis.html#transit-corridors",
+    "title": "Analysis",
+    "section": "Transit corridors",
+    "text": "Transit corridors\nThe terminals are only part of the picture. They replaced, or now sit alongside, a network of subsea pipelines and cables, several of which have been damaged or sabotaged since 2022. The map shows the main corridors as schematic straight lines between their landing points."
+  },
+  {
+    "objectID": "02-analysis.html#proximity",
+    "href": "02-analysis.html#proximity",
+    "title": "Analysis",
+    "section": "Proximity",
+    "text": "Proximity\nDistance from each terminal to the nearest Russian territory, meaning the mainland near the Gulf of Finland or the Kaliningrad exclave, with the share of total capacity sitting within a given band.\nOnly 17% of the region’s operating import capacity sits within 200 km of Russian territory. The two largest terminals, Świnoujście and Mukran, lie more than 350 km back, so the exposure concentrates in the smaller terminals closest to the border."
+  },
+  {
+    "objectID": "02-analysis.html#proximity-zones",
+    "href": "02-analysis.html#proximity-zones",
+    "title": "Analysis",
+    "section": "Proximity zones",
+    "text": "Proximity zones\nThe rings mark distance from Russian territory in 100 km steps. The terminals inside 100 km are the small ones, near Kaliningrad and at the eastern end of the Gulf of Finland. The largest capacity sits in the outer band, well back from the border.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBand\nTerminals\nCapacity (bcm)\n\n\n\n\nUnder 100 km\n3\n10.2\n\n\n200 to 300 km\n1\n5.0\n\n\nOver 300 km\n2\n14.3"
+  },
+  {
+    "objectID": "02-analysis.html#dependence",
+    "href": "02-analysis.html#dependence",
+    "title": "Analysis",
+    "section": "Dependence",
+    "text": "Dependence\nGas import dependency for each country (Eurostat nrg_ind_id, natural gas, 2023). The figure is the share of a country’s gas demand met by imports rather than its own production, so values above 100% reflect stock draws or re-exports."
+  },
+  {
+    "objectID": "02-analysis.html#import-capacity-by-country",
+    "href": "02-analysis.html#import-capacity-by-country",
+    "title": "Analysis",
+    "section": "Import capacity by country",
+    "text": "Import capacity by country\nNot every country has its own terminal. This rolls the operating terminals up by country, next to each country’s gas import dependency.\n\n\n\n\n\n\nEstonia, Latvia and Sweden have no terminal of their own, yet almost all their gas is imported; they lean on neighbours through the Balticconnector and regional pipelines. Lithuania, Germany and Poland each run a single terminal, so that one asset carries the country’s seaborne supply. Denmark stands apart, with low dependency on the back of its North Sea production."
+  },
+  {
+    "objectID": "02-analysis.html#is-the-capacity-enough",
+    "href": "02-analysis.html#is-the-capacity-enough",
+    "title": "Analysis",
+    "section": "Is the capacity enough?",
+    "text": "Is the capacity enough?\nCapacity only means something next to demand. This compares each country’s operating terminal capacity with the gas it actually burned in 2023, so a bar at 100% means the terminals alone could cover a normal year’s consumption.\n\n\n\n\n\n\n\n\n\nAcross the eight countries the operating terminals could land 22% of the gas the region burns in a year. That regional figure hides the more interesting split. Finland and Lithuania built capacity well beyond their own consumption, so their terminals are not just national supply but a regional buffer that neighbours can draw on. Poland and Germany, with far larger demand, cover only part of it by sea and still lean on pipelines from the west and north.\nFour countries show no terminal, but they are not in the same position. Estonia, Latvia and Sweden import all their gas through neighbours, so the empty bar is a dependency. Denmark’s empty bar is not: it produces its own gas from the North Sea and is the one country here that does not need a terminal.\nRead alongside the exposure score, this sharpens the picture. The terminals sitting closest to Russian territory are the small ones, but two of them, Klaipėda and Inkoo, are precisely the assets carrying spare capacity for their neighbours. The most exposed sites are also the ones the region’s fallback depends on."
+  },
+  {
+    "objectID": "02-analysis.html#what-if-the-biggest-terminal-goes-down",
+    "href": "02-analysis.html#what-if-the-biggest-terminal-goes-down",
+    "title": "Analysis",
+    "section": "What if the biggest terminal goes down?",
+    "text": "What if the biggest terminal goes down?\nEU gas security rules use an idea called the N-1 standard: can a country still meet demand if its single largest piece of supply infrastructure fails? The test below borrows that logic and applies it to seaborne capacity alone, removing each country’s largest terminal and asking what the rest could still land.\n\n\n\n\n\n\n\n\n\nThe result is stark. Finland and Lithuania comfortably clear their own demand while everything is running, but each depends on one large terminal. Take Inkoo out and Finland is left with Hamina, a small-scale site covering about a fifth of demand. Take out Klaipėda, Świnoujście or Mukran and Lithuania, Poland and Germany have no seaborne capacity at all.\nTwo caveats matter here. The real N-1 standard counts every source of supply, including pipelines, storage and domestic production, so these countries are not failing the actual regulatory test. They have other ways to get gas, which is the point: lose a terminal and you fall back onto exactly the pipelines and interconnectors that have been damaged since 2022. And this compares against annual demand, while a failure in January would bite harder than the average suggests."
+  },
+  {
+    "objectID": "02-analysis.html#exposure-ranking",
+    "href": "02-analysis.html#exposure-ranking",
+    "title": "Analysis",
+    "section": "Exposure ranking",
+    "text": "Exposure ranking\nClick any column heading to re-sort the table."
+  },
+  {
+    "objectID": "02-analysis.html#change-the-weights-yourself",
+    "href": "02-analysis.html#change-the-weights-yourself",
+    "title": "Analysis",
+    "section": "Change the weights yourself",
+    "text": "Change the weights yourself\nThe weights are a choice, so rather than defend one set, here they are to move. Drag a slider or take one of the presets, and the ranking recomputes as you go. The weights are rescaled to sum to one, so only their balance matters.\n\n\n  \n    Presets:\n    Balanced\n    Proximity-led\n    Capacity-led\n    Transit-led\n  \n  \n    Proximity to Russia 40%\n      \n    Share of capacity 30%\n      \n    Route past the Straits 30%\n      \n  \n  \n\n\n\nRank\nTerminal\nExposure\n\n\n\n\n\n\n\n\n\n\n\nWeighting towards proximity lifts the terminals nearest Russian territory, Hamina, Klaipėda and Gdańsk. Weighting towards capacity lifts Świnoujście, the largest in the region. That the order moves at all is the point: the ranking is a function of the assumptions, and the assumptions are yours to set."
+  },
+  {
+    "objectID": "02-analysis.html#interactive-map",
+    "href": "02-analysis.html#interactive-map",
+    "title": "Analysis",
+    "section": "Interactive map",
+    "text": "Interactive map\nToggle the layers in the top-right, hover a corridor or terminal for its name, and click a terminal for its figures."
+  },
+  {
+    "objectID": "01-data.html",
+    "href": "01-data.html",
+    "title": "Data",
+    "section": "",
+    "text": "Every dataset here is public and free, with no login and no paid access. Where a source would normally require accepting terms or running a manual download, this project avoids it by using a small table stored with the project instead, and the notes below say exactly what to replace if you want to extend the project."
+  },
+  {
+    "objectID": "01-data.html#base-geography",
+    "href": "01-data.html#base-geography",
+    "title": "Data",
+    "section": "Base geography",
+    "text": "Base geography\nCountry shapes and coastlines come from Natural Earth, loaded through the rnaturalearth package. Natural Earth is in the public domain, and because the package ships the data, there is nothing to download by hand."
+  },
+  {
+    "objectID": "01-data.html#energy-infrastructure",
+    "href": "01-data.html#energy-infrastructure",
+    "title": "Data",
+    "section": "Energy infrastructure",
+    "text": "Energy infrastructure\nThe infrastructure layer is a small table of the region’s LNG import terminals, data/processed/lng_terminals.csv. It holds the name, country, location, annual import capacity (in billion cubic metres, or bcm), status, and a source note for each terminal. You can sort or search it here:\n\n\n\n\n\n\nDownload this table as a CSV\nThe capacities are taken from operator reporting and the Global Energy Monitor terminal tracker, current as of 2024 to 2025. The source column in the table names the operator behind each figure. Two points worth flagging:\n\nCapacities move, and a headline figure is often the planned one. Świnoujście reached 8.3 bcm only in January 2025, once its third tank came online. Mukran is frequently quoted at 13.5 bcm, but that assumes two FSRUs (the moored ships that store and re-gasify LNG). Deutsche ReGas ended the charter on the second unit, so the terminal runs on one ship, the Neptune, and is counted here at about 6 bcm. Taking the 13.5 figure at face value would roughly double Germany’s seaborne supply on paper.\nThe Paldiski jetty in Estonia is deliberately left out. It is shelved, and its capacity figure refers to the same ship (the Exemplar) that now operates at Inkoo, so including both would count one vessel twice.\n\nTo extend the project, EMODnet Human Activities and OpenStreetMap (via the osmdata package) are the route to add the pipelines and cables as mapped routes, and the full set of capacities can be reconciled against the Global Energy Monitor tracker."
+  },
+  {
+    "objectID": "01-data.html#transit-corridors",
+    "href": "01-data.html#transit-corridors",
+    "title": "Data",
+    "section": "Transit corridors",
+    "text": "Transit corridors\nThe corridor map on the Analysis page uses a small table, data/processed/transit_lines.csv, listing the main subsea pipelines and cables by their landing points and status. They are drawn as schematic straight lines, not surveyed routes: the aim is to show which corridors exist and which have been disrupted, not their exact path. Positions and dates come from operator and press reporting. To map the true routes, add the actual route lines from EMODnet Human Activities or OpenStreetMap."
+  },
+  {
+    "objectID": "01-data.html#proximity-reference",
+    "href": "01-data.html#proximity-reference",
+    "title": "Data",
+    "section": "Proximity reference",
+    "text": "Proximity reference\nInstead of a maritime boundary line, the proximity measure uses distance to the nearest Russian territory, meaning the mainland near the Gulf of Finland plus the Kaliningrad exclave, taken from Natural Earth. It is reproducible from a public package and easy to read: how far each terminal is from Russian soil."
+  },
+  {
+    "objectID": "01-data.html#dependence",
+    "href": "01-data.html#dependence",
+    "title": "Data",
+    "section": "Dependence",
+    "text": "Dependence\nThe dependence layer uses gas import dependency from Eurostat (indicator nrg_ind_id, natural gas, 2023), held in data/processed/import_dependence.csv. The figure is the share of gas demand met by net imports. Values above 100% reflect stock draws or re-exports in that year, and Denmark is low because of its own North Sea production. scripts/03_eurostat.R reproduces the pull.\n\n\n\n\n\n\nDownload this table as a CSV\nThe table above is committed 2023 data. For comparison, the figure below is pulled live from the Eurostat API in your browser when this page loads:\n\nChecking Eurostat for the latest EU-wide figure…"
+  },
+  {
+    "objectID": "01-data.html#gas-demand",
+    "href": "01-data.html#gas-demand",
+    "title": "Data",
+    "section": "Gas demand",
+    "text": "Gas demand\nTo judge whether the terminals are large enough, the analysis compares their capacity with what each country actually burns. That demand figure is inland gas consumption from Eurostat (indicator nrg_cb_gas, natural gas, 2023), held in data/processed/gas_demand.csv and converted from million cubic metres to bcm so it sits on the same scale as terminal capacity. scripts/03_eurostat.R pulls it alongside the dependency figures.\nOne caveat worth stating: 2023 demand was itself depressed by high prices and mild weather across much of Europe, so coverage against a colder, higher demand year would look less comfortable.\nDownload the demand figures as a CSV"
+  },
+  {
+    "objectID": "01-data.html#russian-pipeline-imports",
+    "href": "01-data.html#russian-pipeline-imports",
+    "title": "Data",
+    "section": "Russian pipeline imports",
+    "text": "Russian pipeline imports\nThe before and after comparison uses imports of natural gas from Russia by pipeline, from Eurostat (indicator nrg_ti_gas, partner Russia, natural gas), for 2021 and 2023, held in data/processed/russian_imports.csv and converted to bcm. 2021 is used as the last full year before the invasion.\nThese are recorded imports, not pipeline capacity, which is the fairer comparison: capacity figures for pipelines like Nord Stream describe what could have flowed rather than what these particular countries actually took.\nDownload the import figures as a CSV"
+  },
+  {
+    "objectID": "01-data.html#a-note-on-conflict-data",
+    "href": "01-data.html#a-note-on-conflict-data",
+    "title": "Data",
+    "section": "A note on conflict data",
+    "text": "A note on conflict data\nThis project frames the question as exposure and structural dependence, not active conflict, because there is no battlefield on the Baltic seabed. ACLED is deliberately not used, since it now requires registration, which would break the public data rule. If a later version needs conflict events, UCDP GED is the public, no-login substitute."
+  },
+  {
+    "objectID": "01-data.html#how-the-data-is-prepared",
+    "href": "01-data.html#how-the-data-is-prepared",
+    "title": "Data",
+    "section": "How the data is prepared",
+    "text": "How the data is prepared\nThe steps that turn the raw tables and map data into the layers behind the maps live in scripts/01_clean.R, and the Analysis page repeats them when it builds:\n\ntidy up the columns,\nput everything on a map projection suited to Europe, so distances come out in kilometres rather than degrees,\ntrim the map to the Baltic study area,\nkeep the capacity and country information attached to each terminal."
+  },
+  {
+    "objectID": "01-data.html#citations",
+    "href": "01-data.html#citations",
+    "title": "Data",
+    "section": "Citations",
+    "text": "Citations\n\nNatural Earth. Free vector and raster map data, 1:50m cultural vectors. https://www.naturalearthdata.com (accessed June 2026).\nEurostat. Energy import dependency by products, indicator nrg_ind_id, natural gas, 2023. https://ec.europa.eu/eurostat (accessed June 2026).\nEurostat. Supply, transformation and consumption of gas, indicator nrg_cb_gas, inland consumption, natural gas, 2023. https://ec.europa.eu/eurostat (accessed August 2026).\nEurostat. Imports of natural gas by partner country, indicator nrg_ti_gas, partner Russia, 2021 and 2023. https://ec.europa.eu/eurostat (accessed August 2026).\nGlobal Energy Monitor. Global LNG Terminal Tracker. https://globalenergymonitor.org (accessed June 2026).\nOperator figures for capacity and status: Gaz-System, Deutsche ReGas, Gasgrid Finland, KN Energies, and Hamina LNG (2024 to 2025 reporting).\n\nIf you add pipelines or cables later: EMODnet Human Activities (https://emodnet.ec.europa.eu/en/human-activities) and OpenStreetMap."
+  }
+]
