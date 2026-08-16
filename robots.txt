@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 
-Sitemap: https://tobyn-smith.github.io/me/sitemap.xml
+Sitemap: https://tobynsmith.me/sitemap.xml

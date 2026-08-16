@@ -3,7 +3,7 @@
 Personal site for my work in energy security, supply-chain risk, and geospatial
 analysis.
 
-**[tobyn-smith.github.io/me →](https://tobyn-smith.github.io/me/)**
+**[tobynsmith.me →](https://tobynsmith.me/)**
 
 Hand-built and static: no framework, no build step, no runtime dependencies.
 The hero globe is drawn from scratch on a canvas — orthographic projection,
