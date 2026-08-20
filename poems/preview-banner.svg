@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d0c0c"/>
+  <rect x="42" y="42" width="1116" height="546" fill="none" stroke="#eee6da" stroke-opacity=".22"/>
+  <path d="M96 72v486" stroke="#b52c23" stroke-width="4"/>
+  <path d="M96 514h390" stroke="#b52c23" stroke-width="8"/>
+  <circle cx="927" cy="314" r="184" fill="none" stroke="#b52c23" stroke-opacity=".42" stroke-width="2"/>
+  <path d="M746 405h362M927 136v356" stroke="#eee6da" stroke-opacity=".24" stroke-width="1" transform="rotate(18 927 314)"/>
+  <text x="140" y="265" fill="#eee6da" font-family="Georgia, 'Times New Roman', serif" font-size="142" letter-spacing="-9">tobyn's</text>
+  <text x="140" y="405" fill="#b52c23" font-family="Georgia, 'Times New Roman', serif" font-size="150" letter-spacing="-10">poems</text>
+</svg>
