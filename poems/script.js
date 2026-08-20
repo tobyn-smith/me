@@ -207,6 +207,50 @@ if (menuToggle && header) {
   });
 }
 
+const comingPage = document.querySelector(".coming-page");
+if (comingPage && !prefersReducedMotion) {
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let frame = 0;
+  let pressTimer = 0;
+
+  const drawComingParallax = () => {
+    currentX += (targetX - currentX) * .08;
+    currentY += (targetY - currentY) * .08;
+    comingPage.style.setProperty("--pointer-x", currentX.toFixed(2));
+    comingPage.style.setProperty("--pointer-y", currentY.toFixed(2));
+    if (Math.abs(targetX - currentX) > .1 || Math.abs(targetY - currentY) > .1) {
+      frame = requestAnimationFrame(drawComingParallax);
+    } else {
+      frame = 0;
+    }
+  };
+
+  const wakeComingParallax = () => {
+    if (!frame) frame = requestAnimationFrame(drawComingParallax);
+  };
+
+  comingPage.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "touch") return;
+    const bounds = comingPage.getBoundingClientRect();
+    targetX = ((event.clientX - bounds.left) / bounds.width - .5) * 100;
+    targetY = ((event.clientY - bounds.top) / bounds.height - .5) * 100;
+    wakeComingParallax();
+  }, { passive: true });
+  comingPage.addEventListener("pointerleave", () => {
+    targetX = 0;
+    targetY = 0;
+    wakeComingParallax();
+  }, { passive: true });
+  comingPage.addEventListener("pointerdown", () => {
+    comingPage.classList.add("is-pressed");
+    window.clearTimeout(pressTimer);
+    pressTimer = window.setTimeout(() => comingPage.classList.remove("is-pressed"), 260);
+  }, { passive: true });
+}
+
 if (poemList && collection) {
   const collectionPoems = (editorialOrder[collection] || [])
     .map((title) => poems.find((poem) => poem.title === title))
