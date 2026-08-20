@@ -125,6 +125,7 @@ const poemMarks = {
 };
 
 const romanNumerals = ["i.", "ii.", "iii.", "iv.", "v.", "vi.", "vii.", "viii.", "ix."];
+const collectionLabels = { one: "bruises and nostalgia", two: "wonderlust", three: "my silhouette" };
 const editorialPosition = new Map();
 Object.entries(editorialOrder).forEach(([collectionName, titles]) => {
   titles.forEach((title, index) => editorialPosition.set(title, { collection: collectionName, index }));
@@ -147,7 +148,7 @@ poems.forEach((poem) => {
   const position = editorialPosition.get(poem.title);
   if (position) {
     poem.collection = position.collection;
-    poem.collectionLabel = `collection ${position.collection}`;
+    poem.collectionLabel = collectionLabels[position.collection];
     poem.number = romanNumerals[position.index];
   }
   poem.body = poem.body.map((stanza) => stanza.toLowerCase());
