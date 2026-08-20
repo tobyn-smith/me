@@ -1,7 +1,7 @@
 name: Sync project sites
 
-# Rebuilds the three project subsites from their source repos and vendors them
-# into this repo as /usagrid, /baltic and /reader. GitHub Pages can only serve one
+# Rebuilds the four project subsites from their source repos and vendors them
+# into this repo as /usagrid, /baltic, /reader and /poems. GitHub Pages can only serve one
 # repository per custom domain, so the built output lives here as subdirectories
 # rather than being mapped from the source repos directly.
 #
@@ -11,6 +11,7 @@ name: Sync project sites
 #   is rebuilt here exactly like its own publish.yml does.
 # - reader: the browser app and demo are built from source exactly like its own
 #   pages.yml does.
+# - poems: the static poetry site is copied from its source repository.
 #
 # Each site is then rewritten from its github.io URLs to the canonical
 # tobynsmith.me paths, and Quarto's render timestamps are stripped from the
@@ -154,12 +155,25 @@ jobs:
             | xargs -r sed -i -e 's|https://tobyn-smith.github.io/me/|https://tobynsmith.me/|g' \
                                 -e 's|tobyn-smith.github.io/reader|tobynsmith.me/reader|g'
 
+      # ---- poems: static site from the source repository ----
+      - name: Checkout poems
+        uses: actions/checkout@v4
+        with:
+          repository: tobyn-smith/poems
+          path: .sync-src/poems
+
+      - name: Copy poems site
+        run: |
+          rm -rf poems
+          mkdir -p poems
+          cp -a .sync-src/poems/index.html .sync-src/poems/collection-one.html .sync-src/poems/collection-two.html .sync-src/poems/collection-three.html .sync-src/poems/collection-four.html .sync-src/poems/styles.css .sync-src/poems/script.js poems/
+
       - name: Commit and push
         run: |
           rm -rf .sync-src
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add usagrid baltic reader
+          git add usagrid baltic reader poems
           if git diff --cached --quiet; then
             echo "No changes to sync."
           else
