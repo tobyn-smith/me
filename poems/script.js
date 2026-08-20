@@ -135,7 +135,6 @@ const poemList = document.querySelector("#poem-list");
 const collection = document.body.dataset.collection;
 const header = document.querySelector(".site-header");
 const menuToggle = document.querySelector(".menu-toggle");
-const siteShell = document.querySelector(".site-shell");
 const currentPage = location.pathname.split("/").pop() || "index.html";
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -264,7 +263,7 @@ if (poemList && collection) {
         <span class="poem-entry-graphic mark-${poem.mark}" aria-hidden="true"></span>
         <h2>${poem.title}</h2>
       </summary>
-      <div class="poem-entry-body">${stanzas}<button class="reading-mode-toggle" type="button" aria-label="enter reading mode"><span class="reading-mode-symbol" aria-hidden="true"></span><span class="reading-mode-label">reading mode</span></button></div>
+      <div class="poem-entry-body">${stanzas}</div>
     </details>`;
   }).join("");
 
@@ -287,104 +286,6 @@ if (poemList && collection) {
   openFromHash();
 
   const poemEntries = [...poemList.querySelectorAll(".poem-entry")];
-  let readingMode = null;
-  let lastReadingFocus = null;
-  let readingIndex = -1;
-
-  const readingMarkup = (poem, index) => {
-    const stanzas = poem.body.map((stanza) => `<p>${stanza.replaceAll("\\n", "<br />")}</p>`).join("");
-    const previous = collectionPoems[index - 1];
-    const next = collectionPoems[index + 1];
-    return `<div class="reading-mode-progress" aria-hidden="true"><span></span></div>
-      <button class="reading-mode-close" type="button" aria-label="close reading mode"><span aria-hidden="true"></span></button>
-      <div class="reading-mode-inner">
-        <p class="reading-mode-number">${poem.number}</p>
-        <h2 id="reading-mode-title" tabindex="-1">${poem.title}</h2>
-        <div class="reading-mode-body">${stanzas}</div>
-      </div>
-      <nav class="reading-mode-controls" aria-label="poem navigation">
-        ${previous ? `<button class="reading-control reading-control-previous" type="button" aria-label="previous poem: ${previous.title}" data-reading-index="${index - 1}"><span>${previous.title}</span></button>` : "<span></span>"}
-        ${next ? `<button class="reading-control reading-control-next" type="button" aria-label="next poem: ${next.title}" data-reading-index="${index + 1}"><span>${next.title}</span></button>` : "<span></span>"}
-      </nav>`;
-  };
-
-  const updateReadingProgress = () => {
-    if (!readingMode) return;
-    const scrollable = readingMode.scrollHeight - readingMode.clientHeight;
-    const amount = scrollable > 0 ? readingMode.scrollTop / scrollable : 0;
-    const bar = readingMode.querySelector(".reading-mode-progress span");
-    if (bar) bar.style.transform = `scaleX(${amount})`;
-  };
-
-  const renderReadingMode = (index, focusTitle = false) => {
-    const poem = collectionPoems[index];
-    if (!poem || !readingMode) return;
-    readingIndex = index;
-    readingMode.innerHTML = readingMarkup(poem, index);
-    readingMode.scrollTop = 0;
-    readingMode.querySelector(".reading-mode-close").addEventListener("click", closeReadingMode);
-    readingMode.querySelectorAll("[data-reading-index]").forEach((control) => {
-      control.addEventListener("click", () => renderReadingMode(Number(control.dataset.readingIndex), true));
-    });
-    updateReadingProgress();
-    if (focusTitle) readingMode.querySelector("#reading-mode-title").focus();
-  };
-
-  const closeReadingMode = () => {
-    if (!readingMode) return;
-    document.body.classList.remove("reading-open");
-    if (siteShell) {
-      siteShell.inert = false;
-      siteShell.removeAttribute("aria-hidden");
-    }
-    readingMode.classList.remove("is-visible");
-    const focusTarget = lastReadingFocus;
-    window.setTimeout(() => {
-      readingMode?.remove();
-      readingMode = null;
-      readingIndex = -1;
-      focusTarget?.focus();
-    }, prefersReducedMotion ? 0 : 220);
-  };
-
-  const openReadingMode = (index, source) => {
-    if (readingMode) return;
-    lastReadingFocus = source;
-    readingMode = document.createElement("section");
-    readingMode.className = "reading-mode";
-    readingMode.setAttribute("role", "dialog");
-    readingMode.setAttribute("aria-modal", "true");
-    readingMode.setAttribute("aria-labelledby", "reading-mode-title");
-    document.body.append(readingMode);
-    if (siteShell) {
-      siteShell.inert = true;
-      siteShell.setAttribute("aria-hidden", "true");
-    }
-    document.body.classList.add("reading-open");
-    readingMode.addEventListener("scroll", updateReadingProgress, { passive: true });
-    readingMode.addEventListener("wheel", (event) => {
-      const maximum = readingMode.scrollHeight - readingMode.clientHeight;
-      if (maximum <= 0 || event.deltaY === 0) return;
-      const nextScrollTop = Math.max(0, Math.min(maximum, readingMode.scrollTop + event.deltaY));
-      if (nextScrollTop === readingMode.scrollTop) return;
-      event.preventDefault();
-      readingMode.scrollTop = nextScrollTop;
-    }, { passive: false });
-    renderReadingMode(index);
-    requestAnimationFrame(() => {
-      readingMode?.classList.add("is-visible");
-      readingMode?.querySelector("#reading-mode-title")?.focus();
-    });
-  };
-
-  poemEntries.forEach((entry, index) => {
-    entry.querySelector(".reading-mode-toggle")?.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      openReadingMode(index, event.currentTarget);
-    });
-  });
-
   if ("IntersectionObserver" in window) {
     const readingObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => entry.target.classList.toggle("is-active", entry.isIntersecting));
@@ -396,26 +297,6 @@ if (poemList && collection) {
 }
 
 document.addEventListener("keydown", (event) => {
-  const readingMode = document.querySelector(".reading-mode");
-  if (readingMode && event.key === "Escape") {
-    event.preventDefault();
-    readingMode.querySelector(".reading-mode-close")?.click();
-    return;
-  }
-  if (readingMode && event.key === "Tab") {
-    const focusable = [...readingMode.querySelectorAll("button, [tabindex='-1']")].filter((node) => !node.disabled);
-    if (!focusable.length) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
-    return;
-  }
   if (!poemList || !collection || !["ArrowDown", "ArrowUp"].includes(event.key)) return;
   const entries = [...poemList.querySelectorAll("details")];
   const current = entries.findIndex((entry) => entry.contains(document.activeElement));
