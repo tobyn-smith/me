@@ -149,15 +149,15 @@ h1, h2 { font-family: var(--display); font-weight: 500; letter-spacing: -.075em;
 .collection-hero { position: relative; overflow: hidden; padding: clamp(54px, 8vw, 110px) clamp(24px, 7vw, 110px) clamp(72px, 9vw, 125px); background: var(--paper); color: var(--paper-ink); }
 .collection-art { position: absolute; z-index: 0; right: clamp(30px, 10vw, 180px); top: 50%; width: clamp(120px, 18vw, 260px); aspect-ratio: 1; color: var(--signal); opacity: .48; transform: translateY(-50%); pointer-events: none; }
 .collection-art::before, .collection-art::after { content: ""; position: absolute; }
-.collection-art-one { border: 1px solid currentColor; border-radius: 48% 52% 50% 46%; transform: translateY(-50%) rotate(-14deg); }
-.collection-art-one::before { inset: 20%; border: 1px solid currentColor; border-radius: 52% 48% 46% 54%; }
-.collection-art-one::after { left: 47%; top: -8%; width: 1px; height: 116%; background: currentColor; transform: rotate(20deg); }
-.collection-art-two { border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; border-radius: 50%; }
-.collection-art-two::before { left: 27%; top: 18%; width: 44%; aspect-ratio: 1; border: 1px solid currentColor; border-radius: 50%; }
-.collection-art-two::after { left: 8%; right: 8%; top: 58%; height: 1px; background: currentColor; box-shadow: 0 14px 0 currentColor, 0 28px 0 currentColor; }
-.collection-art-three { border-left: 1px solid currentColor; border-right: 1px solid currentColor; transform: translateY(-50%) skewY(-10deg); }
-.collection-art-three::before { left: 22%; bottom: 0; width: 1px; height: 72%; background: currentColor; box-shadow: 25px -24px 0 currentColor, 50px -8px 0 currentColor; }
-.collection-art-three::after { left: 10%; right: 10%; bottom: 15%; height: 1px; background: currentColor; }
+.collection-art-one { border: 1px solid currentColor; border-radius: 44% 56% 51% 49%; transform: translateY(-50%) rotate(-18deg); }
+.collection-art-one::before { inset: 15% 24% 18% 10%; border: 1px solid currentColor; border-radius: 52% 48% 46% 54%; transform: rotate(29deg); }
+.collection-art-one::after { left: 7%; top: 50%; width: 86%; height: 1px; background: currentColor; transform: rotate(-17deg); box-shadow: 0 16px 0 rgba(181, 44, 35, .45); }
+.collection-art-two { border: 1px solid currentColor; border-radius: 50%; transform: translateY(-50%) rotate(12deg); }
+.collection-art-two::before { inset: 17%; border: 1px solid currentColor; transform: rotate(45deg); }
+.collection-art-two::after { left: 7%; top: 50%; width: 86%; height: 1px; background: currentColor; transform: rotate(-23deg); box-shadow: 0 -18px 0 rgba(181, 44, 35, .42), 0 18px 0 rgba(181, 44, 35, .42); }
+.collection-art-three { border: 0; transform: translateY(-50%) skewY(-7deg); }
+.collection-art-three::before { left: 38%; top: 8%; width: 24%; aspect-ratio: 1; border: 1px solid currentColor; border-radius: 50%; }
+.collection-art-three::after { left: 19%; top: 37%; width: 62%; height: 54%; border: 1px solid currentColor; border-radius: 48% 52% 16% 16% / 26% 26% 10% 10%; box-shadow: 14px 12px 0 -1px var(--paper), 14px 12px 0 0 currentColor; }
 .collection-hero h1 { position: relative; z-index: 1; max-width: 9ch; margin: 0; padding: clamp(28px, 4vw, 58px) clamp(24px, 4vw, 62px); background: var(--ink); color: var(--paper); font-size: clamp(52px, 9vw, 132px); line-height: .86; box-shadow: 14px 16px 0 var(--signal); }
 .poems-section { padding: clamp(52px, 7vw, 95px) clamp(24px, 9vw, 145px) 115px; background: var(--paper); color: var(--paper-ink); }
 .poem-page-list { max-width: 1040px; margin: 0 auto; border-top: 1px solid var(--line); }
