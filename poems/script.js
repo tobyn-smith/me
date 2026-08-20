@@ -318,6 +318,14 @@ if (poemList && collection) {
     }
     document.body.classList.add("reading-open");
     readingMode.addEventListener("scroll", updateReadingProgress, { passive: true });
+    readingMode.addEventListener("wheel", (event) => {
+      const maximum = readingMode.scrollHeight - readingMode.clientHeight;
+      if (maximum <= 0 || event.deltaY === 0) return;
+      const nextScrollTop = Math.max(0, Math.min(maximum, readingMode.scrollTop + event.deltaY));
+      if (nextScrollTop === readingMode.scrollTop) return;
+      event.preventDefault();
+      readingMode.scrollTop = nextScrollTop;
+    }, { passive: false });
     renderReadingMode(index);
     requestAnimationFrame(() => {
       readingMode?.classList.add("is-visible");
