@@ -80,7 +80,7 @@ a:focus-visible, summary:focus-visible, .menu-toggle:focus-visible { outline: 2p
 .home-links-reveal a:nth-child(2) { animation-delay: .72s; }
 .home-links-reveal a:nth-child(3) { animation-delay: .82s; }
 .home-links-reveal a:nth-child(4) { animation-delay: .92s; }
-@keyframes typeset-in { from { opacity: 0; transform: translateY(30px); clip-path: inset(0 0 100% 0); } to { opacity: 1; transform: translateY(0); clip-path: inset(0); } }
+@keyframes typeset-in { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes copy-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes links-in { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes link-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
@@ -88,7 +88,7 @@ a:focus-visible, summary:focus-visible, .menu-toggle:focus-visible { outline: 2p
 @keyframes ink-orbit { from { transform: rotate(-18deg) translate3d(-8px, 0, 0); } to { transform: rotate(8deg) translate3d(12px, 18px, 0); } }
 .home-copy { max-width: 880px; }
 h1, h2 { font-family: var(--display); font-weight: 500; letter-spacing: -.075em; }
-.home-copy h1 { margin: 0; font-size: clamp(70px, 12.5vw, 184px); line-height: .76; }
+.home-copy h1 { margin: 0; padding: 0 0 .08em; overflow: visible; font-size: clamp(70px, 12.5vw, 184px); line-height: .84; }
 .home-copy h1 span { display: block; }
 .home-copy h1 .title-name { color: var(--paper); }
 .home-copy h1 .title-poems { margin-left: .09em; color: var(--signal); transition: transform .35s ease, letter-spacing .35s ease; }
@@ -164,13 +164,64 @@ h1, h2 { font-family: var(--display); font-weight: 500; letter-spacing: -.075em;
 .poem-entry { position: relative; scroll-margin-top: 100px; border-bottom: 1px solid var(--line); }
 .poem-entry::before { content: ""; position: absolute; left: -16px; top: 0; bottom: 0; width: 2px; background: transparent; transition: background .35s; }
 .poem-entry.is-active::before { background: var(--signal); }
-.poem-entry-heading { display: grid; width: 100%; grid-template-columns: 45px minmax(0, 1fr); gap: 15px; align-items: baseline; padding: 25px 0 22px; border: 0; background: transparent; color: var(--paper-ink); text-align: left; cursor: pointer; list-style: none; }
+.poem-entry-heading { display: grid; width: 100%; grid-template-columns: 45px 38px minmax(0, 1fr); gap: 15px; align-items: center; padding: 25px 0 22px; border: 0; background: transparent; color: var(--paper-ink); text-align: left; cursor: pointer; list-style: none; }
 .poem-entry-heading::-webkit-details-marker { display: none; }
 .poem-entry-heading:hover { color: var(--signal-dark); }
 .poem-entry-heading h2 { margin: 0; font-size: clamp(24px, 3.2vw, 44px); line-height: 1.08; }
 .poem-entry-number { color: var(--paper-muted); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; transition: color .35s; }
 .poem-entry.is-active .poem-entry-number { color: var(--signal); }
-.poem-entry-body { max-width: 64ch; padding: 0 0 43px 60px; color: var(--paper-muted); font-family: var(--body); font-size: 15px; line-height: 1.9; }
+.poem-entry-graphic { position: relative; width: 30px; height: 30px; color: var(--paper-muted); opacity: .52; transition: color .35s, opacity .35s, transform .35s; }
+.poem-entry.is-active .poem-entry-graphic { color: var(--signal); opacity: 1; transform: scale(1.08); }
+.poem-entry-graphic::before, .poem-entry-graphic::after { content: ""; position: absolute; box-sizing: border-box; }
+.mark-heart::before { left: 7px; top: 8px; width: 16px; height: 16px; border-left: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(-45deg); }
+.mark-heart::after { left: 7px; top: 4px; width: 8px; height: 8px; border: 1px solid currentColor; border-radius: 50%; box-shadow: 8px 0 0 -1px var(--paper), 8px 0 0 0 currentColor; }
+.mark-door::before { left: 7px; top: 4px; width: 16px; height: 23px; border: 1px solid currentColor; }
+.mark-door::after { right: 10px; top: 16px; width: 3px; height: 3px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-forest::before { left: 3px; bottom: 3px; width: 24px; height: 1px; background: currentColor; box-shadow: 0 -7px 0 currentColor; }
+.mark-forest::after { left: 7px; bottom: 10px; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 15px solid currentColor; opacity: .75; }
+.mark-mirror::before { inset: 4px 7px; border: 1px solid currentColor; transform: rotate(8deg); }
+.mark-mirror::after { left: 4px; top: 14px; width: 22px; height: 1px; background: currentColor; transform: rotate(-18deg); }
+.mark-road::before { left: 7px; top: 4px; width: 16px; height: 23px; border-left: 1px solid currentColor; border-right: 1px solid currentColor; transform: skewX(-14deg); }
+.mark-road::after { left: 14px; top: 6px; width: 1px; height: 5px; background: currentColor; box-shadow: 0 8px 0 currentColor, 0 16px 0 currentColor; }
+.mark-light::before { left: 9px; top: 8px; width: 12px; height: 12px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-light::after { left: 14px; top: 2px; width: 1px; height: 25px; background: currentColor; transform: rotate(18deg); }
+.mark-ornament::before { left: 7px; top: 7px; width: 16px; height: 16px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-ornament::after { left: 14px; top: 2px; width: 3px; height: 7px; border: 1px solid currentColor; }
+.mark-paw::before { left: 12px; top: 12px; width: 8px; height: 10px; border: 1px solid currentColor; border-radius: 50%; box-shadow: -7px -5px 0 -2px var(--paper), -7px -5px 0 -1px currentColor, 7px -5px 0 -2px var(--paper), 7px -5px 0 -1px currentColor; }
+.mark-paw::after { left: 7px; top: 5px; width: 4px; height: 4px; border: 1px solid currentColor; border-radius: 50%; box-shadow: 12px 0 0 -1px var(--paper), 12px 0 0 0 currentColor; }
+.mark-sky::before { left: 8px; top: 4px; width: 14px; height: 14px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-sky::after { left: 3px; bottom: 6px; width: 24px; height: 1px; background: currentColor; box-shadow: 0 6px 0 currentColor; }
+.mark-branch::before { left: 14px; top: 4px; width: 1px; height: 24px; background: currentColor; transform: rotate(42deg); }
+.mark-branch::after { left: 7px; top: 9px; width: 13px; height: 9px; border-top: 1px solid currentColor; border-radius: 50%; transform: rotate(-25deg); }
+.mark-tide::before { left: 3px; top: 9px; width: 24px; height: 9px; border-top: 1px solid currentColor; border-radius: 50%; }
+.mark-tide::after { left: 3px; top: 17px; width: 24px; height: 9px; border-top: 1px solid currentColor; border-radius: 50%; }
+.mark-train::before { left: 4px; top: 8px; width: 22px; height: 15px; border: 1px solid currentColor; }
+.mark-train::after { left: 8px; top: 12px; width: 5px; height: 4px; border: 1px solid currentColor; box-shadow: 8px 0 0 -1px var(--paper), 8px 0 0 0 currentColor; }
+.mark-split::before { left: 5px; top: 5px; width: 20px; height: 20px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-split::after { left: 14px; top: 5px; width: 1px; height: 20px; background: currentColor; transform: rotate(38deg); }
+.mark-room::before { inset: 5px; border: 1px solid currentColor; }
+.mark-room::after { left: 14px; bottom: 5px; width: 1px; height: 11px; background: currentColor; transform: rotate(35deg); }
+.mark-roots::before { left: 8px; top: 4px; width: 1px; height: 24px; background: currentColor; box-shadow: 7px 0 0 currentColor, 14px 0 0 currentColor; }
+.mark-roots::after { left: 4px; bottom: 4px; width: 22px; height: 9px; border-top: 1px solid currentColor; border-radius: 50%; }
+.mark-dream::before { left: 5px; top: 8px; width: 20px; height: 14px; border: 1px solid currentColor; border-radius: 50%; transform: rotate(-14deg); }
+.mark-dream::after { left: 15px; top: 3px; width: 1px; height: 24px; background: currentColor; transform: rotate(26deg); }
+.mark-city::before { left: 5px; bottom: 4px; width: 5px; height: 15px; border: 1px solid currentColor; box-shadow: 8px -8px 0 -1px var(--paper), 8px -8px 0 0 currentColor, 16px -3px 0 -1px var(--paper), 16px -3px 0 0 currentColor; }
+.mark-city::after { left: 3px; right: 3px; bottom: 3px; height: 1px; background: currentColor; }
+.mark-stair::before { left: 5px; bottom: 6px; width: 20px; height: 15px; border-left: 1px solid currentColor; border-bottom: 1px solid currentColor; background: transparent; }
+.mark-stair::after { left: 5px; top: 5px; width: 20px; height: 1px; background: currentColor; transform: rotate(-32deg); }
+.mark-sun::before { left: 8px; top: 8px; width: 14px; height: 14px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-sun::after { left: 14px; top: 2px; width: 1px; height: 26px; background: currentColor; transform: rotate(45deg); }
+.mark-spotlight::before { left: 10px; top: 3px; width: 10px; height: 10px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-spotlight::after { left: 7px; top: 14px; width: 16px; height: 12px; border-left: 1px solid currentColor; border-right: 1px solid currentColor; transform: perspective(20px) rotateX(-20deg); }
+.mark-breeze::before { left: 3px; top: 9px; width: 24px; height: 8px; border-top: 1px solid currentColor; border-radius: 50%; transform: rotate(-8deg); }
+.mark-breeze::after { left: 7px; top: 17px; width: 18px; height: 7px; border-top: 1px solid currentColor; border-radius: 50%; transform: rotate(8deg); }
+.mark-nightmare::before { left: 6px; top: 5px; width: 18px; height: 20px; border: 1px solid currentColor; border-radius: 48% 52% 45% 55%; transform: rotate(14deg); }
+.mark-nightmare::after { left: 14px; top: 10px; width: 3px; height: 3px; border: 1px solid currentColor; border-radius: 50%; box-shadow: 7px 0 0 -1px var(--paper), 7px 0 0 0 currentColor; }
+.mark-bag::before { left: 5px; top: 9px; width: 20px; height: 16px; border: 1px solid currentColor; }
+.mark-bag::after { left: 11px; top: 4px; width: 8px; height: 7px; border: 1px solid currentColor; border-bottom: 0; border-radius: 5px 5px 0 0; }
+.mark-speech::before { left: 5px; top: 6px; width: 20px; height: 15px; border: 1px solid currentColor; border-radius: 50%; }
+.mark-speech::after { left: 8px; bottom: 5px; width: 7px; height: 7px; border-left: 1px solid currentColor; transform: skew(-25deg); }
+.poem-entry-body { max-width: 64ch; padding: 0 0 43px 102px; color: var(--paper-muted); font-family: var(--body); font-size: 15px; line-height: 1.9; }
 .poem-entry-body p { margin: 0 0 28px; }
 .poem-entry-body p:last-child { margin-bottom: 0; }
 
@@ -209,7 +260,7 @@ h1, h2 { font-family: var(--display); font-weight: 500; letter-spacing: -.075em;
   .home-hero { min-height: 590px; padding-top: 61px; padding-bottom: 67px; }
   .home-hero::before { left: 50%; top: 18%; width: 220px; border-color: rgba(181, 44, 35, .22); }
   .home-hero::after { right: 22px; height: 18%; }
-  .home-copy h1 { font-size: clamp(62px, 20vw, 108px); }
+  .home-copy h1 { padding-bottom: .1em; font-size: clamp(62px, 20vw, 108px); line-height: .84; }
   .home-copy p { margin-top: 38px; font-size: 14px; }
   .home-links a { min-height: 53px; font-size: 17px; }
   .collection-preview { grid-template-columns: 1fr; gap: 48px; margin-top: -22px; padding-top: 65px; border-radius: 20px 20px 0 0; }
@@ -224,9 +275,10 @@ h1, h2 { font-family: var(--display); font-weight: 500; letter-spacing: -.075em;
   .poems-section { padding: 50px 22px 80px; }
   .poem-entry { scroll-margin-top: 84px; }
   .poem-entry::before { left: -10px; }
-  .poem-entry-heading { grid-template-columns: 34px minmax(0, 1fr); gap: 8px; padding: 19px 0; }
+  .poem-entry-heading { grid-template-columns: 34px 34px minmax(0, 1fr); gap: 8px; padding: 19px 0; }
   .poem-entry-heading h2 { font-size: 22px; }
-  .poem-entry-body { padding: 0 0 35px 42px; font-size: 14px; line-height: 1.82; }
+  .poem-entry-graphic { width: 28px; height: 28px; }
+  .poem-entry-body { padding: 0 0 35px 76px; font-size: 14px; line-height: 1.82; }
   .coming-page { min-height: calc(100vh - 68px); grid-template-columns: 1fr; align-content: center; padding-top: 67px; }
   .coming-cover { width: calc(100% - 9px); }
   .coming-page h1 { font-size: clamp(48px, 14vw, 82px); }

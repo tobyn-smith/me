@@ -109,6 +109,12 @@ const poems = [
   }
 ];
 
+const poemMarks = [
+  "heart", "door", "forest", "mirror", "road", "light", "ornament", "paw",
+  "sky", "branch", "tide", "train", "split", "door", "room", "roots", "dream",
+  "city", "stair", "sun", "spotlight", "breeze", "road", "nightmare", "bag", "speech"
+];
+
 const poemList = document.querySelector("#poem-list");
 const collection = document.body.dataset.collection;
 const header = document.querySelector(".site-header");
@@ -119,7 +125,8 @@ document.querySelectorAll(".site-nav a").forEach((link) => {
   if (link.getAttribute("href") === currentPage) link.setAttribute("aria-current", "page");
 });
 
-poems.forEach((poem) => {
+poems.forEach((poem, index) => {
+  poem.mark = poemMarks[index];
   poem.title = poem.title.toLowerCase();
   poem.body = poem.body.map((stanza) => stanza.toLowerCase());
 });
@@ -174,6 +181,7 @@ if (poemList && collection) {
     return `<details class="poem-entry" id="poem-${index}"${collectionIndex === 0 ? " open" : ""}>
       <summary class="poem-entry-heading" aria-label="${poem.title}">
         <span class="poem-entry-number">${poem.number}</span>
+        <span class="poem-entry-graphic mark-${poem.mark}" aria-hidden="true"></span>
         <h2>${poem.title}</h2>
       </summary>
       <div class="poem-entry-body">${stanzas}</div>
