@@ -109,11 +109,26 @@ const poems = [
   }
 ];
 
-const poemMarks = [
-  "heart", "door", "forest", "mirror", "road", "light", "ornament", "paw",
-  "sky", "branch", "tide", "train", "split", "door", "room", "roots", "dream",
-  "city", "stair", "sun", "spotlight", "breeze", "road", "nightmare", "bag", "speech"
-];
+const editorialOrder = {
+  one: ["strangers in love", "candlelit drives", "summer", "heartfelt", "you", "the after party", "big blue sky", "an odd christmas", "my old dog"],
+  two: ["wonderland", "apple trees", "breeze", "seashore", "summertime rain on the southern train", "home sick", "chances", "dreamer", "bag claim"],
+  three: ["out of date", "closed doors", "an empty room", "between cities", "overconfidence", "bright lights", "overshare", "a morbid nightmare of mine"]
+};
+
+const poemMarks = {
+  "heartfelt": "heart", "out of date": "door", "wonderland": "forest", "you": "mirror",
+  "candlelit drives": "road", "the after party": "light", "an odd christmas": "ornament", "my old dog": "paw",
+  "big blue sky": "sky", "apple trees": "branch", "seashore": "tide", "summertime rain on the southern train": "train",
+  "chances": "split", "closed doors": "door", "an empty room": "room", "strangers in love": "roots", "dreamer": "dream",
+  "between cities": "city", "overconfidence": "stair", "summer": "sun", "bright lights": "spotlight",
+  "breeze": "breeze", "home sick": "road", "a morbid nightmare of mine": "nightmare", "bag claim": "bag", "overshare": "speech"
+};
+
+const romanNumerals = ["i.", "ii.", "iii.", "iv.", "v.", "vi.", "vii.", "viii.", "ix."];
+const editorialPosition = new Map();
+Object.entries(editorialOrder).forEach(([collectionName, titles]) => {
+  titles.forEach((title, index) => editorialPosition.set(title, { collection: collectionName, index }));
+});
 
 const poemList = document.querySelector("#poem-list");
 const collection = document.body.dataset.collection;
@@ -126,9 +141,15 @@ document.querySelectorAll(".site-nav a").forEach((link) => {
   if (link.getAttribute("href") === currentPage) link.setAttribute("aria-current", "page");
 });
 
-poems.forEach((poem, index) => {
-  poem.mark = poemMarks[index];
+poems.forEach((poem) => {
   poem.title = poem.title.toLowerCase();
+  poem.mark = poemMarks[poem.title];
+  const position = editorialPosition.get(poem.title);
+  if (position) {
+    poem.collection = position.collection;
+    poem.collectionLabel = `collection ${position.collection}`;
+    poem.number = romanNumerals[position.index];
+  }
   poem.body = poem.body.map((stanza) => stanza.toLowerCase());
 });
 
@@ -185,7 +206,9 @@ if (menuToggle && header) {
 }
 
 if (poemList && collection) {
-  const collectionPoems = poems.filter((poem) => poem.collection === collection);
+  const collectionPoems = (editorialOrder[collection] || [])
+    .map((title) => poems.find((poem) => poem.title === title))
+    .filter(Boolean);
   poemList.innerHTML = collectionPoems.map((poem, collectionIndex) => {
     const index = poems.indexOf(poem);
     const stanzas = poem.body.map((stanza) => `<p>${stanza.replaceAll("\n", "<br />")}</p>`).join("");
