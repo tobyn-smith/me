@@ -139,6 +139,23 @@ window.addEventListener("scroll", updateProgress, { passive: true });
 window.addEventListener("resize", updateProgress);
 updateProgress();
 
+const revealItems = document.querySelectorAll(".reveal-on-scroll");
+if (revealItems.length) {
+  const revealImmediately = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (revealImmediately || !("IntersectionObserver" in window)) {
+    revealItems.forEach((item) => item.classList.add("is-revealed"));
+  } else {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-revealed");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -10% 0px", threshold: 0 });
+    revealItems.forEach((item) => revealObserver.observe(item));
+  }
+}
+
 if (menuToggle && header) {
   menuToggle.addEventListener("click", () => {
     const open = header.classList.toggle("nav-open");
