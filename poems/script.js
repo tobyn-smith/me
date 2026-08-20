@@ -220,7 +220,7 @@ if (poemList && collection) {
         <span class="poem-entry-graphic mark-${poem.mark}" aria-hidden="true"></span>
         <h2>${poem.title}</h2>
       </summary>
-      <div class="poem-entry-body">${stanzas}<button class="reading-mode-toggle" type="button" aria-label="enter reading mode"><span aria-hidden="true"></span></button></div>
+      <div class="poem-entry-body">${stanzas}<button class="reading-mode-toggle" type="button" aria-label="enter reading mode"><span class="reading-mode-symbol" aria-hidden="true"></span><span class="reading-mode-label">reading mode</span></button></div>
     </details>`;
   }).join("");
 
