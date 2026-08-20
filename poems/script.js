@@ -120,6 +120,7 @@ const collection = document.body.dataset.collection;
 const header = document.querySelector(".site-header");
 const menuToggle = document.querySelector(".menu-toggle");
 const currentPage = location.pathname.split("/").pop() || "index.html";
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 document.querySelectorAll(".site-nav a").forEach((link) => {
   if (link.getAttribute("href") === currentPage) link.setAttribute("aria-current", "page");
@@ -148,8 +149,7 @@ updateProgress();
 
 const revealItems = document.querySelectorAll(".reveal-on-scroll");
 if (revealItems.length) {
-  const revealImmediately = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (revealImmediately || !("IntersectionObserver" in window)) {
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
     revealItems.forEach((item) => item.classList.add("is-revealed"));
   } else {
     const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -164,12 +164,23 @@ if (revealItems.length) {
 }
 
 if (menuToggle && header) {
-  menuToggle.addEventListener("click", () => {
-    const open = header.classList.toggle("nav-open");
+  const setMenuState = (open) => {
+    header.classList.toggle("nav-open", open);
     menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "close menu" : "menu");
+  };
+
+  menuToggle.addEventListener("click", () => {
+    setMenuState(!header.classList.contains("nav-open"));
   });
   header.querySelectorAll(".site-nav a").forEach((link) => {
-    link.addEventListener("click", () => header.classList.remove("nav-open"));
+    link.addEventListener("click", () => setMenuState(false));
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && header.classList.contains("nav-open")) {
+      setMenuState(false);
+      menuToggle.focus();
+    }
   });
 }
 
@@ -179,7 +190,7 @@ if (poemList && collection) {
     const index = poems.indexOf(poem);
     const stanzas = poem.body.map((stanza) => `<p>${stanza.replaceAll("\n", "<br />")}</p>`).join("");
     return `<details class="poem-entry" id="poem-${index}"${collectionIndex === 0 ? " open" : ""}>
-      <summary class="poem-entry-heading" aria-label="${poem.title}">
+      <summary class="poem-entry-heading" aria-label="${poem.number} ${poem.title}">
         <span class="poem-entry-number">${poem.number}</span>
         <span class="poem-entry-graphic mark-${poem.mark}" aria-hidden="true"></span>
         <h2>${poem.title}</h2>
@@ -189,9 +200,11 @@ if (poemList && collection) {
   }).join("");
 
   const openFromHash = () => {
-    const target = location.hash ? document.querySelector(location.hash) : null;
+    const target = location.hash ? document.getElementById(location.hash.slice(1)) : null;
     if (target && target.matches("details")) {
-      target.open = true;
+      poemList.querySelectorAll("details").forEach((entry) => {
+        entry.open = entry === target;
+      });
       requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
     }
   };
@@ -204,10 +217,15 @@ if (poemList && collection) {
   window.addEventListener("hashchange", openFromHash);
   openFromHash();
 
-  const readingObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => entry.target.classList.toggle("is-active", entry.isIntersecting));
-  }, { rootMargin: "-24% 0px -58% 0px", threshold: 0 });
-  poemList.querySelectorAll(".poem-entry").forEach((entry) => readingObserver.observe(entry));
+  const poemEntries = [...poemList.querySelectorAll(".poem-entry")];
+  if ("IntersectionObserver" in window) {
+    const readingObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.target.classList.toggle("is-active", entry.isIntersecting));
+    }, { rootMargin: "-24% 0px -58% 0px", threshold: 0 });
+    poemEntries.forEach((entry) => readingObserver.observe(entry));
+  } else if (poemEntries[0]) {
+    poemEntries[0].classList.add("is-active");
+  }
 }
 
 document.addEventListener("keydown", (event) => {
@@ -220,6 +238,6 @@ document.addEventListener("keydown", (event) => {
     event.preventDefault();
     next.querySelector("summary").focus();
     next.open = true;
-    next.scrollIntoView({ behavior: "smooth", block: "center" });
+    next.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth", block: "center" });
   }
 });
